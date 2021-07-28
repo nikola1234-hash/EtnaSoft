@@ -1,0 +1,19 @@
+﻿<dx:ThemedWindow
+    x:Class="EtnaSoft.WPF.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Views="clr-namespace:EtnaSoft.WPF.Views"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    x:Name="ShellWindow"
+    Title="EtnaSoft"
+    Width="1000"
+    Height="800"
+    TitleAlignment="Left"
+    WindowKind="Normal"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
+    WindowStyle="SingleBorderWindow">
+    <Grid Background="{Binding BgColor}">
+        <ContentControl Content="{Binding CurrentViewModel}" />
+    </Grid>
+</dx:ThemedWindow>

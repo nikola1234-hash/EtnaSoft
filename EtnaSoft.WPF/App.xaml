@@ -1,0 +1,18 @@
+﻿<Application
+    x:Class="EtnaSoft.WPF.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:EtnaSoft.WPF.ViewModels"
+    xmlns:views="clr-namespace:EtnaSoft.WPF.Views"
+    Startup="App_OnStartup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/LoginPanelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
