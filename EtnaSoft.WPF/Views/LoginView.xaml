@@ -7,6 +7,10 @@
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -44,15 +48,46 @@
                     Margin="0,10,0,0"
                     HorizontalAlignment="Center"
                     BorderBrush="White"
-                    BorderThickness="1">
+                    BorderThickness="2"
+                    CornerRadius="7">
                     <Label
+                        x:Name="titleLabel"
                         Margin="5"
                         HorizontalAlignment="Center"
                         Content="Login Panel"
                         FontSize="21"
-                        Foreground="White" />
-                </Border>
+                        Foreground="White">
+                        <Label.Triggers>
+                            <EventTrigger RoutedEvent="TextBox.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <StringAnimationUsingKeyFrames
+                                            Storyboard.TargetName="titleLabel"
+                                            Storyboard.TargetProperty="Content"
+                                            Duration="0:0:6">
+                                            <DiscreteStringKeyFrame KeyTime="0:0:0" Value="" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:1" Value="E" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:1.5" Value="Et" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:2" Value="Etn" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:2.5" Value="Etna" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:3" Value="Etna " />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:3.5" Value="Etna S" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:4.5" Value="Etna So" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:5" Value="Etna Sof" />
+                                            <DiscreteStringKeyFrame KeyTime="0:0:5.5" Value="Etna Soft" />
 
+
+
+
+
+                                        </StringAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Border>
+                <!--  Start of Login textBox form  -->
                 <StackPanel
                     Grid.Row="1"
                     Margin="0,30,0,0"
@@ -71,18 +106,35 @@
                             Foreground="White"
                             Text="Lozinka" />
                         <PasswordBox x:Name="PassBox" MinWidth="125" />
+
+                        <!--  Error Message TextBlock  -->
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            DataContext="{Binding ErrorMessageViewModel}"
+                            Foreground="Red"
+                            Text="{Binding Message}"
+                            Visibility="{Binding HasMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <!--  End of Login textBox form  -->
                     </StackPanel>
                     <StackPanel Margin="0,30,0,0">
                         <Button
                             Command="{Binding LoginCommand}"
                             CommandParameter="{Binding ElementName=PassBox}"
                             Content="Potvrdi"
-                            FontSize="14" />
+                            FontSize="14"
+                            ToolTip="Pritisni da se ulogujes">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="15" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
                         <Button
                             Margin="0,25,0,0"
                             Command="{Binding CloseCommand}"
                             Content="Otkazi"
-                            FontSize="14">
+                            FontSize="14"
+                            ToolTip="Izadji iz programa">
                             <b:Interaction.Triggers>
                                 <b:EventTrigger EventName="Click">
                                     <b:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
