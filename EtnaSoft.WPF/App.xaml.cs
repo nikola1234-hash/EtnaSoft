@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Windows;
 using DevExpress.Mvvm.POCO;
+using EtnaSoft.Dal;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.ViewModels;
@@ -39,6 +37,7 @@ namespace EtnaSoft.WPF
         
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
+            EtnaSettings.ConnectionString = ConfigurationManager.ConnectionStrings["SqlDb"].ToString();
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             
             var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
