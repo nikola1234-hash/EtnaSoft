@@ -7,9 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtnaSoft.WPF", "EtnaSoft.WP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtnaSoft.Dal", "EtnaSoft.Dal\EtnaSoft.Dal.csproj", "{CC3DAF90-0940-4134-912C-8EFE900B95CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErtnaSoft.Bo", "ErtnaSoft.Bo\ErtnaSoft.Bo.csproj", "{25D62B00-9BA5-4B0D-98AB-7BC9169BEC55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErtnaSoft.Bo", "ErtnaSoft.Bo\ErtnaSoft.Bo.csproj", "{25D62B00-9BA5-4B0D-98AB-7BC9169BEC55}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "EtnaSoft.Database", "EtnaSoft.Database\EtnaSoft.Database.sqlproj", "{64DE81E3-2FCE-4FF6-B4EE-E8A86D12BA4A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A3C27AA3-C37A-45B5-82CE-F3174F585B4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtnaSoft.Dal.Tests", "EtnaSoft.Dal.Tests\EtnaSoft.Dal.Tests.csproj", "{BE087670-A2EA-430B-998C-2811C9C33FCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,9 +39,16 @@ Global
 		{64DE81E3-2FCE-4FF6-B4EE-E8A86D12BA4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64DE81E3-2FCE-4FF6-B4EE-E8A86D12BA4A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64DE81E3-2FCE-4FF6-B4EE-E8A86D12BA4A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BE087670-A2EA-430B-998C-2811C9C33FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE087670-A2EA-430B-998C-2811C9C33FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE087670-A2EA-430B-998C-2811C9C33FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE087670-A2EA-430B-998C-2811C9C33FCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BE087670-A2EA-430B-998C-2811C9C33FCC} = {A3C27AA3-C37A-45B5-82CE-F3174F585B4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54148D9C-5D36-4B15-892E-6462252B201D}

@@ -6,7 +6,7 @@ using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Dal.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IRepository<User>
     {
         private const string LoadAllUsers = "SELECT * FROM dbo.User";
         private const string LoadById = "SELECT * FROM dbo.User WHERE Id = @Id";

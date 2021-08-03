@@ -6,12 +6,13 @@ using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Dal.Repositories
 {
-    public class GuestRepository
+    
+    public class GuestRepository : IRepository<Guest>
     {
 
         private const string GetAllGuests = "SELECT * from dbo.Guest";
         private const string GetByIdGuest = "Select * from dbo.Guest where Id = @Id";
-        private const string CreateGuest = "Sp_GuestCreate";
+        private const string CreateGuest = "sp_CreateGuest";
 
         private const string UpdateGuest =
             "UPDATE dbo.Guest SET FirstName = @FirstName, LastName = @LastName, Telephone = @Telephone, EmailAddress = @EmailAddress," +
@@ -33,7 +34,7 @@ namespace EtnaSoft.Dal.Repositories
             return output;
         }
 
-        public Guest GetyId(int id)
+        public Guest GetById(int id)
         {
             Guest output = _context.LoadData<Guest, dynamic>(GetByIdGuest, new {Id = id}).FirstOrDefault();
             return output;
@@ -72,4 +73,6 @@ namespace EtnaSoft.Dal.Repositories
             return output;
         }
     }
+
+  
 }
