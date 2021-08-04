@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dapper;
+using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 

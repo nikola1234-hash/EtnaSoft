@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EtnaSoft.Dal.Repositories
+namespace EtnaSoft.Dal.Infrastucture
 {
     public interface IRepository<TEntity>
     {

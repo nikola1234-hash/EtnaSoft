@@ -8,16 +8,14 @@ namespace EtnaSoft.Dal.Repositories
 {
     public class UserRepository : IRepository<User>
     {
-        private const string LoadAllUsers = "SELECT * FROM dbo.User";
-        private const string LoadById = "SELECT * FROM dbo.User WHERE Id = @Id";
+        private const string LoadAllUsers = "SELECT * FROM dbo.Users";
+        private const string LoadById = "SELECT * FROM dbo.Users WHERE Id = @Id";
 
-        private const string UpdateById =
-            "UPDATE dbo.User SET Username = @Username, PasswordHash = @PasswordHash, Name = @Name, LastName = @LastName, IsActive = @IsActive WHERE Id = @Id";
+        private const string UpdateById = "sp_UpdateUser";
 
-        private const string SetInactive = "Update dbo.User Set IsActive = 0 WHERE Id = @Id";
+        private const string SetInactive = "Update dbo.Users Set IsActive = 0 WHERE Id = @Id";
 
-        private const string CreateUser = "Insert into dbo.User (Name, LastName, Username, PasswordHash)" +
-                                          "Values (@Name, @LastName, @Username, @PasswordHash";
+        private const string CreateUser = "sp_CreateUser";
 
 
         private readonly IGenericDbContext _context;
@@ -42,9 +40,9 @@ namespace EtnaSoft.Dal.Repositories
         public bool Update(int id, User user)
         {
             user.Id = id;
-            DynamicParameters o = new DynamicParameters(user);
+            DynamicParameters dynamicUser = new DynamicParameters(user);
             bool output = false;
-            int i = _context.SaveData(UpdateById, o);
+            int i = _context.SaveData(UpdateById, dynamicUser);
             if (i == 1)
             {
                 output = true;
@@ -55,8 +53,15 @@ namespace EtnaSoft.Dal.Repositories
 
         public User Create(User user)
         {
-            DynamicParameters userToCreate = new DynamicParameters(user);
-            var createdUser = _context.LoadData<User, dynamic>(CreateUser, userToCreate).FirstOrDefault();
+            var parameters = new
+            {
+                Name = user.Name,
+                LastName = user.LastName,
+                Username = user.Username,
+                PasswordHash = user.PasswordHash,
+                CreatedBy = user.CreatedBy
+            };
+            var createdUser = _context.LoadData<User, dynamic>(CreateUser, parameters).FirstOrDefault();
             return createdUser;
         }
         public bool Delete(int id)

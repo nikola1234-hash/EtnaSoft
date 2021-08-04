@@ -1,5 +1,7 @@
 ﻿using System;
-namespace EtnaSoft.Bo.Entities
+using EtnaSoft.Bo.Entities;
+
+namespace ErtnaSoft.Bo.Entities
 {
     public class Guest : Audit
     {

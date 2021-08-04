@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using Dapper;
-using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
 
 namespace EtnaSoft.Dal.Infrastucture
 {
@@ -10,20 +10,15 @@ namespace EtnaSoft.Dal.Infrastucture
         //TODO: DEBUG CMD PROPERTY 
         // does it start with CommandType.Text
         // and does it change to StoredProcedure if statements starts with sp_
-        private CommandType cmd
-        {
-            get { return CommandType.Text;}
-            set
-            {
-                cmd = value;
-            }
-        }
+       
         public string ConnectionString => EtnaSettings.ConnectionString;
         public IEnumerable<TEntity> LoadData<TEntity, TParameters>(string sql, TParameters parameters)
         {
             
-            using (IDbConnection conn = new SqlConnection(ConnectionString))
+            
+            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
             {
+                CommandType cmd = CommandType.Text;
                 // sql db name starts with sp_ its stored procedure
                 if (sql.StartsWith("sp_"))
                 {
@@ -37,8 +32,9 @@ namespace EtnaSoft.Dal.Infrastucture
 
         public int SaveData<TParameters>(string sql, TParameters parameters)
         {
-            using (IDbConnection conn = new SqlConnection(ConnectionString))
+            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
             {
+                CommandType cmd = CommandType.Text;
                 if (sql.StartsWith("sp_"))
                 {
                     cmd = CommandType.StoredProcedure;

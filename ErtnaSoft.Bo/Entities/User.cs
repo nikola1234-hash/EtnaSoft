@@ -1,6 +1,6 @@
 ﻿namespace EtnaSoft.Bo.Entities
 {
-    public class User
+    public class User : Audit
     {
         public int Id { get; set; }
         public string Name { get; set; }

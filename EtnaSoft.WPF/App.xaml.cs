@@ -2,10 +2,16 @@
 using System.Configuration;
 using System.Windows;
 using DevExpress.Mvvm.POCO;
+using ErtnaSoft.Bo.Entities;
+using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
+using EtnaSoft.Dal.Infrastucture;
+using EtnaSoft.Dal.Repositories;
+using EtnaSoft.Dal.Services;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.ViewModels;
+using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EtnaSoft.WPF
@@ -25,6 +31,17 @@ namespace EtnaSoft.WPF
 
         private void ConfigureServices(IServiceCollection service)
         {
+            service.AddSingleton<AdminService>();
+            service.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+
+            service.AddSingleton<IRepository<User>, UserRepository>();
+            service.AddSingleton<IRepository<Guest>, GuestRepository>();
+
+            service.AddSingleton<IUnitOfWork, UnitOfWork>();
+            service.AddSingleton<IGenericDbContext, GenericDbContext>();
+            
+
             service.AddSingleton<IViewStore, ViewStore>();
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
 
@@ -42,6 +59,14 @@ namespace EtnaSoft.WPF
             
             var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
             mainWindow.DataContext = mainViewModel;
+
+            var adminService = ServiceProvider.GetRequiredService<AdminService>();
+            bool accountExists = adminService.CheckIfAccountExists();
+            if (!accountExists)
+            {
+                adminService.FirstUserCreation();
+            }
+
             mainWindow.Show();
         }
     }

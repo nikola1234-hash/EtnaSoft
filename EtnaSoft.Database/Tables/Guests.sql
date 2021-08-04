@@ -8,9 +8,10 @@
 	[UniqueNumber] NVARCHAR(13) null,
 	[BirthDate] date null,
 	[IsActive] bit NOT NULL DEFAULT 1,
-	[DateCreated] date NOT NULL DEFAULT GETDATE(),
+	[DateCreated] date NOT NULL ,
 	[DateModified] date NULL,
 	[CreatedBy] NVARCHAR(25) NOT NULL,
-	[ModifiedBy] NVARCHAR(25) NULL
+	[ModifiedBy] NVARCHAR(25) NULL, 
+    [Address] NVARCHAR(250) NULL
 
 )

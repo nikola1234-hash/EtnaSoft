@@ -1,7 +1,7 @@
-﻿using EtnaSoft.Bo.Entities;
-using EtnaSoft.Dal.Repositories;
+﻿using ErtnaSoft.Bo.Entities;
+using EtnaSoft.Bo.Entities;
 
-namespace EtnaSoft.Dal.Services
+namespace EtnaSoft.Dal.Infrastucture
 {
     public interface IUnitOfWork
     {

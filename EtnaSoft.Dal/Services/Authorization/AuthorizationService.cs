@@ -3,6 +3,8 @@ using System;
 using System.Linq;
 using System.Text;
 using EtnaSoft.Bo.Entities;
+using EtnaSoft.Dal.Exceptions;
+using EtnaSoft.Dal.Infrastucture;
 using Microsoft.AspNet.Identity;
 
 namespace EtnaSoft.Dal.Services.Authorization
@@ -29,16 +31,21 @@ namespace EtnaSoft.Dal.Services.Authorization
                 throw new Exception("Username does not exist");
             }
 
-            PasswordVerificationResult result = _hasher.VerifyHashedPassword(user.PasswordHash, password);
-            if (result == PasswordVerificationResult.Success)
+            if (user.IsActive == false)
             {
-                return user;
+                throw new UserNotActiveExeption("This user is not active", user);
             }
-
+            PasswordVerificationResult result = _hasher.VerifyHashedPassword(user.PasswordHash, password);
+            
             if (result == PasswordVerificationResult.Failed)
             {
                 throw new Exception("Invalid Passowrd");
             }
+            if (result == PasswordVerificationResult.Success)
+            {
+                return user;
+            }
+            //This should fail
             //Should not have come this far..
             throw new Exception("Something is wrong!");
         }
@@ -51,6 +58,7 @@ namespace EtnaSoft.Dal.Services.Authorization
                 throw new Exception("Cannot be empty!");
             }
             RegistrationStatus registration = RegistrationStatus.Success;
+
             if (password != repeatPassword)
             {
                return RegistrationStatus.PasswordDoNotMatch;
@@ -61,8 +69,22 @@ namespace EtnaSoft.Dal.Services.Authorization
             {
                 return RegistrationStatus.UsernameAlreadyExists;
             }
+
+            string hashedPassword = _hasher.HashPassword(password);
             
-            
+            User newUser = new User()
+            {
+                Name = name,
+                LastName = lastName,
+                Username = username,
+                PasswordHash = hashedPassword
+            };
+            var createdUser = _unitOfWork.Users.Create(newUser);
+            if (createdUser is null)
+            {
+                throw new Exception("Created user is null");
+            }
+
             return registration;
         }
     }

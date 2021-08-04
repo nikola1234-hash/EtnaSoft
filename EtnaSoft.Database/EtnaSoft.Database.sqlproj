@@ -61,6 +61,7 @@
     <Folder Include="StoredProcedures\Guest" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\PublishScripts" />
+    <Folder Include="StoredProcedures\User" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -70,6 +71,8 @@
     <Build Include="Tables\RoomReservations.sql" />
     <Build Include="Tables\Reservations.sql" />
     <Build Include="StoredProcedures\Guest\sp_CreateGuest.sql" />
+    <Build Include="StoredProcedures\User\sp_CreateUser.sql" />
+    <Build Include="StoredProcedures\User\sp_UpdateUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EtnaSoft.Database.publish.xml" />
