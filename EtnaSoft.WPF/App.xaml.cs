@@ -8,7 +8,9 @@ using EtnaSoft.Dal;
 using EtnaSoft.Dal.Infrastucture;
 using EtnaSoft.Dal.Repositories;
 using EtnaSoft.Dal.Services;
+using EtnaSoft.Dal.Services.Authorization;
 using EtnaSoft.WPF.Services;
+using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -33,15 +35,16 @@ namespace EtnaSoft.WPF
         {
             service.AddSingleton<AdminService>();
             service.AddSingleton<IPasswordHasher, PasswordHasher>();
-
+            service.AddSingleton<IAuthorization, AuthorizationService>();
+            service.AddSingleton<IAuthenticator, Authenticator>();
 
             service.AddSingleton<IRepository<User>, UserRepository>();
             service.AddSingleton<IRepository<Guest>, GuestRepository>();
 
             service.AddSingleton<IUnitOfWork, UnitOfWork>();
             service.AddSingleton<IGenericDbContext, GenericDbContext>();
-            
 
+            service.AddSingleton<IRenavigate, Renavigate>();
             service.AddSingleton<IViewStore, ViewStore>();
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
 

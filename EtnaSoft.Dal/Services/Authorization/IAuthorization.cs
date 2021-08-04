@@ -11,7 +11,7 @@ namespace EtnaSoft.Dal.Services.Authorization
         PasswordDoNotMatch,
         UsernameAlreadyExists
     }
-    internal interface IAuthorization
+    public interface IAuthorization
     {
         User LoginUser(string username, string password);
 
