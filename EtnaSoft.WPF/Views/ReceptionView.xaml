@@ -10,15 +10,14 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <dxsch:ResourceTreeControl /><dxsch:SchedulerControl GroupType="Resource" CommandBarStyle="Ribbon" FirstDayOfWeek="Monday" ActiveViewIndex="0" ShowDateNavigationPanel="True" >
-            <dxsch:SchedulerControl.DataSource>
-                <dxsch:DataSource>
-                    <dxsch:DataSource.ResourceMappings>
-                        <dxsch:ResourceMappings/>
-                    </dxsch:DataSource.ResourceMappings>
-                </dxsch:DataSource>
-            </dxsch:SchedulerControl.DataSource>
-            <dxsch:TimelineView x:Name="timelineView1" ResourcesPerPage="20"/>
+        <dxsch:SchedulerControl
+            ActiveViewIndex="0"
+            FirstDayOfWeek="Monday"
+            GroupType="Resource"
+            
+            ShowDateNavigationPanel="True">
+
+            <dxsch:TimelineView x:Name="timelineView1" ResourcesPerPage="20" />
         </dxsch:SchedulerControl>
     </Grid>
 </UserControl>

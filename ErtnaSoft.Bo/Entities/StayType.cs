@@ -1,6 +1,6 @@
 ﻿namespace EtnaSoft.Bo.Entities
 {
-    public class StayType
+    public class StayType : Entity
     {
         public int Id { get; set; }
         public string Title { get; set; }

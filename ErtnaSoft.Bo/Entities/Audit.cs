@@ -2,7 +2,7 @@
 
 namespace EtnaSoft.Bo.Entities
 {
-    public class Audit
+    public class Audit : Entity
     {
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }

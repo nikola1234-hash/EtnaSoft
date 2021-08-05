@@ -7,5 +7,6 @@ namespace EtnaSoft.Dal.Infrastucture
     {
         IRepository<Guest> Guests { get; }
         IRepository<User> Users { get; }
+        IRepository<Room> Rooms { get; }
     }
 }

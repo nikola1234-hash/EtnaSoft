@@ -7,15 +7,16 @@ namespace EtnaSoft.Dal.Services
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IGenericDbContext dbContext)
+        public UnitOfWork(IRepository<User> users, IRepository<Guest> guests, IRepository<Room> rooms)
         {
-            Guests = new GuestRepository(dbContext);
-            Users = new UserRepository(dbContext);
+            Guests = guests;
+            Users = users;
+            Rooms = rooms;
         }
 
         public IRepository<Guest> Guests { get; private set; }
         public IRepository<User> Users { get; private set; }
-
+        public IRepository<Room> Rooms { get; private set; }
 
 
 

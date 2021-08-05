@@ -40,7 +40,7 @@ namespace EtnaSoft.WPF
 
             service.AddSingleton<IRepository<User>, UserRepository>();
             service.AddSingleton<IRepository<Guest>, GuestRepository>();
-
+            service.AddSingleton<IRepository<Room>, RoomRepository>();
             service.AddSingleton<IUnitOfWork, UnitOfWork>();
             service.AddSingleton<IGenericDbContext, GenericDbContext>();
 
