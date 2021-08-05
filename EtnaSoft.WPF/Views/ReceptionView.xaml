@@ -24,6 +24,7 @@
             </dxsch:SchedulerControl.DataSource>
 
 
+
             <dxsch:TimelineView
                 x:Name="timelineView1"
                 ResourcesPerPage="10"

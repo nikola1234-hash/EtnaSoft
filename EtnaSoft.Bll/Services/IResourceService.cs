@@ -4,7 +4,7 @@ using EtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.Bll.Services
 {
-    public interface IRoomResourceService
+    public interface IResourceService
     {
         ObservableCollection<Room> CreateResource();
     }

@@ -62,6 +62,8 @@
     <Folder Include="Scripts" />
     <Folder Include="Scripts\PublishScripts" />
     <Folder Include="StoredProcedures\User" />
+    <Folder Include="StoredProcedures\Reservation" />
+    <Folder Include="StoredProcedures\RoomReservation" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -73,6 +75,9 @@
     <Build Include="StoredProcedures\Guest\sp_CreateGuest.sql" />
     <Build Include="StoredProcedures\User\sp_CreateUser.sql" />
     <Build Include="StoredProcedures\User\sp_UpdateUser.sql" />
+    <Build Include="StoredProcedures\Reservation\sp_BookingResource.sql" />
+    <Build Include="StoredProcedures\RoomReservation\sp_UpdateRoomReservation.sql" />
+    <Build Include="StoredProcedures\RoomReservation\sp_CreateRoomReservation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EtnaSoft.Database.publish.xml" />

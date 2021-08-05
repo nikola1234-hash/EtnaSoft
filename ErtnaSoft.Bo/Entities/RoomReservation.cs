@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
-namespace EtnaSoft.Bo.Entities
+using EtnaSoft.Bo.Entities;
+
+namespace ErtnaSoft.Bo.Entities
 {
     public class RoomReservation : Audit
     {

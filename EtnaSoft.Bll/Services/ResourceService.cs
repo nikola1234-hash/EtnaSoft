@@ -5,11 +5,11 @@ using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Bll.Services
 {
-    public class RoomResourceService : IRoomResourceService
+    public class ResourceService : IResourceService
     {
 
         private readonly IUnitOfWork _unit;
-        public RoomResourceService(IUnitOfWork unit)
+        public ResourceService(IUnitOfWork unit)
         {
             _unit = unit;
         }
