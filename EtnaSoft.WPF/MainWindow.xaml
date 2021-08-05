@@ -22,7 +22,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <nav:NavigationBar Grid.Row="0" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" />
+        <nav:NavigationBar
+            Grid.Row="0"
+            Background="{StaticResource DefaultBrushMenu}"
+            Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" />
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
     </Grid>
 </dx:ThemedWindow>

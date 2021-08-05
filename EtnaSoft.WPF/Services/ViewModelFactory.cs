@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DevExpress.Mvvm;
 using EtnaSoft.WPF.Navigation;
 using EtnaSoft.WPF.ViewModels;
@@ -13,11 +9,12 @@ namespace EtnaSoft.WPF.Services
     {
         private readonly LoginViewModel _loginView;
         private readonly HomeViewModel _homeView;
-
-        public ViewModelFactory(LoginViewModel loginView, HomeViewModel homeView)
+        private readonly ReceptionViewModel _receptionView;
+        public ViewModelFactory(LoginViewModel loginView, HomeViewModel homeView, ReceptionViewModel receptionView)
         {
             _loginView = loginView;
             _homeView = homeView;
+            _receptionView = receptionView;
         }
 
         public ViewModelBase CreateViewModel(ViewType viewType)
@@ -28,7 +25,8 @@ namespace EtnaSoft.WPF.Services
                     return _loginView;
                 case ViewType.HomeView:
                     return _homeView;
-                
+                case ViewType.Reception:
+                    return _receptionView;
 
                 default:
                     throw new Exception("No valid views");

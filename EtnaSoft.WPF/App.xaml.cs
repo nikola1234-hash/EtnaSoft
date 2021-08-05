@@ -49,6 +49,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
 
             service.AddScoped(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
+            service.AddScoped<ReceptionViewModel>();
             service.AddScoped<LoginViewModel>();
             service.AddScoped<HomeViewModel>();
             service.AddScoped<MainWindow>();

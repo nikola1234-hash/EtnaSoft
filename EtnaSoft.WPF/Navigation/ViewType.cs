@@ -3,6 +3,7 @@
     public enum ViewType
     {
         HomeView,
-        LoginView
+        LoginView,
+        Reception
     }
 }

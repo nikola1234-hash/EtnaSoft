@@ -23,8 +23,8 @@
                 Content="Pocetna" />
             <RadioButton
                 Command="{Binding NavigateCommand}"
-                CommandParameter="{x:Static local:ViewType.HomeView}"
-                Content="Rezervacije" />
+                CommandParameter="{x:Static local:ViewType.Reception}"
+                Content="Recepcija" />
         </StackPanel>
 
     </Grid>
