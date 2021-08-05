@@ -207,6 +207,10 @@
       <Project>{25D62B00-9BA5-4B0D-98AB-7BC9169BEC55}</Project>
       <Name>ErtnaSoft.Bo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EtnaSoft.Bll\EtnaSoft.Bll.csproj">
+      <Project>{ef4c14ab-7021-4a20-b2cc-0338e98b3f44}</Project>
+      <Name>EtnaSoft.Bll</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EtnaSoft.Dal\EtnaSoft.Dal.csproj">
       <Project>{cc3daf90-0940-4134-912c-8efe900b95cd}</Project>
       <Name>EtnaSoft.Dal</Name>

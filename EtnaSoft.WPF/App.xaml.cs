@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Windows;
 using DevExpress.Mvvm.POCO;
 using ErtnaSoft.Bo.Entities;
+using EtnaSoft.Bll.Services;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
 using EtnaSoft.Dal.Infrastucture;
@@ -38,6 +39,10 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IAuthorization, AuthorizationService>();
             service.AddSingleton<IAuthenticator, Authenticator>();
 
+
+
+            service.AddSingleton<IRoomResourceService, RoomResourceService>();
+
             service.AddSingleton<IRepository<User>, UserRepository>();
             service.AddSingleton<IRepository<Guest>, GuestRepository>();
             service.AddSingleton<IRepository<Room>, RoomRepository>();
@@ -48,11 +53,11 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IViewStore, ViewStore>();
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
 
-            service.AddScoped(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
-            service.AddScoped<ReceptionViewModel>();
-            service.AddScoped<LoginViewModel>();
-            service.AddScoped<HomeViewModel>();
-            service.AddScoped<MainWindow>();
+            service.AddSingleton(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
+            service.AddSingleton<ReceptionViewModel>();
+            service.AddSingleton<LoginViewModel>();
+            service.AddSingleton<HomeViewModel>();
+            service.AddSingleton<MainWindow>();
         }
 
         

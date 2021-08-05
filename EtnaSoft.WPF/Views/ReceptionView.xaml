@@ -14,10 +14,20 @@
             ActiveViewIndex="0"
             FirstDayOfWeek="Monday"
             GroupType="Resource"
-            
             ShowDateNavigationPanel="True">
+            <dxsch:SchedulerControl.DataSource>
+                <dxsch:DataSource AppointmentsSource="{Binding Reservations}" ResourcesSource="{Binding Rooms}">
+                    <dxsch:DataSource.ResourceMappings>
+                        <dxsch:ResourceMappings Caption="RoomNumber" Id="Id" />
+                    </dxsch:DataSource.ResourceMappings>
+                </dxsch:DataSource>
+            </dxsch:SchedulerControl.DataSource>
 
-            <dxsch:TimelineView x:Name="timelineView1" ResourcesPerPage="20" />
+
+            <dxsch:TimelineView
+                x:Name="timelineView1"
+                ResourcesPerPage="10"
+                SnapToCellsMode="Auto" />
         </dxsch:SchedulerControl>
     </Grid>
 </UserControl>

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A3C27AA3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtnaSoft.Dal.Tests", "EtnaSoft.Dal.Tests\EtnaSoft.Dal.Tests.csproj", "{BE087670-A2EA-430B-998C-2811C9C33FCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtnaSoft.Bll", "EtnaSoft.Bll\EtnaSoft.Bll.csproj", "{C2EB707D-D875-40EB-9A45-AC016BA50AA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtnaSoft.Bll", "EtnaSoft.Bll\EtnaSoft.Bll.csproj", "{EF4C14AB-7021-4A20-B2CC-0338E98B3F44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +45,10 @@ Global
 		{BE087670-A2EA-430B-998C-2811C9C33FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE087670-A2EA-430B-998C-2811C9C33FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE087670-A2EA-430B-998C-2811C9C33FCC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2EB707D-D875-40EB-9A45-AC016BA50AA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2EB707D-D875-40EB-9A45-AC016BA50AA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2EB707D-D875-40EB-9A45-AC016BA50AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2EB707D-D875-40EB-9A45-AC016BA50AA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF4C14AB-7021-4A20-B2CC-0338E98B3F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF4C14AB-7021-4A20-B2CC-0338E98B3F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF4C14AB-7021-4A20-B2CC-0338E98B3F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF4C14AB-7021-4A20-B2CC-0338E98B3F44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

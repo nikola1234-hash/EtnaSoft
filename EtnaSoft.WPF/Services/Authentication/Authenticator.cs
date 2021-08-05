@@ -19,14 +19,10 @@ namespace EtnaSoft.WPF.Services.Authentication
         public bool Login(string username, string password)
         {
             bool success = false;
-            try
+            CurrentUser = _authorization.LoginUser(username, password);
+            if (CurrentUser != null)
             {
-                CurrentUser = _authorization.LoginUser(username, password);
                 success = true;
-            }
-            catch (Exception)
-            {
-                success = false;
             }
 
             return success;
