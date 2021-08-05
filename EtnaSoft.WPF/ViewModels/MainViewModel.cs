@@ -5,6 +5,7 @@ using System.Windows.Media;
 using EtnaSoft.WPF.Commands;
 using EtnaSoft.WPF.Navigation;
 using EtnaSoft.WPF.Services;
+using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
 
 namespace EtnaSoft.WPF.ViewModels
@@ -14,11 +15,14 @@ namespace EtnaSoft.WPF.ViewModels
         //Bound to MainWindow Grid Background
         public Brush BgColor { get; set; }
 
+        public bool IsLoggedIn => _authenticator.IsLoggedIn;
+        private readonly IAuthenticator _authenticator;
         private readonly IViewStore _viewStore;
         public ICommand NavigateCommand { get; }
-        public MainViewModel(IViewStore viewStore, IEtnaViewModelFactory viewModelFactory)
+        public MainViewModel(IViewStore viewStore, IEtnaViewModelFactory viewModelFactory, IAuthenticator authenticator)
         {
             _viewStore = viewStore;
+            _authenticator = authenticator;
             _viewStore.ViewChanged += OnViewChanged;
             NavigateCommand = new NavigateCommand(viewModelFactory, _viewStore);
             NavigateCommand.Execute(ViewType.LoginView);
@@ -30,10 +34,10 @@ namespace EtnaSoft.WPF.ViewModels
         private void OnViewChanged()
         {
             RaisePropertiesChanged(nameof(CurrentViewModel));
+            RaisePropertiesChanged(nameof(IsLoggedIn));
         }
 
         public ViewModelBase CurrentViewModel => _viewStore.CurrentViewModel;
-
 
     }
 }

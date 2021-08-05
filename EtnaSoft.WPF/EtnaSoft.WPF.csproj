@@ -98,6 +98,9 @@
     </ApplicationDefinition>
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
+    <Compile Include="Navigation\NavigationBar.xaml.cs">
+      <DependentUpon>NavigationBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Navigation\ViewType.cs" />
     <Compile Include="Services\Authentication\Authenticator.cs" />
     <Compile Include="Services\Authentication\IAuthenticator.cs" />
@@ -129,7 +132,15 @@
     <Compile Include="Stores\IViewStore.cs" />
     <Compile Include="Stores\ViewStore.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Page Include="Navigation\NavigationBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\LoginPanelStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\NavigationStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

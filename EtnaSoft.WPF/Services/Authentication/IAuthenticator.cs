@@ -10,7 +10,7 @@ namespace EtnaSoft.WPF.Services.Authentication
     public interface IAuthenticator
     {
         bool IsLoggedIn { get; }
-        User Login(string username, string password);
+        bool Login(string username, string password);
         void Logout();
     }
 }

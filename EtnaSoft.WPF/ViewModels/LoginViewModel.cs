@@ -51,8 +51,8 @@ namespace EtnaSoft.WPF.ViewModels
                 var pass = passwordBox.Password;
                 try
                 {
-                    var user = _authenticator.Login(Username, pass);
-                    if (user != null)
+                    var successLogin = _authenticator.Login(Username, pass);
+                    if (successLogin)
                     {
                         _view.CurrentViewModel = _renavigate.Navigate();
                     }

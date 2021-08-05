@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/LoginPanelStyle.xaml" />
+                <ResourceDictionary Source="Styles/NavigationStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type viewModels:LoginViewModel}">
                 <views:LoginView />

@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Views="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:nav="clr-namespace:EtnaSoft.WPF.Navigation"
     x:Name="ShellWindow"
     Title="EtnaSoft"
     Width="1000"
@@ -13,7 +14,15 @@
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
     WindowStyle="SingleBorderWindow">
-    <Grid Background="{Binding BgColor}">
-        <ContentControl Content="{Binding CurrentViewModel}" />
+    <dx:ThemedWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </dx:ThemedWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <nav:NavigationBar Grid.Row="0" Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" />
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
     </Grid>
 </dx:ThemedWindow>

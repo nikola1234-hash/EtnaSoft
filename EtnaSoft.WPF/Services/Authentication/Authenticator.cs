@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EtnaSoft.Bo.Entities;
-using EtnaSoft.Dal.Exceptions;
-using EtnaSoft.Dal.Services;
 using EtnaSoft.Dal.Services.Authorization;
 
 namespace EtnaSoft.WPF.Services.Authentication
@@ -20,13 +14,22 @@ namespace EtnaSoft.WPF.Services.Authentication
         }
 
 
-        public User CurrentUser { get; set; }
+        public User CurrentUser { get; private set; }
         public bool IsLoggedIn => CurrentUser != null;
-        public User Login(string username, string password)
+        public bool Login(string username, string password)
         {
-            var user = _authorization.LoginUser(username, password);
-            CurrentUser = user;
-            return user;
+            bool success = false;
+            try
+            {
+                CurrentUser = _authorization.LoginUser(username, password);
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+            }
+
+            return success;
         }
 
         public void Logout()
