@@ -42,10 +42,15 @@ namespace EtnaSoft.WPF
 
 
             service.AddSingleton<IResourceService, ResourceService>();
+            service.AddSingleton<IBookingService, BookingService>();
 
             service.AddSingleton<IRepository<User>, UserRepository>();
             service.AddSingleton<IRepository<Guest>, GuestRepository>();
             service.AddSingleton<IRepository<Room>, RoomRepository>();
+            service.AddSingleton<IRepository<Reservation>, ReservationRepository>();
+            service.AddSingleton<IRepository<RoomReservation>, RoomReservationRepository>();
+            service.AddSingleton<IRepository<StayType>, StayTypeRepository>();
+
             service.AddSingleton<IUnitOfWork, UnitOfWork>();
             service.AddSingleton<IGenericDbContext, GenericDbContext>();
 

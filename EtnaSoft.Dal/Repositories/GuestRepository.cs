@@ -11,16 +11,16 @@ namespace EtnaSoft.Dal.Repositories
     public class GuestRepository : IRepository<Guest>
     {
 
-        private const string GetAllGuests = "SELECT * from dbo.Guest";
-        private const string GetByIdGuest = "Select * from dbo.Guest where Id = @Id";
+        private const string GetAllGuests = "SELECT * from dbo.Guests";
+        private const string GetByIdGuest = "Select * from dbo.Guests where Id = @Id";
         private const string CreateGuest = "sp_CreateGuest";
 
         private const string UpdateGuest =
-            "UPDATE dbo.Guest SET FirstName = @FirstName, LastName = @LastName, Telephone = @Telephone, EmailAddress = @EmailAddress," +
+            "UPDATE dbo.Guests SET FirstName = @FirstName, LastName = @LastName, Telephone = @Telephone, EmailAddress = @EmailAddress," +
             "Address = @Address, UniqueNumber = @UniqueNumber, BirthDate = @BirthDate" +
             "WHERE Id = @Id";
 
-        private const string DeleteGuest = "UPDATE dbo.Guest Set IsActive = 0 WHERE Id = @Id";
+        private const string DeleteGuest = "UPDATE dbo.Guests Set IsActive = 0 WHERE Id = @Id";
 
         private readonly IGenericDbContext _context;
 

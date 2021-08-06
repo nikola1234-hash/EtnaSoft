@@ -16,10 +16,21 @@
             GroupType="Resource"
             ShowDateNavigationPanel="True">
             <dxsch:SchedulerControl.DataSource>
-                <dxsch:DataSource AppointmentsSource="{Binding Reservations}" ResourcesSource="{Binding Rooms}">
+                <dxsch:DataSource AppointmentsSource="{Binding Bookings}" ResourcesSource="{Binding Rooms}">
                     <dxsch:DataSource.ResourceMappings>
                         <dxsch:ResourceMappings Caption="RoomNumber" Id="Id" />
                     </dxsch:DataSource.ResourceMappings>
+                    <dxsch:DataSource.AppointmentMappings>
+                        <dxsch:AppointmentMappings
+                            AllDay="AllDay"
+                            Description="StayTypeId"
+                            End="EndDate"
+                            Id="Id"
+                            ResourceId="RoomId"
+                            Start="StartDate"
+                            StatusId="IsCheckedIn"
+                            Subject="GuestId" />
+                    </dxsch:DataSource.AppointmentMappings>
                 </dxsch:DataSource>
             </dxsch:SchedulerControl.DataSource>
 
