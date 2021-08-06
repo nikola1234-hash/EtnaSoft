@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Dapper;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
@@ -38,35 +39,31 @@ namespace EtnaSoft.Dal.Repositories
         {
             bool output = false;
             entity.Id = id;
-            var p = new
-            {
-                Id = entity.Id,
-                RoomId = entity.RoomId,
-                StayTypeId = entity.StayTypeId,
-                GuestId = entity.GuestId,
-                ModifiedBy = entity.ModifiedBy
+            //var pEntity = new
+            //{
+            //    Id = entity.Id,
+            //    RoomId = entity.RoomId,
+            //    StayTypeId = entity.StayTypeId,
+            //    GuestId = entity.GuestId,
+            //    ModifiedBy = entity.ModifiedBy
 
-            };
-            var o = _context.SaveData(UpdateRoom, p);
+            //};
+            var parameters = new DynamicParameters(entity);
+            var o = _context.SaveData(UpdateRoom, parameters);
             output = o == 1;
             return output;
         }
 
         public RoomReservation Create(RoomReservation entity)
         {
-            var pEntity = new
-            {
-                RoomId = entity.RoomId,
-                GuestId = entity.GuestId,
-                StayTypeId = entity.StayTypeId,
-                CreatedBy = entity.CreatedBy
-            };
-            var output = _context.LoadData<RoomReservation, dynamic>(CreateRoomReservation, pEntity).FirstOrDefault();
+            var parameters = new DynamicParameters(entity);
+            var output = _context.LoadData<RoomReservation, DynamicParameters>(CreateRoomReservation, parameters).FirstOrDefault();
             return output;
         }
 
         public bool Delete(int id)
         {
+            //TODO: Should see how to deal with this
             throw new NotImplementedException();
         }
     }

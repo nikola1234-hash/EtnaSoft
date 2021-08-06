@@ -53,15 +53,8 @@ namespace EtnaSoft.Dal.Repositories
 
         public User Create(User user)
         {
-            var parameters = new
-            {
-                Name = user.Name,
-                LastName = user.LastName,
-                Username = user.Username,
-                PasswordHash = user.PasswordHash,
-                CreatedBy = user.CreatedBy
-            };
-            var createdUser = _context.LoadData<User, dynamic>(CreateUser, parameters).FirstOrDefault();
+            var parameters = new DynamicParameters(user);
+            var createdUser = _context.LoadData<User, DynamicParameters>(CreateUser, parameters).FirstOrDefault();
             return createdUser;
         }
         public bool Delete(int id)
