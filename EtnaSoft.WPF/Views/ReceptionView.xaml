@@ -46,7 +46,10 @@
                             ResourceId="RoomId"
                             Start="StartDate"
                             StatusId="IsCheckedIn"
-                            Subject="GuestId" />
+                            Subject="RoomNumber">
+                            <dxsch:CustomFieldMapping Name="NumberOfPeople" Mapping="NumberOfPeople" />
+                        </dxsch:AppointmentMappings>
+
                     </dxsch:DataSource.AppointmentMappings>
                 </dxsch:DataSource>
             </dxsch:SchedulerControl.DataSource>
