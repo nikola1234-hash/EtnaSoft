@@ -2,8 +2,11 @@
     x:Class="EtnaSoft.WPF.Views.ReceptionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxmvvm="clr-namespace:DevExpress;assembly=DevExpress.Mvvm.v20.1"
     xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduling"
+    xmlns:interactivity="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
@@ -11,10 +14,24 @@
     mc:Ignorable="d">
     <Grid>
         <dxsch:SchedulerControl
+            x:Name="schedule"
             ActiveViewIndex="0"
             FirstDayOfWeek="Monday"
             GroupType="Resource"
             ShowDateNavigationPanel="True">
+            <dxsch:SchedulerControl.OptionsWindows>
+                <dxsch:OptionsWindows AppointmentWindowType="{x:Type local:CustomAppointmentWindow}" />
+            </dxsch:SchedulerControl.OptionsWindows>
+            <!--  THIS IS EVENT TO COMMAND AREA  -->
+            <interactivity:Interaction.Behaviors>
+                <interactivity:EventToCommand
+                    Command="{Binding EditBookingCommand}"
+                    EventName="AppointmentWindowShowing"
+                    PassEventArgsToCommand="True"
+                    SourceName="schedule" />
+
+            </interactivity:Interaction.Behaviors>
+
             <dxsch:SchedulerControl.DataSource>
                 <dxsch:DataSource AppointmentsSource="{Binding Bookings}" ResourcesSource="{Binding Rooms}">
                     <dxsch:DataSource.ResourceMappings>

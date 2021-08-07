@@ -14,12 +14,24 @@ namespace EtnaSoft.WPF.ViewModels
         public ObservableCollection<Booking> Bookings { get; set; }
         private readonly IResourceService _roomResource;
         private readonly IBookingService _bookingService;
+        public ICommand<object> EditBookingCommand { get; }
         public ReceptionViewModel(IResourceService roomResource, IBookingService bookingService)
         {
+            EditBookingCommand = new DelegateCommand<object>(ExecuteEditBooking);
             _roomResource = roomResource;
             _bookingService = bookingService;
             Initialize();
         }
+
+        private void ExecuteEditBooking(object obj)
+        {
+            var args = (AppointmentWindowShowingEventArgs) obj;
+            //Sender is source
+            var sender = (SchedulerControl) args.Source;
+            args.Window.DataContext = new AppointmentViewModel(args.Appointment, sender);
+
+        }
+
 
         public void Initialize()
         {

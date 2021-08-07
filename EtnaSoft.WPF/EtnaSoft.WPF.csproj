@@ -117,10 +117,14 @@
     <Compile Include="Services\IEtnaViewModelFactory.cs" />
     <Compile Include="Stores\IRenavigate.cs" />
     <Compile Include="Stores\Renavigate.cs" />
+    <Compile Include="ViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MessageViewModel.cs" />
     <Compile Include="ViewModels\ReceptionViewModel.cs" />
+    <Compile Include="Views\CustomAppointmentWindow.xaml.cs">
+      <DependentUpon>CustomAppointmentWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -155,6 +159,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\NavigationStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CustomAppointmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,7 +18,6 @@ namespace EtnaSoft.Bll.Services
         public ObservableCollection<Booking> LoadResource()
         {
             //TODO: FULL BOOKING PROPERTIES
-            ObservableCollection<Booking> bookings;
             var reservations = _unit.Reservations.GetAll()
                 .Where(s=> s.StartDate > DateTime.Now.Date.AddYears(-1));
             var roomReservation = _unit.RoomReservations.GetAll();
@@ -52,9 +51,10 @@ namespace EtnaSoft.Bll.Services
                     CreatedBy = r.CreatedBy,
                     ModifiedBy = r.ModifiedBy,
                     DateCreated = r.DateCreated,
-                    DateModified = r.DateModified
+                    DateModified = r.DateModified,
+                    TotalPrice = r.TotalPrice
                 };
-            bookings = new ObservableCollection<Booking>(query);
+            ObservableCollection<Booking> bookings = new ObservableCollection<Booking>(query);
             return bookings;
         }
     }

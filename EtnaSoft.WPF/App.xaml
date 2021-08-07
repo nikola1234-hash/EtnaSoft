@@ -20,6 +20,9 @@
             <DataTemplate DataType="{x:Type viewModels:ReceptionViewModel}">
                 <views:ReceptionView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:AppointmentViewModel}">
+                <views:CustomAppointmentWindow />
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
