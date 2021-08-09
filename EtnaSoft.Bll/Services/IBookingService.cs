@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using EtnaSoft.Bll.Models;
-using EtnaSoft.Bo.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace EtnaSoft.Bll.Services
 {
     public interface IBookingService
     {
-        ObservableCollection<Booking> LoadResource();
-        List<StayType> LoadStayTypes();
+        void CheckIn(int id);
+        void Cancel(int id);
     }
 }

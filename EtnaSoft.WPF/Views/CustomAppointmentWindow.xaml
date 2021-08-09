@@ -39,15 +39,23 @@
             </dxr:RibbonControl.ToolbarItems>
             <dxr:RibbonDefaultPageCategory Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Categories_Default}}">
                 <dxr:RibbonPage Caption="Rezervacija" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Pages_Appointment}}">
-                    <dxr:RibbonPageGroup Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Groups_Actions}}">
+                    <dxr:RibbonPageGroup Caption="{x:Null}" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Groups_Actions}}">
                         <dxb:BarButtonItem
                             x:Name="barItemSaveAndClose"
                             Content="Sacuvaj i zatvori"
+                            Glyph="{dx:DXImage SvgImages/XAF/Action_SaveScript.svg}"
+                            LargeGlyph="{dx:DXImage SvgImages/XAF/Action_SaveScript.svg}"
                             Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Actions_SaveAndClose}}" />
                         <dxb:BarButtonItem
                             x:Name="barItemDelete"
-                            Content="Izbrisi"
+                            Content="Otkazi"
+                            Glyph="{dx:DXImage SvgImages/Outlook Inspired/Cancel.svg}"
+                            LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/Cancel.svg}"
                             Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Actions_Delete}}" />
+                        <dxb:BarButtonItem
+                            Content="Prijava gosta"
+                            Glyph="{dx:DXImage SvgImages/XAF/Action_Grant.svg}"
+                            LargeGlyph="{dx:DXImage SvgImages/XAF/Action_Grant.svg}" />
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Groups_Options}}">
                         <dxb:BarEditItem x:Name="barItemLabel" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Options_Label}}" />

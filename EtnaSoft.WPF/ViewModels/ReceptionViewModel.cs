@@ -37,10 +37,10 @@ namespace EtnaSoft.WPF.ViewModels
 
 
         private readonly IResourceService _roomResource;
-        private readonly IBookingService _bookingService;
+        private readonly ISchedulerService _bookingService;
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
-        public ReceptionViewModel(IResourceService roomResource, IBookingService bookingService)
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService bookingService)
         {
             EditBookingCommand = new DelegateCommand<object>(ExecuteEditBooking);
             LoadedCommand = new DelegateCommand(OnLoad);

@@ -16,11 +16,12 @@ namespace EtnaSoft.WPF.ViewModels
     {
         private readonly AppointmentItem _appointmentItem;
         
-        private readonly IBookingService _bookingService;
+        private readonly ISchedulerService _bookingService;
 
         #region Commands
         public DelegateCommand LoadedCommand { get; }
         public ICommand<object> ChangedCommand { get; }
+        public ICommand<int> CheckInCommand { get; }
         #endregion
 
         #region Properties
@@ -187,10 +188,11 @@ namespace EtnaSoft.WPF.ViewModels
         
 
         #endregion
-        public AppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IBookingService bookingService) : base(appointmentItem, scheduler)
+        public AppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, ISchedulerService bookingService) : base(appointmentItem, scheduler)
         {
             _appointmentItem = appointmentItem;
             _bookingService = bookingService;
+            CheckInCommand = new DelegateCommand<int>(CheckInExecute);
             LoadedCommand = new DelegateCommand(OnLoad);
             RemoveAppointmentCommand = new DelegateCommand(ExecuteRemove);
             SaveAppointmentCommand = new DelegateCommand(ExecuteSaveCommand);
@@ -198,9 +200,14 @@ namespace EtnaSoft.WPF.ViewModels
             ChangedCommand = new DelegateCommand<object>(OnChangeCommandExecute);
         }
 
+        private void CheckInExecute(int reservationId)
+        {
+            
+            throw new NotImplementedException();
+        }
+
         private void OnChangeCommandExecute(object obj)
         {
-
             //EditValue property need first to be casted as list of objects
             // Otherwise you get SystemCollections Generic `1 System.Object Error
             if (obj is BarEditItem item)
@@ -213,7 +220,6 @@ namespace EtnaSoft.WPF.ViewModels
                     RoomNumber = room.RoomNumber;
                 }
             }
-
         }
 
         private void ExecuteSaveAndCloseCommand()
