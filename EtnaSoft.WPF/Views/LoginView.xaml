@@ -122,6 +122,7 @@
                             CommandParameter="{Binding ElementName=PassBox}"
                             Content="Potvrdi"
                             FontSize="14"
+                            IsDefault="True"
                             ToolTip="Pritisni da se ulogujes">
                             <Button.Resources>
                                 <Style TargetType="Border">

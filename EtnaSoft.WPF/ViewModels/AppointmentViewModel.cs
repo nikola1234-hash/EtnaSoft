@@ -201,13 +201,17 @@ namespace EtnaSoft.WPF.ViewModels
         private void OnChangeCommandExecute(object obj)
         {
 
-            //Todo: GET VALUE OF COMBOBOX
+            //EditValue property need first to be casted as list of objects
+            // Otherwise you get SystemCollections Generic `1 System.Object Error
             if (obj is BarEditItem item)
             {
                 var resource = item.EditValue;
-                var r = (List<ResourceItem>)resource[0];
-                var room = (Room) resource.SourceObject;
-                RoomNumber = room.RoomNumber;
+                if (resource is List<object> lResource)
+                {
+                    var resourceItem = (ResourceItem)lResource[0];
+                    var room = (Room) resourceItem.SourceObject;
+                    RoomNumber = room.RoomNumber;
+                }
             }
 
         }

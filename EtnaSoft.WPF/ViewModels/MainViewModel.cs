@@ -25,7 +25,7 @@ namespace EtnaSoft.WPF.ViewModels
             _authenticator = authenticator;
             _viewStore.ViewChanged += OnViewChanged;
             NavigateCommand = new NavigateCommand(viewModelFactory, _viewStore);
-            NavigateCommand.Execute(ViewType.LoginView);
+            NavigateCommand.Execute(ViewType.Reception);
 
             //TODO: When LogedIn Change the color to White or something like that
             BgColor = new SolidColorBrush(Colors.Black);
