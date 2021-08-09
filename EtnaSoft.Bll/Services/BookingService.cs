@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using EtnaSoft.Bll.Models;
+using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Bll.Services
@@ -41,6 +43,7 @@ namespace EtnaSoft.Bll.Services
                     Telephone = g.Telephone,
                     Address = g.Address,
                     Email = g.EmailAddress,
+                    UniqueNumber = g.UniqueNumber,
                     StayTypeId = s.Id,
                     Title = s.Title,
                     NumberOfPeople = r.NumberOfPeople,
@@ -56,6 +59,12 @@ namespace EtnaSoft.Bll.Services
                 };
             ObservableCollection<Booking> bookings = new ObservableCollection<Booking>(query);
             return bookings;
+        }
+
+        public List<StayType> LoadStayTypes()
+        {
+            var output = _unit.StayTypes.GetAll().ToList();
+            return output;
         }
     }
 }

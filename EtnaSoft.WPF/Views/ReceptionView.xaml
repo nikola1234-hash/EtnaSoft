@@ -12,7 +12,17 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <!--  THIS IS EVENT TO COMMAND AREA  -->
+    <interactivity:Interaction.Behaviors>
+        <interactivity:EventToCommand
+            Command="{Binding EditBookingCommand}"
+            EventName="AppointmentWindowShowing"
+            PassEventArgsToCommand="True"
+            SourceName="schedule" />
+        <interactivity:EventToCommand Command="{Binding LoadedCommand}" Event="Loaded" />
+    </interactivity:Interaction.Behaviors>
     <Grid>
+
         <dxsch:SchedulerControl
             x:Name="schedule"
             ActiveViewIndex="0"
@@ -22,15 +32,8 @@
             <dxsch:SchedulerControl.OptionsWindows>
                 <dxsch:OptionsWindows AppointmentWindowType="{x:Type local:CustomAppointmentWindow}" />
             </dxsch:SchedulerControl.OptionsWindows>
-            <!--  THIS IS EVENT TO COMMAND AREA  -->
-            <interactivity:Interaction.Behaviors>
-                <interactivity:EventToCommand
-                    Command="{Binding EditBookingCommand}"
-                    EventName="AppointmentWindowShowing"
-                    PassEventArgsToCommand="True"
-                    SourceName="schedule" />
 
-            </interactivity:Interaction.Behaviors>
+
 
             <dxsch:SchedulerControl.DataSource>
                 <dxsch:DataSource AppointmentsSource="{Binding Bookings}" ResourcesSource="{Binding Rooms}">
@@ -48,6 +51,18 @@
                             StatusId="IsCheckedIn"
                             Subject="RoomNumber">
                             <dxsch:CustomFieldMapping Name="NumberOfPeople" Mapping="NumberOfPeople" />
+                            <dxsch:CustomFieldMapping Name="TotalPrice" Mapping="TotalPrice" />
+                            <dxsch:CustomFieldMapping Name="StayTypeId" Mapping="StayTypeId" />
+                            <dxsch:CustomFieldMapping Name="Title" Mapping="Title" />
+                            <dxsch:CustomFieldMapping Name="FirstName" Mapping="FirstName" />
+                            <dxsch:CustomFieldMapping Name="LastName" Mapping="LastName" />
+                            <dxsch:CustomFieldMapping Name="Address" Mapping="Address" />
+                            <dxsch:CustomFieldMapping Name="EmailAddress" Mapping="Email" />
+                            <dxsch:CustomFieldMapping Name="Telephone" Mapping="Telephone" />
+                            <dxsch:CustomFieldMapping Name="IsCheckedIn" Mapping="IsCheckedIn" />
+                            <dxsch:CustomFieldMapping Name="IsCanceled" Mapping="IsCanceled" />
+                            <dxsch:CustomFieldMapping Name="UniqueNumber" Mapping="UniqueNumber" />
+                            <dxsch:CustomFieldMapping Name="RoomNumber" Mapping="RoomNumber" />
                         </dxsch:AppointmentMappings>
 
                     </dxsch:DataSource.AppointmentMappings>

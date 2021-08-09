@@ -16,6 +16,8 @@ namespace EtnaSoft.Bll.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Telephone { get; set; }
+        public string  UniqueNumber { get; set; }
+
         public string Address { get; set; }
         public int NumberOfPeople { get; set; }
         public DateTime StartDate { get; set; }
