@@ -19,14 +19,20 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IAuthenticator _authenticator;
         private readonly IViewStore _viewStore;
         public ICommand NavigateCommand { get; }
+        public ICommand OnLoadCommand { get; }
         public MainViewModel(IViewStore viewStore, IEtnaViewModelFactory viewModelFactory, IAuthenticator authenticator)
         {
             _viewStore = viewStore;
             _authenticator = authenticator;
             _viewStore.ViewChanged += OnViewChanged;
             NavigateCommand = new NavigateCommand(viewModelFactory, _viewStore);
-            NavigateCommand.Execute(ViewType.Reception);
+            OnLoadCommand = new DelegateCommand(OnLoadExecute);
+        }
 
+        private void OnLoadExecute()
+        {
+            NavigateCommand.Execute(ViewType.LoginView);
+            
             //TODO: When LogedIn Change the color to White or something like that
             BgColor = new SolidColorBrush(Colors.Black);
         }

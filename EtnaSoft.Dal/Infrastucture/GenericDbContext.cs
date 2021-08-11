@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Dapper;
 using System.Data.SqlClient;
@@ -25,8 +26,16 @@ namespace EtnaSoft.Dal.Infrastucture
                     cmd = CommandType.StoredProcedure;
                 }
 
-                IEnumerable<TEntity> output = conn.Query<TEntity>(sql, parameters, commandType: cmd);
-                return output;
+                try
+                {
+                    IEnumerable<TEntity> output = conn.Query<TEntity>(sql, parameters, commandType: cmd);
+                    return output;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+              
             }
         }
 

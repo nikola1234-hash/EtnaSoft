@@ -1,5 +1,7 @@
 ﻿using System;
+using EtnaSoft.Bll.Stores;
 using EtnaSoft.Bo.Entities;
+using EtnaSoft.Dal;
 using EtnaSoft.Dal.Services.Authorization;
 
 namespace EtnaSoft.WPF.Services.Authentication
@@ -22,6 +24,7 @@ namespace EtnaSoft.WPF.Services.Authentication
             CurrentUser = _authorization.LoginUser(username, password);
             if (CurrentUser != null)
             {
+                UserStore.CurrentUser = CurrentUser.Username;
                 success = true;
             }
 

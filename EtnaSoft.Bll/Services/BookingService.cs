@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EtnaSoft.Bll.Stores;
 using EtnaSoft.Bo.Entities;
+using EtnaSoft.Dal;
 using EtnaSoft.Dal.Infrastucture;
+using EtnaSoft.Dal.Services;
 
 namespace EtnaSoft.Bll.Services
 {
@@ -15,18 +18,26 @@ namespace EtnaSoft.Bll.Services
             _unit = unit;
         }
 
-        public void CheckIn(int id)
+        
+        public bool CheckIn(int id)
         {
+            bool success = false;
             Reservation resevation = _unit.Reservations.GetById(id);
             if (resevation != null)
             {
                 resevation.IsCheckedIn = true;
                 _unit.Reservations.Update(id, resevation);
+                var updated = _unit.Reservations.GetById(id);
+                success = updated.IsCheckedIn;
             }
+
+            return success;
+
         }
 
-        public void Cancel(int id)
+        public bool Cancel(int id)
         {
+            bool success = false;
             Reservation reservation = _unit.Reservations.GetById(id);
             
             if (reservation != null)
@@ -35,10 +46,13 @@ namespace EtnaSoft.Bll.Services
                 {
                     throw new Exception("Reservation already canceled.");
                 }
-
+                reservation.ModifiedBy = UserStore.CurrentUser;
                 reservation.IsCanceled = true;
-                _unit.Reservations.Update(id, reservation);
+                success = _unit.Reservations.Update(id, reservation);
+                
             }
+
+            return success;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace EtnaSoft.Dal.Repositories
     {
 
         private const string GetAllRes = "SELECT * from dbo.Reservations";
-        private const string GetResById = "SELECT  from dbo.Reservations WHERE Id = @Id";
+        private const string GetResById = "SELECT * from dbo.Reservations WHERE Id = @Id";
         private const string UpdateRes = "sp_UpdateReservation";
         private const string CreateRes = "sp_CreateReservation";
         private const string CancelReservation = "UPDATE dbo.Reservations SET IsCanceled = 1 WHERE Id = @Id";
@@ -40,13 +40,19 @@ namespace EtnaSoft.Dal.Repositories
         public bool Update(int id, Reservation entity)
         {
             bool output = false;
-            //TODO: TEST UPDATE
             var parameters = new DynamicParameters(entity);
-            int i = _context.SaveData(UpdateRes, parameters);
-            output = i == 1;
+            //FIXED TOO MANY ARGUMENTS
+            //Dynamic parameters must have all the parameters that are in stored procedure
+            //No more no less
+            //pay attention
+            var i = _context.LoadData<Reservation, DynamicParameters>(UpdateRes, parameters);
+            output = i != null;
+            
             return output;
         }
 
+
+        //TODO: DEBUG THIS SOMETHING IS NOT RIGHT
         public Reservation Create(Reservation entity)
         {
             var parameters = new DynamicParameters(entity);

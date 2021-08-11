@@ -9,7 +9,7 @@ namespace EtnaSoft.Dal.Services
     {
         public UnitOfWork(IRepository<User> users, IRepository<Guest> guests, IRepository<Room> rooms,
             IRepository<Reservation> reservations, IRepository<RoomReservation> roomReservations,
-            IRepository<StayType> stayTypes)
+            IRepository<StayType> stayTypes, IRepository<CustomLabel> labels)
         {
             Guests = guests;
             Users = users;
@@ -17,6 +17,7 @@ namespace EtnaSoft.Dal.Services
             Reservations = reservations;
             RoomReservations = roomReservations;
             StayTypes = stayTypes;
+            Labels = labels;
         }
 
         public IRepository<Guest> Guests { get;  }
@@ -25,5 +26,6 @@ namespace EtnaSoft.Dal.Services
         public IRepository<Reservation> Reservations { get; }
         public IRepository<RoomReservation> RoomReservations { get; }
         public IRepository<StayType> StayTypes { get; }
+        public IRepository<CustomLabel> Labels { get; }
     }
 }

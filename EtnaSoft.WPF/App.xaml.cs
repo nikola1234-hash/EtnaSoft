@@ -12,10 +12,12 @@ using EtnaSoft.Dal.Services;
 using EtnaSoft.Dal.Services.Authorization;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Services.Authentication;
+using EtnaSoft.WPF.Services.Reception;
 using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Prism.Events;
 
 namespace EtnaSoft.WPF
 {
@@ -41,6 +43,8 @@ namespace EtnaSoft.WPF
 
 
 
+            service.AddSingleton<IDetailsManager, DetailsManager>();
+            service.AddSingleton<IUpdateBookingService, UpdateBookingService>();
             service.AddSingleton<IResourceService, ResourceService>();
             service.AddSingleton<ISchedulerService, SchedulerService>();
             service.AddSingleton<IBookingService, BookingService>();
@@ -51,6 +55,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IRepository<Reservation>, ReservationRepository>();
             service.AddSingleton<IRepository<RoomReservation>, RoomReservationRepository>();
             service.AddSingleton<IRepository<StayType>, StayTypeRepository>();
+            service.AddSingleton<IRepository<CustomLabel>, LabelRepository>();
 
             service.AddSingleton<IUnitOfWork, UnitOfWork>();
             service.AddSingleton<IGenericDbContext, GenericDbContext>();
@@ -58,6 +63,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IRenavigate, Renavigate>();
             service.AddSingleton<IViewStore, ViewStore>();
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
+            service.AddSingleton<IEventAggregator, EventAggregator>();
 
             service.AddSingleton(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
             service.AddSingleton<AppointmentViewModel>();

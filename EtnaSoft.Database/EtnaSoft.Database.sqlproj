@@ -80,6 +80,9 @@
     <Build Include="StoredProcedures\RoomReservation\sp_CreateRoomReservation.sql" />
     <Build Include="StoredProcedures\Reservation\sp_UpdateReservation.sql" />
     <Build Include="StoredProcedures\Reservation\sp_CreateReservation.sql" />
+    <Build Include="Tables\Labels.sql" />
+    <Build Include="Tables\PaymentStatuses.sql" />
+    <Build Include="StoredProcedures\Guest\sp_GuestUpdate.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EtnaSoft.Database.publish.xml" />

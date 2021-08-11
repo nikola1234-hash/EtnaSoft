@@ -19,6 +19,9 @@
     Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=ThemedWindow}}"
     mc:Ignorable="d">
 
+    <dx:ThemedWindow.Resources>
+        <dx:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </dx:ThemedWindow.Resources>
     <dxmvvm:Interaction.Behaviors>
         <dxmvvm:CurrentWindowService ClosingCommand="{Binding WindowClosingCommand}" />
         <dxmvvm:EventToCommand Command="{Binding LoadedCommand}" Event="FrameworkElement.Loaded" />
@@ -27,6 +30,7 @@
             EventName="KeyDown"
             KeyGesture="Esc"
             MarkRoutedEventsAsHandled="True" />
+        <dxmvvm:WindowService />
     </dxmvvm:Interaction.Behaviors>
 
     <DockPanel>
@@ -42,6 +46,7 @@
                     <dxr:RibbonPageGroup Caption="{x:Null}" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Groups_Actions}}">
                         <dxb:BarButtonItem
                             x:Name="barItemSaveAndClose"
+                            Command="{Binding SaveAndCloseCommand}"
                             Content="Sacuvaj i zatvori"
                             Glyph="{dx:DXImage SvgImages/XAF/Action_SaveScript.svg}"
                             LargeGlyph="{dx:DXImage SvgImages/XAF/Action_SaveScript.svg}"
@@ -53,8 +58,10 @@
                             LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/Cancel.svg}"
                             Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Actions_Delete}}" />
                         <dxb:BarButtonItem
+                            Command="{Binding CheckInCommand}"
                             Content="Prijava gosta"
                             Glyph="{dx:DXImage SvgImages/XAF/Action_Grant.svg}"
+                            IsEnabled="{Binding CheckInEnabled}"
                             LargeGlyph="{dx:DXImage SvgImages/XAF/Action_Grant.svg}" />
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Groups_Options}}">
@@ -74,6 +81,7 @@
                         <dxb:BarEditItem x:Name="barItemResource" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Options_Resource}}" />
                         <dxb:BarEditItem x:Name="barItemReminder" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Options_Reminder}}" />
                     </dxr:RibbonPageGroup>
+
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
         </dxr:RibbonControl>
@@ -123,7 +131,7 @@
                     <dxe:TextEdit />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Prijavljeni">
-                    <dxe:CheckEdit IsChecked="{Binding IsCheckedIn}" />
+                    <dxe:PopupImageEdit />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
             <dxlc:LayoutItem

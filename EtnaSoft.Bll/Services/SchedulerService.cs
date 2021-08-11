@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Models;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
@@ -21,7 +22,7 @@ namespace EtnaSoft.Bll.Services
         {
             //TODO: FULL BOOKING PROPERTIES
             var reservations = _unit.Reservations.GetAll()
-                .Where(s=> s.StartDate > DateTime.Now.Date.AddYears(-1));
+                .Where(s=> s.StartDate > DateTime.Now.Date.AddYears(-1) && s.IsCanceled == false);
             var roomReservation = _unit.RoomReservations.GetAll();
             var guests = _unit.Guests.GetAll();
             var stayType = _unit.StayTypes.GetAll();
@@ -34,6 +35,7 @@ namespace EtnaSoft.Bll.Services
                 join s in stayType on rr.StayTypeId equals s.Id
                 select new Booking()
                 {
+                    Id = r.Id,
                     AllDay = true, // All bookings are 24hours 
                     EndDate = r.EndDate,
                     StartDate = r.StartDate,
@@ -64,6 +66,12 @@ namespace EtnaSoft.Bll.Services
         public List<StayType> LoadStayTypes()
         {
             var output = _unit.StayTypes.GetAll().ToList();
+            return output;
+        }
+        [Obsolete]
+        public IEnumerable<CustomLabel> LoadCustomLabels()
+        {
+            var output = _unit.Labels.GetAll();
             return output;
         }
     }

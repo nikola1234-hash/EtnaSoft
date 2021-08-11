@@ -39,17 +39,17 @@ namespace EtnaSoft.Dal.Repositories
         {
             bool output = false;
             entity.Id = id;
-            //var pEntity = new
-            //{
-            //    Id = entity.Id,
-            //    RoomId = entity.RoomId,
-            //    StayTypeId = entity.StayTypeId,
-            //    GuestId = entity.GuestId,
-            //    ModifiedBy = entity.ModifiedBy
+            var pEntity = new
+            {
+                Id = entity.Id,
+                RoomId = entity.RoomId,
+                StayTypeId = entity.StayTypeId,
+                GuestId = entity.GuestId,
+                ModifiedBy = entity.ModifiedBy
 
-            //};
-            var parameters = new DynamicParameters(entity);
-            var o = _context.SaveData(UpdateRoom, parameters);
+            };
+   
+            var o = _context.SaveData(UpdateRoom, pEntity);
             output = o == 1;
             return output;
         }

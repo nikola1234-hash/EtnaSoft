@@ -29,27 +29,39 @@
             FirstDayOfWeek="Monday"
             GroupType="Resource"
             ShowDateNavigationPanel="True">
+
+
+
             <dxsch:SchedulerControl.OptionsWindows>
                 <dxsch:OptionsWindows AppointmentWindowType="{x:Type local:CustomAppointmentWindow}" />
             </dxsch:SchedulerControl.OptionsWindows>
-
-
-
+            <!--  AppointmentLabelsSource="{Binding Labels}"  -->
             <dxsch:SchedulerControl.DataSource>
                 <dxsch:DataSource AppointmentsSource="{Binding Bookings}" ResourcesSource="{Binding Rooms}">
                     <dxsch:DataSource.ResourceMappings>
                         <dxsch:ResourceMappings Caption="RoomNumber" Id="Id" />
                     </dxsch:DataSource.ResourceMappings>
+
+                    <!--  If we decide to implement labels  -->
+
+                    <!--<dxsch:DataSource.AppointmentLabelMappings>
+                        <dxsch:AppointmentLabelMappings
+                            Caption="Caption"
+                            Id="Id"
+                            Color="Color" />
+                    </dxsch:DataSource.AppointmentLabelMappings>-->
                     <dxsch:DataSource.AppointmentMappings>
                         <dxsch:AppointmentMappings
                             AllDay="AllDay"
                             Description="StayTypeId"
                             End="EndDate"
                             Id="Id"
+                            LabelId="IsCheckedIn"
                             ResourceId="RoomId"
                             Start="StartDate"
                             StatusId="IsCheckedIn"
                             Subject="RoomNumber">
+
                             <dxsch:CustomFieldMapping Name="NumberOfPeople" Mapping="NumberOfPeople" />
                             <dxsch:CustomFieldMapping Name="TotalPrice" Mapping="TotalPrice" />
                             <dxsch:CustomFieldMapping Name="StayTypeId" Mapping="StayTypeId" />

@@ -3,7 +3,7 @@ using EtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.Dal.Infrastucture
 {
-    public interface IRepository<TEntity> where TEntity : Entity
+    public interface IRepository<TEntity>
     {
         IEnumerable<TEntity> GetAll();
         TEntity GetById(int id);

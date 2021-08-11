@@ -6,7 +6,7 @@ namespace EtnaSoft.Bll.Services
 {
     public interface IBookingService
     {
-        void CheckIn(int id);
-        void Cancel(int id);
+        bool CheckIn(int id);
+        bool Cancel(int id);
     }
 }

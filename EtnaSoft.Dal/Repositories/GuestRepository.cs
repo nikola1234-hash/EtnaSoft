@@ -4,6 +4,7 @@ using Dapper;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
+using Microsoft.AspNet.Identity;
 
 namespace EtnaSoft.Dal.Repositories
 {
@@ -15,10 +16,7 @@ namespace EtnaSoft.Dal.Repositories
         private const string GetByIdGuest = "Select * from dbo.Guests where Id = @Id";
         private const string CreateGuest = "sp_CreateGuest";
 
-        private const string UpdateGuest =
-            "UPDATE dbo.Guests SET FirstName = @FirstName, LastName = @LastName, Telephone = @Telephone, EmailAddress = @EmailAddress," +
-            "Address = @Address, UniqueNumber = @UniqueNumber, BirthDate = @BirthDate" +
-            "WHERE Id = @Id";
+        private const string UpdateGuest = "sp_GuestUpdate";
 
         private const string DeleteGuest = "UPDATE dbo.Guests Set IsActive = 0 WHERE Id = @Id";
 
@@ -50,8 +48,18 @@ namespace EtnaSoft.Dal.Repositories
         public bool Update(int id, Guest guest)
         {
             bool output = false;
-            guest.Id = id;
-            DynamicParameters guestUpdate = new DynamicParameters(guest);
+            var guestUpdate = new 
+            {
+                Id = id,
+                FirstName = guest.FirstName,
+                LastName = guest.LastName,
+                Address = guest.Address,
+                EmailAddress = guest.EmailAddress,
+                Telephone = guest.Telephone,
+                UniqueNumber = guest.UniqueNumber,
+                ModifiedBy = guest.ModifiedBy
+            };
+            
             int i = _context.SaveData(UpdateGuest, guestUpdate);
             if (i == 1)
             {

@@ -11,5 +11,6 @@ namespace EtnaSoft.Dal.Infrastucture
         IRepository<Reservation> Reservations { get; }
         IRepository<RoomReservation> RoomReservations { get; }
         IRepository<StayType> StayTypes { get; }
+        IRepository<CustomLabel> Labels { get; }
     }
 }
