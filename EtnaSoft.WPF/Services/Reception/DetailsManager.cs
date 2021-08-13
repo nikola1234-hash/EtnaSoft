@@ -21,32 +21,43 @@ namespace EtnaSoft.WPF.Services.Reception
 
         public bool CreateUpdateModel(AppointmentViewModel model)
         {
+            Guest MapGuest(AppointmentViewModel appointmentViewModel)
+            {
+                Guest mappedGuest = new Guest()
+                {
+                    FirstName = appointmentViewModel.FirstName,
+                    LastName = appointmentViewModel.LastName,
+                    Address = appointmentViewModel.Address,
+                    BirthDate = appointmentViewModel.BirthDate,
+                    EmailAddress = appointmentViewModel.EmailAddress,
+                    ModifiedBy = UserStore.CurrentUser,
+                    UniqueNumber = appointmentViewModel.UniqueNumber,
+                    Telephone = appointmentViewModel.Telephone
+                };
+                return mappedGuest;
+            }
+            Reservation MapReservation(AppointmentViewModel appointmentViewModel)
+            {
+                var mappedReservation = new Reservation()
+                {
+                    Id = (int) appointmentViewModel.Appointment.Id,
+                    StartDate = appointmentViewModel.StartDate.Date,
+                    EndDate = appointmentViewModel.EndDate.Date,
+                    TotalPrice = appointmentViewModel.TotalPrice,
+                    NumberOfPeople = appointmentViewModel.NumberOfPeople
+                };
+                return mappedReservation;
+            }
             bool success = false;
 
-            var reservation = new Reservation()
-            {
-                Id = (int) model.Appointment.Id,
-                StartDate = model.StartDate.Date,
-                EndDate = model.EndDate.Date,
-                TotalPrice = model.TotalPrice
-            };
             var roomNumber = model.RoomNumber;
             var stayType = model.SelectedStayType;
-            Guest guest = new Guest()
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Address = model.Address,
-                BirthDate = model.BirthDate,
-                EmailAddress = model.EmailAddress,
-                ModifiedBy = UserStore.CurrentUser,
-                UniqueNumber = model.UniqueNumber,
-                Telephone = model.Telephone
-            };
-            
+            var guest = MapGuest(model);
+            var reservation = MapReservation(model);
 
-            
-            _updateBooking.Update(reservation, guest, roomNumber, stayType);
+
+            success = _updateBooking.Update(reservation, guest, roomNumber, stayType, model.IsGuestDirty,
+                model.IsReservationDirty, model.IsRoomReservationDirty);
 
 
             return success;

@@ -49,6 +49,7 @@
                             Command="{Binding SaveAndCloseCommand}"
                             Content="Sacuvaj i zatvori"
                             Glyph="{dx:DXImage SvgImages/XAF/Action_SaveScript.svg}"
+                            IsEnabled="{Binding SaveButtonEnabled}"
                             LargeGlyph="{dx:DXImage SvgImages/XAF/Action_SaveScript.svg}"
                             Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Actions_SaveAndClose}}" />
                         <dxb:BarButtonItem
@@ -142,6 +143,7 @@
                     <dxe:DateEdit
                         x:Name="editorStartDate"
                         Width="150"
+                        DateTime="{Binding StartDate}"
                         DockPanel.Dock="Left"
                         Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_StartDate}}" />
                     <dxe:TextEdit
@@ -164,6 +166,7 @@
                     <dxe:DateEdit
                         x:Name="editorEndDate"
                         Width="150"
+                        DateTime="{Binding EndDate}"
                         DockPanel.Dock="Left"
                         Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_EndDate}}" />
                     <dxe:TextEdit

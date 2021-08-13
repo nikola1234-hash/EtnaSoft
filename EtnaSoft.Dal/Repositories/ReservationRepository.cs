@@ -38,14 +38,27 @@ namespace EtnaSoft.Dal.Repositories
         }
 
         public bool Update(int id, Reservation entity)
-        {
+        {  
+            //Man Entity and return anonymus type
+            object MapEntity(Reservation reservation)
+            {
+                var param = new
+                {
+                    Id = reservation.Id,
+                    RoomReservationId = reservation.RoomReservationId,
+                    NumberOfPeople = reservation.NumberOfPeople,
+                    StartDate = reservation.StartDate,
+                    EndDate = reservation.EndDate,
+                    TotalPrice = reservation.TotalPrice,
+                    IsCheckedIn = reservation.IsCheckedIn,
+                    IsCanceled = reservation.IsCanceled,
+                    ModifiedBy = reservation.ModifiedBy
+                };
+                return param;
+            }
             bool output = false;
-            var parameters = new DynamicParameters(entity);
-            //FIXED TOO MANY ARGUMENTS
-            //Dynamic parameters must have all the parameters that are in stored procedure
-            //No more no less
-            //pay attention
-            var i = _context.LoadData<Reservation, DynamicParameters>(UpdateRes, parameters);
+            var parameters = MapEntity(entity);
+            var i = _context.LoadData<Reservation, dynamic>(UpdateRes, parameters);
             output = i != null;
             
             return output;

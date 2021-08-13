@@ -45,12 +45,53 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _roomNumber; }
             set
             {
-                _roomNumber = value;
-                RaisePropertyChanged(nameof(RoomNumber));
-                //TODO: ALLOW ONLY FREE ROOMS FOR ACTUAL DATES
+                if (string.IsNullOrWhiteSpace(_roomNumber))
+                {
+                    SetValue(ref _roomNumber, value);
+                }
+                else
+                {
+                    IsRoomReservationDirty = SetValue(ref _roomNumber, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
 
+        private bool _isGuestDirty;
+
+        public bool IsGuestDirty
+        {
+            get { return _isGuestDirty; }
+            set
+            {
+                _isGuestDirty = value;
+                RaisePropertyChanged(nameof(IsGuestDirty));
+            }
+        }
+
+        private bool _isReservationDirty;
+
+        public bool IsReservationDirty
+        {
+            get { return _isReservationDirty; }
+            set
+            {
+                _isReservationDirty = value;
+                RaisePropertyChanged(nameof(IsReservationDirty));
+            }
+        }
+
+        private bool _isRoomReservationDirty;
+
+        public bool IsRoomReservationDirty
+        {
+            get { return _isRoomReservationDirty; }
+            set
+            {
+                _isRoomReservationDirty = value;
+                RaisePropertyChanged(nameof(IsRoomReservationDirty));
+            }
+        }
         private int _numberOfPeople;
         private int _numberOfDays;
         public int NumberOfDays
@@ -67,8 +108,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _numberOfPeople; }
             set
             {
-                _numberOfPeople = value;
-                RaisePropertyChanged(nameof(NumberOfPeople));
+                if (_numberOfPeople != 0)
+                {
+                    IsReservationDirty = SetValue(ref _numberOfPeople, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
+                else
+                {
+                    SetValue(ref _numberOfPeople, value);
+                }
             }
         }
         private decimal _totalPrice;
@@ -77,8 +125,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _totalPrice; }
             set
             {
-                _totalPrice = value;
-                RaisePropertyChanged(nameof(TotalPrice));
+                if (_totalPrice != 0)
+                {
+                    IsReservationDirty = SetValue(ref _totalPrice, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
+                else
+                {
+                    SetValue(ref _totalPrice, value);
+                }
             }
         }
         private StayType _selectedStayType;
@@ -87,10 +142,23 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _selectedStayType; }
             set
             {
-                _selectedStayType = value;
-                RaisePropertyChanged(nameof(SelectedStayType));
+                if (_selectedStayType is null)
+                {
+                    SetValue(ref _selectedStayType, value);
+                }
+                else
+                {
+                    IsRoomReservationDirty = SetValue(ref _selectedStayType, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
+
+        public bool SaveButtonEnabled
+        {
+            get => IsRoomReservationDirty || IsGuestDirty || IsReservationDirty;
+        }
+
         private List<StayType> _stayTypes;
         public List<StayType> StayTypes
         {
@@ -109,8 +177,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _firstName; }
             set
             {
-                _firstName = value;
-                RaisePropertyChanged(nameof(FirstName));
+                if (string.IsNullOrWhiteSpace(_firstName))
+                {
+                    SetValue(ref _firstName, value);
+                }
+                else
+                {
+                   IsGuestDirty = SetValue(ref _firstName, value);
+                   RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
 
@@ -121,8 +196,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _lastName; }
             set
             {
-                _lastName = value;
-                RaisePropertyChanged(nameof(LastName));
+                if (string.IsNullOrWhiteSpace(_lastName))
+                {
+                    SetValue(ref _lastName, value);
+                }
+                else
+                {
+                    IsGuestDirty = SetValue(ref _lastName, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
 
@@ -133,8 +215,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _address; }
             set
             {
-                _address = value;
-                RaisePropertyChanged(nameof(Address));
+                if (string.IsNullOrWhiteSpace(_address))
+                {
+                    SetValue(ref _address, value);
+                }
+                else
+                {
+                    IsGuestDirty = SetValue(ref _address, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
 
@@ -145,8 +234,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _telephone; }
             set
             {
-                _telephone = value;
-                RaisePropertyChanged(nameof(Telephone));
+                if (string.IsNullOrWhiteSpace(_telephone))
+                {
+                    SetValue(ref _telephone, value);
+                }
+                else
+                {
+                    IsGuestDirty = SetValue(ref _telephone, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
 
@@ -157,8 +253,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _emailAddress; }
             set
             {
-                _emailAddress = value;
-                RaisePropertyChanged(nameof(EmailAddress));
+                if (string.IsNullOrWhiteSpace(_emailAddress))
+                {
+                    SetValue(ref _emailAddress, value);
+                }
+                else
+                {
+                    IsGuestDirty = SetValue(ref _emailAddress, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
 
@@ -193,8 +296,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _uniqueNumber; }
             set
             {
-                _uniqueNumber = value;
-                RaisePropertyChanged(nameof(UniqueNumber));
+                if (string.IsNullOrWhiteSpace(_uniqueNumber))
+                {
+                    SetValue(ref _uniqueNumber, value);
+                }
+                else
+                {
+                    IsGuestDirty = SetValue(ref _uniqueNumber, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
             }
         }
 
@@ -208,8 +318,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _startDate; }
             set
             {
-                _startDate = value;
-                RaisePropertyChanged(nameof(StartDate));
+                if (_startDate != DateTime.MinValue)
+                {
+                    IsReservationDirty = SetValue(ref _startDate, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
+                else
+                {
+                    SetValue(ref _startDate, value);
+                }
             }
         }
 
@@ -221,8 +338,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _endDate; }
             set
             {
-                _endDate = value;
-                RaisePropertyChanged(nameof(EndDate));
+                if (_endDate != DateTime.MinValue)
+                {
+                    IsReservationDirty = SetValue(ref _endDate, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
+                else
+                {
+                    SetValue(ref _endDate, value);
+                }
             }
         }
 
@@ -233,8 +357,15 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _birthDate; }
             set
             {
-                _birthDate = value;
-                RaisePropertyChanged(nameof(BirthDate));
+                if (_birthDate != DateTime.MinValue)
+                {
+                    IsGuestDirty = SetValue(ref _birthDate, value);
+                    RaisePropertiesChanged(nameof(SaveButtonEnabled));
+                }
+                else
+                {
+                    SetValue(ref _birthDate, value);
+                }
             }
         }
         public ICurrentWindowService WindowService

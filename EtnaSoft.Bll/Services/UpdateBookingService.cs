@@ -18,13 +18,9 @@ namespace EtnaSoft.Bll.Services
             _unit = unit;
         }
 
-        //TODO DateTime overflow fix Reservation
-        public bool Update(Reservation reservation, Guest guest, string roomNumber, StayType stayType)
+        public bool Update(Reservation reservation, Guest guest, string roomNumber, StayType stayType, bool isGuestDirty, bool isReservationDirty, bool isRoomReservationDirty)
         {
-            if (reservation is null || guest is null || string.IsNullOrWhiteSpace(roomNumber) || stayType is null)
-            {
-                throw new Exception("Parameter is null");
-            }
+            ParameterNullCheck();
             bool success = false;
             var reservationFromDb = _unit.Reservations.GetById(reservation.Id);
             var roomReservation = _unit.RoomReservations.GetById(reservationFromDb.RoomReservationId);
@@ -35,29 +31,67 @@ namespace EtnaSoft.Bll.Services
 
             try
             {
-                //RoomReservation Update first
-                roomReservation.RoomId = room.Id;
-                roomReservation.StayTypeId = stayType.Id;
-                roomReservation.ModifiedBy = UserStore.CurrentUser;
-                _unit.RoomReservations.Update(roomReservation.Id, roomReservation);
-                
-                //Guest UPDATE
-                guestFromDb.ModifiedBy = UserStore.CurrentUser;
-                _unit.Guests.Update(guestFromDb.Id, guest);
-                
-                //AND FINALY RESERVATION UPDATE
-                reservation.ModifiedBy = UserStore.CurrentUser;
-                _unit.Reservations.Update(reservationFromDb.Id, reservation);
+               
+                if (isRoomReservationDirty)
+                {
+                    success = UpdateRoomReservation();
+                }
 
-                success = true;
+                if (isGuestDirty)
+                {
+                    success = UpdateGuest();
+                }
+
+                if (isReservationDirty)
+                {
+                    success = UpdateReservation();
+                }
+                
             }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
 
+          
+
+
             return success;
 
+            //LOCAL FUNCTIONS
+
+            bool UpdateReservation()
+            {
+                bool updated = false;
+                reservation.ModifiedBy = UserStore.CurrentUser;
+                reservation.RoomReservationId = roomReservation.Id;
+                updated =_unit.Reservations.Update(reservationFromDb.Id, reservation);
+                return updated;
+            }
+            bool UpdateGuest()
+            {
+                bool updated = false;
+                //IS DIRTY FLAG must be a conditional for modifiedby
+                guestFromDb.ModifiedBy = UserStore.CurrentUser;
+                updated = _unit.Guests.Update(guestFromDb.Id, guest);
+                return updated;
+            }
+            void ParameterNullCheck()
+            {
+                if (reservation is null || guest is null || string.IsNullOrWhiteSpace(roomNumber) || stayType is null)
+                {
+                    throw new Exception("Parameter is null");
+                }
+            }
+            bool UpdateRoomReservation()
+            {
+                bool updated = false;
+                roomReservation.RoomId = room.Id;
+                roomReservation.StayTypeId = stayType.Id;
+                roomReservation.ModifiedBy = UserStore.CurrentUser;
+                updated = _unit.RoomReservations.Update(roomReservation.Id, roomReservation);
+                return updated;
+            }
         }
     }
 }
