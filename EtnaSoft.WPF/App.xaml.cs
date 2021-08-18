@@ -66,6 +66,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IEventAggregator, EventAggregator>();
 
             service.AddSingleton(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
+            service.AddSingleton<CreateAppointmentViewModel>();
             service.AddSingleton<AppointmentViewModel>();
             service.AddSingleton<ReceptionViewModel>();
             service.AddSingleton<LoginViewModel>();

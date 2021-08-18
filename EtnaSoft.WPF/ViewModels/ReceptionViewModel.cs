@@ -11,6 +11,7 @@ using EtnaSoft.Bo.Entities;
 using EtnaSoft.WPF.Events;
 using EtnaSoft.WPF.Models;
 using EtnaSoft.WPF.Services.Reception;
+using EtnaSoft.WPF.Views;
 using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
@@ -60,12 +61,15 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IResourceService _roomResource;
         private readonly ISchedulerService _schedulerService;
         private readonly IBookingService _bookingService;
-        
+        private CreateAppointmentWindow NewBookingWindow
+        {
+            get { return GetService<CreateAppointmentWindow>(); }
+        }
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
         public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager)
         {
-            EditBookingCommand = new DelegateCommand<object>(ExecuteEditBooking);
+            EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
             _roomResource = roomResource;
             _bookingService = bookingService;
@@ -73,6 +77,8 @@ namespace EtnaSoft.WPF.ViewModels
             _detailsManager = detailsManager;
             _schedulerService = schedulerService;
         }
+
+      
 
         private void AppointmentOnStateChanged()
         {
@@ -99,16 +105,28 @@ namespace EtnaSoft.WPF.ViewModels
             //Labels = CustomLabel.Create(labels);
         }
 
-        private void ExecuteEditBooking(object obj)
+        private void OnBookingWindowOpen(object appointmentEvent)
         {
-            var args = (AppointmentWindowShowingEventArgs) obj;
-            //Sender is source
+            var args = (AppointmentWindowShowingEventArgs) appointmentEvent;
             var sender = (SchedulerControl) args.Source;
             _subToken = _eventAggregator.GetEvent<AppointmentViewEvent>()
-                                        .Subscribe(AppointmentOnStateChanged);
-            args.Window.DataContext = new AppointmentViewModel(args.Appointment, sender, _schedulerService,
-                _bookingService, _eventAggregator, _detailsManager);
-          
+                .Subscribe(AppointmentOnStateChanged);
+            //Sender is source
+
+            // Checking if appointment is empty
+            // if(args.Appointment is null) expression is always false
+            if ((int) args.Appointment.Id == 0)
+            {
+                args.Window = new CreateAppointmentWindow
+                {
+                    DataContext = new CreateAppointmentViewModel(args.Appointment, sender)
+                };
+            }
+            else
+            {
+                args.Window.DataContext = new AppointmentViewModel(args.Appointment, sender, _schedulerService,
+                    _bookingService, _eventAggregator, _detailsManager);
+            }
         }
     }
 }

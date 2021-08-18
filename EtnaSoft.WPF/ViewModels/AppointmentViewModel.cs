@@ -398,7 +398,7 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 IsCheckedIn = _bookingService.CheckIn(id);
                 MessageBox.Show("Uspesno prijavljen gost");
-                OnStateChanged();
+                OnChangeReloadAppointments();
                 CloseWindow();
             }
             else
@@ -429,7 +429,7 @@ namespace EtnaSoft.WPF.ViewModels
             var success = _detailsManager.CreateUpdateModel(this);
             if (success)
             {
-                OnStateChanged();
+                OnChangeReloadAppointments();
                 CloseWindow();
             }
             else
@@ -483,7 +483,7 @@ namespace EtnaSoft.WPF.ViewModels
             if (success)
             {
                IsCanceled = _bookingService.Cancel(id);
-               OnStateChanged();
+               OnChangeReloadAppointments();
                CloseWindow();
             }
             else
@@ -497,7 +497,7 @@ namespace EtnaSoft.WPF.ViewModels
             WindowService?.Close();
         }
 
-        protected virtual void OnStateChanged()
+        protected virtual void OnChangeReloadAppointments()
         {
             _eventAggregator.GetEvent<AppointmentViewEvent>().Publish();
         }
