@@ -1,14 +1,112 @@
-﻿<dx:ThemedWindow x:Class="EtnaSoft.WPF.Views.CreateAppointmentWindow" mc:Ignorable="d" Title="CreateAppointmentWindow" Height="450" Width="800" 
-    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:local="clr-namespace:EtnaSoft.WPF.Views">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+﻿<dx:ThemedWindow
+    x:Class="EtnaSoft.WPF.Views.CreateAppointmentWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+    xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduling"
+    xmlns:dxscht="http://schemas.devexpress.com/winfx/2008/xaml/scheduling/themekeys"
+    xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:EtnaSoft.WPF.Views"
+    Title="Kreiraj Rezervaciju"
+    Width="800"
+    Height="450"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <dx:ThemedWindow.Resources>
+        <dx:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </dx:ThemedWindow.Resources>
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DXMessageBoxService />
+        <dx:DialogService DialogWindowStartupLocation="CenterOwner">
+            <dx:DialogService.ViewTemplate>
+                <DataTemplate>
+                    <view:DialogServiceView />
+                </DataTemplate>
+            </dx:DialogService.ViewTemplate>
+            <dx:DialogService.DialogStyle>
+                <Style TargetType="dx:DXDialogWindow">
+                    <Setter Property="SizeToContent" Value="WidthAndHeight" />
+                </Style>
+            </dx:DialogService.DialogStyle>
+        </dx:DialogService>
+        <dxmvvm:CurrentWindowService ClosingCommand="{Binding WindowClosingCommand}" />
+        <dxmvvm:EventToCommand Command="{Binding LoadedCommand}" Event="FrameworkElement.Loaded" />
+    </dxmvvm:Interaction.Behaviors>
+    <DockPanel>
+        <dxr:RibbonControl
+            DockPanel.Dock="Top"
+            MinimizationButtonVisibility="Auto"
+            RibbonStyle="Office2010"
+            ToolbarShowMode="Hide">
+            <dxr:RibbonControl.ToolbarItems>
 
-    </Grid>
+                <dxb:BarButtonItem
+                    Command="{Binding CreateReservationCommand}"
+                    Content="Sacuvaj rezervaciju"
+                    Glyph="{dx:DXImage SvgImages/Save/Save.svg}"
+                    LargeGlyph="{dx:DXImage SvgImages/Save/Save.svg}"
+                    MediumGlyph="{dx:DXImage SvgImages/Save/Save.svg}" />
+            </dxr:RibbonControl.ToolbarItems>
+            <dxr:RibbonPage Caption="Nova rezervacija">
+                <dxr:RibbonPageGroup Caption="Opcije">
+                    <dxb:BarButtonItem
+                        Command="{Binding CreateReservationCommand}"
+                        Content="Rezervisi"
+                        Glyph="{dx:DXImage SvgImages/Save/Save.svg}"
+                        LargeGlyph="{dx:DXImage SvgImages/Save/Save.svg}"
+                        MediumGlyph="{dx:DXImage SvgImages/Save/Save.svg}"
+                        RibbonStyle="Default" />
+                    <dxb:BarButtonItem
+                        Command="{Binding AbortReservationCommand}"
+                        Content="Odustani"
+                        Glyph="{dx:DXImage SvgImages/Scheduling/Delete.svg}"
+                        LargeGlyph="{dx:DXImage SvgImages/Scheduling/Delete.svg}"
+                        MediumGlyph="{dx:DXImage SvgImages/Scheduling/Delete.svg}" />
+
+                </dxr:RibbonPageGroup>
+                <dxr:RibbonPageGroup Caption="Izaberi gosta" Glyph="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}">
+                    <dxb:BarButtonItem
+                        Content="Izaberi Gosta"
+                        Glyph="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}"
+                        LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}"
+                        MediumGlyph="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}" />
+                    <dxb:BarButtonItem
+                        Command="{Binding AddNewGuestCommand}"
+                        Content="Novi Gost"
+                        Glyph="{dx:DXImage SvgImages/Outlook Inspired/NewEmployee.svg}"
+                        LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/NewEmployee.svg}"
+                        MediumGlyph="{dx:DXImage SvgImages/Outlook Inspired/NewEmployee.svg}" />
+                </dxr:RibbonPageGroup>
+            </dxr:RibbonPage>
+        </dxr:RibbonControl>
+        <dxlc:LayoutControl dxe:ValidationService.IsValidationContainer="True" Orientation="Vertical">
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Soba">
+                    <dxe:ComboBoxEdit
+                        DisplayMember="RoomNumber"
+                        ItemsSource="{Binding RoomList}"
+                        SelectedIndex="{Binding SelectedIndex}"
+                        SelectedItem="SelectedRoom"
+                        ValueMember="Id" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="LayoutItem">
+                    <dxe:TextEdit />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Margin="0,0,0,-10" Label="Soba:">
+                    <dxe:ComboBoxEdit />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="LayoutItem">
+                    <dxe:TextEdit />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+    </DockPanel>
+
 </dx:ThemedWindow>
