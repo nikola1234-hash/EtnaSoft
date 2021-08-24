@@ -18,7 +18,7 @@ namespace EtnaSoft.WPF.ViewModels
 {
     public class ReceptionViewModel : ViewModelBase
     {
-
+        private readonly IGuestSearchService _guestSearch;
         private readonly IEventAggregator _eventAggregator;
         private readonly IDetailsManager _detailsManager;
         private ObservableCollection<Room> _rooms;
@@ -68,7 +68,7 @@ namespace EtnaSoft.WPF.ViewModels
         }
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
-        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager)
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, IGuestSearchService guestSearch)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -76,6 +76,7 @@ namespace EtnaSoft.WPF.ViewModels
             _bookingService = bookingService;
             _eventAggregator = eventAggregator;
             _detailsManager = detailsManager;
+            _guestSearch = guestSearch;
             _schedulerService = schedulerService;
         }
 
@@ -145,7 +146,7 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 args.Window = new CreateAppointmentWindow
                 {
-                    DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator, _roomResource)
+                    DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator, _roomResource, _guestSearch)
                 };
             }
             else

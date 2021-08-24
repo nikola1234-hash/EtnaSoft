@@ -18,13 +18,11 @@ namespace EtnaSoft.WPF.ViewModels
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IResourceService _resourceService;
-
         public ICommand CreateReservationCommand { get; }
         public ICommand AbortReservationCreationCommand { get; }
         public ICommand SearchExistingGuestCommand { get; }
         public ICommand AddNewGuestCommand { get; }
         public ICommand LoadedCommand { get; }
-        // This Dialog ViewModel is actually an add new Guest Dialog
         protected DialogServiceViewModel AddGuestDialogViewModel { get; private set; }
         protected SearchGuestDialogViewModel SearchGuestDialogViewModel { get; private set; }
         protected IDialogService NewGuestDialogService => GetService<IDialogService>("newGuestService");
@@ -80,10 +78,11 @@ namespace EtnaSoft.WPF.ViewModels
        
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, IResourceService resourceService) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, IResourceService resourceService, IGuestSearchService guestSearch) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
             _resourceService = resourceService;
+
 
             _appointmentItem = appointmentItem;
 
@@ -95,7 +94,7 @@ namespace EtnaSoft.WPF.ViewModels
             LoadedCommand = new DelegateCommand(OnLoaded);
             AddNewGuestCommand = new DelegateCommand(AddNewGuestExecute);
             AddGuestDialogViewModel = new DialogServiceViewModel();
-            SearchGuestDialogViewModel = new SearchGuestDialogViewModel();
+            SearchGuestDialogViewModel = new SearchGuestDialogViewModel(guestSearch);
         }
 
         private void SearchGuestDialogOpen()

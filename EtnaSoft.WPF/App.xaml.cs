@@ -42,7 +42,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IAuthenticator, Authenticator>();
 
 
-
+            service.AddSingleton<IGuestSearchService,GuestSearchService>();
             service.AddSingleton<IDetailsManager, DetailsManager>();
             service.AddSingleton<IUpdateBookingService, UpdateBookingService>();
             service.AddSingleton<IResourceService, ResourceService>();

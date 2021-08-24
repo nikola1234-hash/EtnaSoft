@@ -1,12 +1,40 @@
-﻿<UserControl x:Class="EtnaSoft.WPF.Views.ExistingGuestDialogView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="EtnaSoft.WPF.Views.ExistingGuestDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <Grid>
-            
+
+
+        <dxlc:LayoutControl>
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Label="Pretraga">
+                    <dxe:TextEdit Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutGroup Header="Gosti" View="GroupBox">
+                    <dxlc:LayoutItem Label="Lista Gostiju">
+                        <dxe:ListBoxEdit
+                            DisplayMember="FirstName"
+                            ItemsSource="{Binding GuestList}"
+                            SelectedItem="{Binding SelectedGuest}"
+                            ValueMember="Id">
+                            <dxe:ListBoxEdit.StyleSettings>
+                                <dxe:ListBoxEditStyleSettings />
+                            </dxe:ListBoxEdit.StyleSettings>
+                        </dxe:ListBoxEdit>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutItem Label="s" />
+        </dxlc:LayoutControl>
+
+
     </Grid>
 </UserControl>
