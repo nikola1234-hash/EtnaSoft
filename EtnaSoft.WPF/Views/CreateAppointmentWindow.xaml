@@ -24,7 +24,7 @@
     </dx:ThemedWindow.Resources>
     <dxmvvm:Interaction.Behaviors>
         <dx:DXMessageBoxService />
-        <dx:DialogService DialogWindowStartupLocation="CenterOwner">
+        <dx:DialogService Name="newGuestService" DialogWindowStartupLocation="CenterOwner">
             <dx:DialogService.ViewTemplate>
                 <DataTemplate>
                     <view:DialogServiceView />
@@ -35,6 +35,15 @@
                     <Setter Property="SizeToContent" Value="WidthAndHeight" />
                 </Style>
             </dx:DialogService.DialogStyle>
+        </dx:DialogService>
+        <dx:DialogService Name="choseGuestService" DialogWindowStartupLocation="CenterScreen">
+            <dx:DialogService.ViewTemplate>
+                <DataTemplate>
+                    <view:ExistingGuestDialogView />
+                </DataTemplate>
+
+            </dx:DialogService.ViewTemplate>
+
         </dx:DialogService>
         <dxmvvm:CurrentWindowService ClosingCommand="{Binding WindowClosingCommand}" />
         <dxmvvm:EventToCommand Command="{Binding LoadedCommand}" Event="FrameworkElement.Loaded" />
@@ -73,6 +82,7 @@
                 </dxr:RibbonPageGroup>
                 <dxr:RibbonPageGroup Caption="Izaberi gosta" Glyph="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}">
                     <dxb:BarButtonItem
+                        Command="{Binding SearchExistingGuestCommand}"
                         Content="Izaberi Gosta"
                         Glyph="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}"
                         LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}"
@@ -93,7 +103,7 @@
                         DisplayMember="RoomNumber"
                         ItemsSource="{Binding RoomList}"
                         SelectedIndex="{Binding SelectedIndex}"
-                        SelectedItem="SelectedRoom"
+                        SelectedItem="{Binding SelectedRoom}"
                         ValueMember="Id" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="LayoutItem">

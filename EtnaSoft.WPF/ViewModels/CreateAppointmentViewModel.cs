@@ -24,8 +24,11 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand SearchExistingGuestCommand { get; }
         public ICommand AddNewGuestCommand { get; }
         public ICommand LoadedCommand { get; }
-        protected DialogServiceViewModel DialogViewModel { get; private set; }
-        protected IDialogService DialogService => GetService<IDialogService>();
+        // This Dialog ViewModel is actually an add new Guest Dialog
+        protected DialogServiceViewModel AddGuestDialogViewModel { get; private set; }
+        protected SearchGuestDialogViewModel SearchGuestDialogViewModel { get; private set; }
+        protected IDialogService NewGuestDialogService => GetService<IDialogService>("newGuestService");
+        protected IDialogService ChoseGuestDialogService => GetService<IDialogService>("choseGuestService");
         protected IMessageBoxService MessageService
         {
             get => GetService<IMessageBoxService>();
@@ -62,7 +65,17 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        public int SelectedIndex { get; set; }
+        private int _selectedIndex;
+
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set
+            {
+                _selectedIndex = value;
+                RaisePropertyChanged(nameof(SelectedIndex));
+            }
+        }
         private AppointmentItem _appointmentItem { get; }
        
         #endregion
@@ -71,21 +84,34 @@ namespace EtnaSoft.WPF.ViewModels
         {
             _eventAggregator = eventAggregator;
             _resourceService = resourceService;
+
             _appointmentItem = appointmentItem;
 
 
 
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
+            SearchExistingGuestCommand = new DelegateCommand(SearchGuestDialogOpen);
             AbortReservationCreationCommand = new DelegateCommand(AbortExecute);
             LoadedCommand = new DelegateCommand(OnLoaded);
             AddNewGuestCommand = new DelegateCommand(AddNewGuestExecute);
-            DialogViewModel = new DialogServiceViewModel();
+            AddGuestDialogViewModel = new DialogServiceViewModel();
+            SearchGuestDialogViewModel = new SearchGuestDialogViewModel();
+        }
+
+        private void SearchGuestDialogOpen()
+        {
+            UICommand resultCommand = ChoseGuestDialogService.ShowDialog(SearchGuestDialogViewModel.DialogCommands,
+                "Postojeci gost", viewModel: SearchGuestDialogViewModel);
+            if (resultCommand != null)
+            {
+                MessageService.Show("Clicked" + resultCommand.Caption);
+            }
         }
 
         private void AddNewGuestExecute()
         {
-            UICommand result = DialogService.ShowDialog(DialogViewModel.DialogCommands, "Registracija",
-                viewModel: DialogViewModel);
+            UICommand result = NewGuestDialogService.ShowDialog(AddGuestDialogViewModel.DialogCommands, "Registracija",
+                viewModel: AddGuestDialogViewModel);
             if (result != null)
             {
                 MessageService.Show("Dialog clicked button " + result.Caption);
@@ -98,7 +124,7 @@ namespace EtnaSoft.WPF.ViewModels
         /// </summary>
         private void OnLoaded()
         {
-            //TODO: Combobox Logic Indexing is having bugs with displaying rooms
+            // Combobox function
             void ComboboxLogic()
             {
                 var id = (int) _appointmentItem.ResourceId;
