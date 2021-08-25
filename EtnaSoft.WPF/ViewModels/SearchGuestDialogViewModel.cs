@@ -77,6 +77,11 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 GuestList.Clear();
             }
+            //TODO: Write some logic if list is empty
+            if (!guests.Any())
+            { 
+
+            }
             GuestList = new ObservableCollection<Guest>(guests);
         }
 

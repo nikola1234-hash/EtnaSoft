@@ -15,9 +15,19 @@
 
         <dxlc:LayoutControl>
             <dxlc:LayoutGroup Orientation="Vertical">
-                <dxlc:LayoutItem Label="Pretraga">
-                    <dxe:TextEdit Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}" />
-                </dxlc:LayoutItem>
+                <dxlc:LayoutGroup>
+                    <dxlc:LayoutItem Label="Pretraga">
+                        <dxe:ButtonEdit
+                            Width="200"
+                            HorizontalAlignment="Left"
+                            Text="{Binding SearchKeyword, UpdateSourceTrigger=PropertyChanged}">
+                            <dxe:ButtonInfo
+                                Command="{Binding SearchCommand}"
+                                GlyphKind="Search"
+                                IsDefaultButton="True" />
+                        </dxe:ButtonEdit>
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
                 <dxlc:LayoutGroup Header="Gosti" View="GroupBox">
                     <dxlc:LayoutItem Label="Lista Gostiju">
                         <dxe:ListBoxEdit
@@ -28,11 +38,71 @@
                             <dxe:ListBoxEdit.StyleSettings>
                                 <dxe:ListBoxEditStyleSettings />
                             </dxe:ListBoxEdit.StyleSettings>
+                            <dxe:ListBoxEdit.ItemTemplate>
+                                <DataTemplate>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            Margin="5,0"
+                                            Text="Ime:" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Margin="5,0"
+                                            Text="{Binding FirstName}" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            Margin="5,0"
+                                            Text="Prezime:" />
+                                        <TextBlock
+                                            Grid.Column="3"
+                                            Margin="5,0"
+                                            Text="{Binding LastName}" />
+                                        <TextBlock
+                                            Grid.Column="4"
+                                            Margin="5,0"
+                                            Text="Telefon:" />
+                                        <TextBlock
+                                            Grid.Column="5"
+                                            Margin="5,0"
+                                            Text="{Binding Telephone}" />
+                                        <TextBlock
+                                            Grid.Column="6"
+                                            Margin="5,0"
+                                            Text="Adresa:" />
+                                        <TextBlock
+                                            Grid.Column="7"
+                                            Margin="5,0"
+                                            Text="{Binding Address}" />
+                                        <TextBlock
+                                            Grid.Column="8"
+                                            Margin="5,0"
+                                            Text="E-mail:" />
+                                        <TextBlock
+                                            Grid.Column="9"
+                                            Margin="5,0"
+                                            Text="{Binding EmailAddress}" />
+
+                                    </Grid>
+
+                                </DataTemplate>
+                            </dxe:ListBoxEdit.ItemTemplate>
                         </dxe:ListBoxEdit>
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
-            <dxlc:LayoutItem Label="s" />
         </dxlc:LayoutControl>
 
 
