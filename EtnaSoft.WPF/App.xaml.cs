@@ -65,13 +65,13 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
             service.AddSingleton<IEventAggregator, EventAggregator>();
 
-            service.AddSingleton(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
-            service.AddSingleton<CreateAppointmentViewModel>();
-            service.AddSingleton<AppointmentViewModel>();
-            service.AddSingleton<ReceptionViewModel>();
-            service.AddSingleton<LoginViewModel>();
-            service.AddSingleton<HomeViewModel>();
-            service.AddSingleton<MainWindow>();
+            service.AddTransient(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
+            service.AddTransient<CreateAppointmentViewModel>();
+            service.AddTransient<AppointmentViewModel>();
+            service.AddTransient<ReceptionViewModel>();
+            service.AddTransient<LoginViewModel>();
+            service.AddTransient<HomeViewModel>();
+            service.AddTransient<MainWindow>();
         }
 
         

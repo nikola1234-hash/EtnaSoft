@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using DevExpress.Mvvm;
 using EtnaSoft.WPF.Navigation;
+using EtnaSoft.WPF.ViewModels;
 
 namespace EtnaSoft.WPF.Services
 {
     public interface IEtnaViewModelFactory
     {
-        ViewModelBase CreateViewModel(ViewType viewType);
+        EtnaBaseViewModel CreateViewModel(ViewType viewType);
     }
 }

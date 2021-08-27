@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
@@ -13,7 +11,7 @@ using EtnaSoft.Bll.Services;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class SearchGuestDialogViewModel : ViewModelBase
+    public class SearchGuestDialogViewModel : ViewModelBase, IDisposable
     {
         private readonly IGuestSearchService _guestSearch;
         private string _searchKeyword;
@@ -53,11 +51,32 @@ namespace EtnaSoft.WPF.ViewModels
 
         public List<UICommand> DialogCommands { get; private set; }
         protected UICommand CancelUiCommand { get; private set; }
-        public ICommand SearchCommand { get; }
+        protected UICommand SelectUiCommand { get; private set; }
+
+
+        public ICommand SearchCommand { get; set; }
+
+        private bool _allowCloseDialog = false;
+
+        public bool AllowCloseDialog
+        {
+            get { return _allowCloseDialog; }
+            set
+            {
+                _allowCloseDialog = value;
+                SetProperty(ref _allowCloseDialog, value, () => AllowCloseDialog);
+            }
+        }
 
         public SearchGuestDialogViewModel(IGuestSearchService guestSearch)
         {
             _guestSearch = guestSearch;
+            InitializeCommands();
+            InitializeCollection();
+        }
+
+        private void InitializeCommands()
+        {
             SearchCommand = new DelegateCommand(SearchCommandExecute);
             DialogCommands = new List<UICommand>();
             CancelUiCommand = new UICommand(
@@ -66,21 +85,45 @@ namespace EtnaSoft.WPF.ViewModels
                 isDefault: false,
                 command: new DelegateCommand<CancelEventArgs>(CancelExecute),
                 caption: "Odustani");
+
+            SelectUiCommand = new UICommand(
+                id: MessageBoxResult.OK,
+                isDefault: true,
+                isCancel: false,
+                command: new DelegateCommand<CancelEventArgs>(SelectGuestExecute, CanSelectGuestExecute),
+                caption: "Izaberi"
+            );
+
+            DialogCommands.Add(SelectUiCommand);
             DialogCommands.Add(CancelUiCommand);
-            InitializeCollection();
         }
+
+        private void SelectGuestExecute(CancelEventArgs args)
+        {
+            if (!_allowCloseDialog)
+            {
+                SelectUiCommand.Id = SelectedGuest.Id;
+            }
+        }
+
+        private bool CanSelectGuestExecute(CancelEventArgs arg)
+        {
+            
+            return SelectedGuest != null;
+        }
+
 
         private void SearchCommandExecute()
         {
-            var guests = _guestSearch.GetGuests(SearchKeyword);
+            var guests = _guestSearch.GetGuests(SearchKeyword).ToList();
             if (GuestList.Count > 0)
             {
                 GuestList.Clear();
             }
             //TODO: Write some logic if list is empty
             if (!guests.Any())
-            { 
-
+            {
+                
             }
             GuestList = new ObservableCollection<Guest>(guests);
         }
@@ -95,5 +138,29 @@ namespace EtnaSoft.WPF.ViewModels
             var guests = _guestSearch.GetGuests("");
             GuestList = new ObservableCollection<Guest>(guests);
         }
-}
+
+        private void ReleaseUnmanagedResources()
+        {
+            GuestList.Clear();
+            SelectedGuest = null;
+            DialogCommands.Clear();
+            SearchCommand = null;
+            CancelUiCommand = null;
+            SelectUiCommand = null;
+            SearchKeyword = string.Empty;
+        }
+
+        public void Dispose()
+        {
+            ReleaseUnmanagedResources();
+            GC.SuppressFinalize(this);
+         
+            
+        }
+
+        ~SearchGuestDialogViewModel()
+        {
+            ReleaseUnmanagedResources();
+        }
+    }
 }

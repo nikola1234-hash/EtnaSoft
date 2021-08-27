@@ -7,7 +7,11 @@ using DevExpress.Mvvm;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class HomeViewModel : ViewModelBase
+    public class HomeViewModel : EtnaBaseViewModel
     {
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
     }
 }

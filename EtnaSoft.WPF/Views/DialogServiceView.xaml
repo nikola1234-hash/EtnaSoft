@@ -18,7 +18,7 @@
                 <TextBlock Text="Name: " />
                 <dxe:TextEdit
                     Width="200"
-                    EditValue="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                    EditValue="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
                     ValidateOnTextInput="True" />
             </StackPanel>
             <dxe:CheckEdit Content="Can Close Dialog" EditValue="{Binding AllowCloseDialog}" />

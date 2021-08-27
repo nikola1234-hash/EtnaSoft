@@ -17,7 +17,7 @@ namespace EtnaSoft.WPF.Services
             _receptionView = receptionView;
         }
 
-        public ViewModelBase CreateViewModel(ViewType viewType)
+        public EtnaBaseViewModel CreateViewModel(ViewType viewType)
         {
             switch (viewType)
             {

@@ -16,7 +16,7 @@ using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class ReceptionViewModel : ViewModelBase
+    public class ReceptionViewModel : EtnaBaseViewModel
     {
         private readonly IGuestSearchService _guestSearch;
         private readonly IEventAggregator _eventAggregator;
@@ -56,7 +56,7 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(Labels));
             }
         }
-
+        
         private bool _isFirstRun = true;
         private SubscriptionToken _subToken;
         private readonly IResourceService _roomResource;
@@ -158,6 +158,12 @@ namespace EtnaSoft.WPF.ViewModels
             //Needs to be at the end of method
             SubscribeToAppointmentEventAggregator();
 
+        }
+
+        public override void Dispose()
+        {
+
+            base.Dispose();
         }
     }
 }

@@ -8,7 +8,7 @@ using EtnaSoft.WPF.Stores;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : EtnaBaseViewModel
     {
         private string _username;
 
@@ -71,5 +71,10 @@ namespace EtnaSoft.WPF.ViewModels
 
         public ICommand LoginCommand { get; }
         public ICommand CloseCommand { get; }
+        public override void Dispose()
+        {
+            ErrorMessageViewModel?.Dispose();
+            base.Dispose();
+        }
     }
 }

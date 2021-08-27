@@ -16,7 +16,7 @@ namespace EtnaSoft.WPF.Stores
             _homeView = homeView;
         }
 
-        public ViewModelBase Navigate()
+        public EtnaBaseViewModel Navigate()
         {
             return _homeView;
         }

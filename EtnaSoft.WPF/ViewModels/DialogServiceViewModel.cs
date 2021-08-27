@@ -5,7 +5,7 @@ using DevExpress.Mvvm;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class DialogServiceViewModel : ViewModelBase
+    public class DialogServiceViewModel : EtnaBaseViewModel
     {
       public List<UICommand> DialogCommands { get; private set; }
       protected UICommand RegisterUICommand { get; private set; }
@@ -74,6 +74,11 @@ namespace EtnaSoft.WPF.ViewModels
           {
               args.Cancel = true;
           }
+      }
+
+      public override void Dispose()
+      {
+          base.Dispose();
       }
     }
 }

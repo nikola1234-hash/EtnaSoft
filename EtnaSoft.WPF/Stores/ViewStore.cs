@@ -5,20 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Editors;
+using EtnaSoft.WPF.ViewModels;
 
 namespace EtnaSoft.WPF.Stores
 {
-    public class ViewStore : ViewModelBase, IViewStore
+    public class ViewStore : EtnaBaseViewModel, IViewStore
     {
         public event Action ViewChanged;
-        private ViewModelBase _currentViewModel
+        private EtnaBaseViewModel _currentViewModel
 ;
 
-        public ViewModelBase CurrentViewModel
+        public EtnaBaseViewModel CurrentViewModel
 
         {
             get { return _currentViewModel; }
-            set { 
+            set
+            {
+                _currentViewModel.Dispose();
                 _currentViewModel = value;
                 OnViewChanged();
                 RaisePropertiesChanged(nameof(CurrentViewModel));

@@ -130,6 +130,7 @@
     <Compile Include="ViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
+    <Compile Include="ViewModels\EtnaBaseViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MessageViewModel.cs" />

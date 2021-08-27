@@ -35,6 +35,7 @@ namespace EtnaSoft.Bll.Services
                     words.Add(wordString);
                 }
 
+                
                 if (words.Count == 1)
                 {
                     result = guests.Where(s => s.FirstName == words[0] && s.IsActive);
@@ -70,6 +71,7 @@ namespace EtnaSoft.Bll.Services
                     return result;
                 }
             }
+            
             // default result
             result = guests.Where(s => s.FirstName == keyword && s.IsActive);
             return result;

@@ -10,7 +10,7 @@ using EtnaSoft.WPF.Stores;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : EtnaBaseViewModel
     {
         //Bound to MainWindow Grid Background
         public Brush BgColor { get; set; }
@@ -43,7 +43,11 @@ namespace EtnaSoft.WPF.ViewModels
             RaisePropertiesChanged(nameof(IsLoggedIn));
         }
 
-        public ViewModelBase CurrentViewModel => _viewStore.CurrentViewModel;
-
+        public EtnaBaseViewModel CurrentViewModel => _viewStore.CurrentViewModel;
+        public override void Dispose()
+        {
+            _viewStore.ViewChanged -= OnViewChanged;
+            base.Dispose();
+        }
     }
 }

@@ -7,7 +7,7 @@ using DevExpress.Mvvm;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class MessageViewModel : ViewModelBase
+    public class MessageViewModel : EtnaBaseViewModel
     {
 
         public bool HasMessage => !string.IsNullOrWhiteSpace(Message);
@@ -23,6 +23,11 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertiesChanged(nameof(Message));
                 RaisePropertiesChanged(nameof(HasMessage));
             }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
         }
     }
 }
