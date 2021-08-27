@@ -48,7 +48,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IResourceService, ResourceService>();
             service.AddSingleton<ISchedulerService, SchedulerService>();
             service.AddSingleton<IBookingService, BookingService>();
-
+            service.AddSingleton<ICreateGuestService, CreateGuestService>();
             service.AddSingleton<IRepository<User>, UserRepository>();
             service.AddSingleton<IRepository<Guest>, GuestRepository>();
             service.AddSingleton<IRepository<Room>, RoomRepository>();

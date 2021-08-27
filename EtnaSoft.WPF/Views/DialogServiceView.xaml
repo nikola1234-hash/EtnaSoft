@@ -12,16 +12,36 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Name: " />
-                <dxe:TextEdit
-                    Width="200"
-                    EditValue="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                    ValidateOnTextInput="True" />
-            </StackPanel>
-            <dxe:CheckEdit Content="Can Close Dialog" EditValue="{Binding AllowCloseDialog}" />
-        </StackPanel>
-    </Grid>
+    <dxlc:LayoutControl>
+        <dxlc:LayoutGroup Header="Podaci" View="GroupBox">
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem dxe:ValidationService.IsValidationContainer="True" Label="Ime:">
+                    <dxe:TextEdit Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Adresa:">
+                    <dxe:TextEdit Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="JMBG:">
+                    <dxe:TextEdit Text="{Binding UniqueNumber}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Label="Prezime:">
+                    <dxe:TextEdit Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Email:">
+                    <dxe:TextEdit Text="{Binding EmailAddress, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Label="Telefon:">
+                    <dxe:TextEdit Text="{Binding Telephone, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Datum Rodjenja:">
+                    <dxe:DateEdit DateTime="{Binding BirthDate}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+
 </UserControl>

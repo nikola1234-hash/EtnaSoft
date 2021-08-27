@@ -14,11 +14,12 @@ using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class CreateAppointmentViewModel : AppointmentWindowViewModel, IDisposable
+    public class CreateAppointmentViewModel : AppointmentWindowBase
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IResourceService _resourceService;
         private readonly IGuestSearchService _guestSearch;
+        private readonly ICreateGuestService _createGuestService;
         public ICommand CreateReservationCommand { get; }
         public ICommand AbortReservationCreationCommand { get; }
         public ICommand SearchExistingGuestCommand { get; }
@@ -80,11 +81,12 @@ namespace EtnaSoft.WPF.ViewModels
        
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, IResourceService resourceService, IGuestSearchService guestSearch) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, IResourceService resourceService, IGuestSearchService guestSearch, ICreateGuestService createGuestService) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
             _resourceService = resourceService;
             _guestSearch = guestSearch;
+            _createGuestService = createGuestService;
             _appointmentItem = appointmentItem;
 
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
@@ -92,7 +94,7 @@ namespace EtnaSoft.WPF.ViewModels
             AbortReservationCreationCommand = new DelegateCommand(AbortExecute);
             LoadedCommand = new DelegateCommand(OnLoaded);
             AddNewGuestCommand = new DelegateCommand(AddNewGuestExecute);
-            AddGuestDialogViewModel = new DialogServiceViewModel();
+            
            
         }
 
@@ -100,25 +102,29 @@ namespace EtnaSoft.WPF.ViewModels
         {
             using (SearchGuestDialogViewModel = new SearchGuestDialogViewModel(_guestSearch))
             {
-                UICommand resultCommand = ChoseGuestDialogService.ShowDialog(SearchGuestDialogViewModel.DialogCommands,
+                UICommand result= ChoseGuestDialogService.ShowDialog(SearchGuestDialogViewModel.DialogCommands,
                     "Postojeci gost", viewModel: SearchGuestDialogViewModel);
-                if (resultCommand != null)
+                if (result != null)
                 {
-                    _guestId = (int)resultCommand.Id;
-                    MessageService.Show("Clicked" + resultCommand.Id);
+                    //returns SelectedGuest.ID as UICommand id;
+                    _guestId = (int)result.Id;
                 }
             }
         }
 
         private void AddNewGuestExecute()
         {
-            UICommand result = NewGuestDialogService.ShowDialog(AddGuestDialogViewModel.DialogCommands, "Registracija",
-                viewModel: AddGuestDialogViewModel);
-            if (result != null)
+            using (AddGuestDialogViewModel = new DialogServiceViewModel(_createGuestService))
             {
-                MessageService.Show("Dialog clicked button " + result.Caption);
+                UICommand result = NewGuestDialogService.ShowDialog(AddGuestDialogViewModel.DialogCommands, "Registracija",
+                    viewModel: AddGuestDialogViewModel);
+                if (result != null)
+                {
+                    MessageService.Show("Dialog clicked button " + result.Id);
                 
+                }
             }
+           
         }
 
         /// <summary>
@@ -169,8 +175,9 @@ namespace EtnaSoft.WPF.ViewModels
             WindowService?.Close();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             AddGuestDialogViewModel?.Dispose();
             SearchGuestDialogViewModel?.Dispose();
         }

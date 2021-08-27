@@ -21,16 +21,11 @@ namespace EtnaSoft.WPF.Stores
             get { return _currentViewModel; }
             set
             {
-                _currentViewModel.Dispose();
+                _currentViewModel?.Dispose();
                 _currentViewModel = value;
-                OnViewChanged();
-                RaisePropertiesChanged(nameof(CurrentViewModel));
+                ViewChanged.Invoke();
             }
         }
 
-        protected virtual void OnViewChanged()
-        {
-            ViewChanged?.Invoke();
-        }
     }
 }

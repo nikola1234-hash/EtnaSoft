@@ -40,8 +40,23 @@ namespace EtnaSoft.Dal.Repositories
         }
         public Guest Create(Guest guest)
         {
-            var guestToCreate = new DynamicParameters(guest);
-            Guest createdGuest = _context.LoadData<Guest, DynamicParameters>(CreateGuest, guestToCreate).FirstOrDefault();
+            object MapGuest()
+            {
+                var guestParam = new
+                {
+                    FirstName = guest.FirstName,
+                    LastName = guest.LastName,
+                    Telephone = guest.Telephone,
+                    Address = guest.Address,
+                    EmailAddress = guest.EmailAddress,
+                    BirthDate = guest.BirthDate,
+                    UniqueNumber = guest.UniqueNumber,
+                    CreatedBy = guest.CreatedBy
+                };
+                return guestParam;
+            }
+            var newGuest = MapGuest();
+            Guest createdGuest = _context.LoadData<Guest, dynamic>(CreateGuest, newGuest).FirstOrDefault();
             return createdGuest;
         }
 

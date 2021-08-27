@@ -21,7 +21,7 @@ using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class AppointmentViewModel : AppointmentWindowViewModel, IDisposable
+    public class AppointmentViewModel : AppointmentWindowBase
     {
         private readonly AppointmentItem _appointmentItem;
         
@@ -502,8 +502,9 @@ namespace EtnaSoft.WPF.ViewModels
             _eventAggregator.GetEvent<AppointmentViewEvent>().Publish();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
         }
     }
 }

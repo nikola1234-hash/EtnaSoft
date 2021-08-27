@@ -62,13 +62,10 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IResourceService _roomResource;
         private readonly ISchedulerService _schedulerService;
         private readonly IBookingService _bookingService;
-        private CreateAppointmentWindow NewBookingWindow
-        {
-            get { return GetService<CreateAppointmentWindow>(); }
-        }
+        private readonly ICreateGuestService _createGuestService;
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
-        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, IGuestSearchService guestSearch)
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, IGuestSearchService guestSearch, ICreateGuestService createGuestService)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -77,6 +74,7 @@ namespace EtnaSoft.WPF.ViewModels
             _eventAggregator = eventAggregator;
             _detailsManager = detailsManager;
             _guestSearch = guestSearch;
+            _createGuestService = createGuestService;
             _schedulerService = schedulerService;
         }
 
@@ -146,7 +144,8 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 args.Window = new CreateAppointmentWindow
                 {
-                    DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator, _roomResource, _guestSearch)
+                    DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator,
+                                                                _roomResource, _guestSearch, _createGuestService)
                 };
             }
             else

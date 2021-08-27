@@ -128,6 +128,7 @@
     <Compile Include="Stores\IRenavigate.cs" />
     <Compile Include="Stores\Renavigate.cs" />
     <Compile Include="ViewModels\AppointmentViewModel.cs" />
+    <Compile Include="ViewModels\AppointmentWindowBase.cs" />
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
     <Compile Include="ViewModels\EtnaBaseViewModel.cs" />

@@ -2,6 +2,13 @@
 using System.ComponentModel;
 using System.Windows;
 using DevExpress.Mvvm;
+using DevExpress.Mvvm.DataAnnotations;
+using System;
+using System.Configuration;
+using ErtnaSoft.Bo.Entities;
+using EtnaSoft.Bll.Services;
+using EtnaSoft.Bll.Stores;
+using EtnaSoft.Dal.Services;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -12,30 +19,95 @@ namespace EtnaSoft.WPF.ViewModels
       protected UICommand CancelUICommand { get; private set; }
       private bool _allowCloseDialog = false;
 
-      public bool AllowCloseDialog
+      private string _firstName;
+
+      public string FirstName
       {
-          get { return _allowCloseDialog; }
+          get { return _firstName; }
           set
           {
-              _allowCloseDialog = value;
-              SetProperty(ref _allowCloseDialog, value, () => AllowCloseDialog);
+              _firstName = value;
+              SetProperty(ref _firstName, value, () => FirstName);
           }
       }
 
-      private string _username;
+      private string _lastName;
 
-      public string Username
+      public string LastName
       {
-          get { return _username; }
+          get { return _lastName; }
           set
           {
-              _username = value;
-              SetProperty(ref _username, value, () => Username);
+              _lastName = value;
+              SetProperty(ref _lastName, value, () => LastName);
           }
       }
 
-      public DialogServiceViewModel()
+      private string _address;
+
+      public string Address
       {
+          get { return _address; }
+          set
+          {
+              _address = value;
+              SetProperty(ref _address, value, () => Address);
+          }
+      }
+
+      private string _telephone;
+
+      public string Telephone
+      {
+          get { return _telephone; }
+          set
+          {
+              _telephone = value;
+              SetProperty(ref _telephone, value, () => Telephone);
+          }
+      }
+
+      private string _emailAddress;
+
+      public string EmailAddress
+      {
+          get { return _emailAddress; }
+          set
+          {
+              _emailAddress = value;
+              SetProperty(ref _emailAddress, value, () => EmailAddress);
+          }
+      }
+
+      private DateTime _birthDate = DateTime.Now.Date.AddYears(-20);
+
+      public DateTime  BirthDate
+
+      {
+          get { return _birthDate; }
+          set
+          {
+              _birthDate = value;
+              SetProperty(ref _birthDate, value, () => BirthDate);
+          }
+      }
+
+      private string _uniqueNumber;
+
+      public string UniqueNumber
+      {
+          get { return _uniqueNumber; }
+          set
+          {
+              _uniqueNumber = value;
+              SetProperty(ref _uniqueNumber, value, () => UniqueNumber);
+          }
+      }
+      public Guest Guest { get; set; }
+      private readonly ICreateGuestService _guestService;
+      public DialogServiceViewModel(ICreateGuestService guestService)
+      {
+          _guestService = guestService;
           DialogCommands = new List<UICommand>();
           RegisterUICommand = new UICommand(
               id:MessageBoxResult.OK,
@@ -53,6 +125,7 @@ namespace EtnaSoft.WPF.ViewModels
               );
           DialogCommands.Add(RegisterUICommand);
           DialogCommands.Add(CancelUICommand);
+          
       }
 
       private void CancelExecute(CancelEventArgs args)
@@ -65,15 +138,35 @@ namespace EtnaSoft.WPF.ViewModels
 
       private bool CanRegisterExecute(CancelEventArgs args)
       {
-          return !string.IsNullOrEmpty(Username);
+          bool canRegister = !string.IsNullOrEmpty(FirstName)
+                             && !string.IsNullOrEmpty(LastName)
+                             && !string.IsNullOrEmpty(Telephone);
+          return canRegister;
       }
 
       private void RegisterCommand(CancelEventArgs args)
       {
-          if (!_allowCloseDialog)
+          Guest GuestMappingLogic()
           {
-              args.Cancel = true;
+              Guest = new Guest
+              {
+                  FirstName = FirstName,
+                  LastName = LastName,
+                  Telephone = Telephone,
+                  Address = Address,
+                  EmailAddress = EmailAddress,
+                  BirthDate = BirthDate,
+                  UniqueNumber = UniqueNumber,
+                  CreatedBy = UserStore.CurrentUser,
+                  DateCreated = DateTime.Now
+              };
+             
+              return Guest;
           }
+
+          var newGuest = GuestMappingLogic();
+          var createdGuest = _guestService.CreateGuest(newGuest);
+          RegisterUICommand.Id = createdGuest;
       }
 
       public override void Dispose()
