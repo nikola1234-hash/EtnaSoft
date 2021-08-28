@@ -18,7 +18,7 @@ namespace EtnaSoft.WPF.ViewModels
 {
     public class ReceptionViewModel : EtnaBaseViewModel
     {
-        private readonly IGuestSearchService _guestSearch;
+
         private readonly IEventAggregator _eventAggregator;
         private readonly IDetailsManager _detailsManager;
         private ObservableCollection<Room> _rooms;
@@ -62,10 +62,13 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IResourceService _roomResource;
         private readonly ISchedulerService _schedulerService;
         private readonly IBookingService _bookingService;
-        private readonly ICreateGuestService _createGuestService;
+        //private readonly ICreateGuestService _createGuestService;
+        private readonly DialogServiceViewModel _dialogServiceViewModel;
+        private readonly SearchGuestDialogViewModel _searchGuestDialogViewModel;
+
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
-        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, IGuestSearchService guestSearch, ICreateGuestService createGuestService)
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -73,8 +76,10 @@ namespace EtnaSoft.WPF.ViewModels
             _bookingService = bookingService;
             _eventAggregator = eventAggregator;
             _detailsManager = detailsManager;
-            _guestSearch = guestSearch;
-            _createGuestService = createGuestService;
+
+
+            _searchGuestDialogViewModel = searchGuestDialogViewModel;
+            _dialogServiceViewModel = dialogServiceViewModel;
             _schedulerService = schedulerService;
         }
 
@@ -145,7 +150,7 @@ namespace EtnaSoft.WPF.ViewModels
                 args.Window = new CreateAppointmentWindow
                 {
                     DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator,
-                                                                _roomResource, _guestSearch, _createGuestService)
+                                                                _roomResource,_dialogServiceViewModel, _searchGuestDialogViewModel)
                 };
             }
             else

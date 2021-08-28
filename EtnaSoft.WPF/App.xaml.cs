@@ -37,6 +37,8 @@ namespace EtnaSoft.WPF
         private void ConfigureServices(IServiceCollection service)
         {
             service.AddSingleton<AdminService>();
+            service.AddSingleton<DatabaseService>();
+
             service.AddSingleton<IPasswordHasher, PasswordHasher>();
             service.AddSingleton<IAuthorization, AuthorizationService>();
             service.AddSingleton<IAuthenticator, Authenticator>();
@@ -65,6 +67,10 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
             service.AddSingleton<IEventAggregator, EventAggregator>();
 
+
+            service.AddTransient<SearchGuestDialogViewModel>();
+            service.AddTransient<DialogServiceViewModel>();
+
             service.AddTransient(typeof(MainViewModel), ViewModelSource.GetPOCOType(typeof(MainViewModel)));
             service.AddTransient<CreateAppointmentViewModel>();
             service.AddTransient<AppointmentViewModel>();
@@ -78,19 +84,30 @@ namespace EtnaSoft.WPF
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
             EtnaSettings.ConnectionString = ConfigurationManager.ConnectionStrings["SqlDb"].ToString();
+            string dbName = ConfigurationManager.AppSettings["DatabaseName"].ToString();
+
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             
             var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
             mainWindow.DataContext = mainViewModel;
-
-            var adminService = ServiceProvider.GetRequiredService<AdminService>();
-            bool accountExists = adminService.CheckIfAccountExists();
-            if (!accountExists)
+            var databaseService = ServiceProvider.GetRequiredService<DatabaseService>();
+            var databaseExists = databaseService.DoesDatabaseExist(dbName);
+            if (databaseExists)
             {
-                adminService.FirstUserCreation();
-            }
+                var adminService = ServiceProvider.GetRequiredService<AdminService>();
+                bool accountExists = adminService.CheckIfAccountExists();
+                if (!accountExists)
+                {
+                    adminService.FirstUserCreation();
+                }
 
-            mainWindow.Show();
+                mainWindow.Show();
+            }
+            else
+            {
+                MessageBox.Show("Baza nije instalirana");
+            }
+          
         }
     }
 }

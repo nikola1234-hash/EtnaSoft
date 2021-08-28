@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
@@ -18,14 +19,12 @@ namespace EtnaSoft.WPF.ViewModels
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IResourceService _resourceService;
-        private readonly IGuestSearchService _guestSearch;
-        private readonly ICreateGuestService _createGuestService;
         public ICommand CreateReservationCommand { get; }
         public ICommand AbortReservationCreationCommand { get; }
         public ICommand SearchExistingGuestCommand { get; }
         public ICommand AddNewGuestCommand { get; }
         public ICommand LoadedCommand { get; }
-        private int _guestId;
+
         protected DialogServiceViewModel AddGuestDialogViewModel { get; private set; }
         protected SearchGuestDialogViewModel SearchGuestDialogViewModel { get; private set; }
         protected IDialogService NewGuestDialogService => GetService<IDialogService>("newGuestService");
@@ -43,6 +42,42 @@ namespace EtnaSoft.WPF.ViewModels
         }
 
         #region Properties
+        private int _guestId;
+        private decimal _totalPrice;
+
+        public decimal TotalPrice
+        {
+            get { return _totalPrice; }
+            set
+            {
+                _totalPrice = value;
+                RaisePropertyChanged(nameof(TotalPrice));
+            }
+        }
+
+        private int _numberOfPeople;
+
+        public int NumberOfPeople
+        {
+            get { return _numberOfPeople; }
+            set
+            {
+                _numberOfPeople = value;
+                RaisePropertyChanged(nameof(NumberOfPeople));
+            }
+        }
+
+        private decimal _pricePerUnit;
+
+        public decimal PricePerUnit
+        {
+            get { return _pricePerUnit; }
+            set
+            {
+                _pricePerUnit = value;
+                RaisePropertyChanged(nameof(PricePerUnit));
+            }
+        }
         private ObservableCollection<Room> _roomList;
         public ObservableCollection<Room> RoomList
         {
@@ -51,6 +86,30 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 SetProperty(ref _roomList, value, () => RoomList);
 
+            }
+        }
+
+        private ObservableCollection<StayType> _stayTypes;
+
+        public ObservableCollection<StayType> StayTypes
+        {
+            get { return _stayTypes; }
+            set
+            {
+                _stayTypes = value;
+                RaisePropertyChanged(nameof(StayTypes));
+            }
+        }
+
+        private StayType _selectedStayType;
+
+        public StayType SelectedStayType
+        {
+            get { return _selectedStayType; }
+            set
+            {
+                _selectedStayType = value;
+                RaisePropertyChanged(nameof(SelectedStayType));
             }
         }
 
@@ -77,18 +136,18 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(SelectedIndex));
             }
         }
-        private AppointmentItem _appointmentItem { get; }
+        private AppointmentItem AppointmentItem { get; }
        
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, IResourceService resourceService, IGuestSearchService guestSearch, ICreateGuestService createGuestService) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, IResourceService resourceService, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
             _resourceService = resourceService;
-            _guestSearch = guestSearch;
-            _createGuestService = createGuestService;
-            _appointmentItem = appointmentItem;
-
+         
+            AppointmentItem = appointmentItem;
+            SearchGuestDialogViewModel = searchGuestDialogViewModel;
+            AddGuestDialogViewModel = dialogServiceViewModel;
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
             SearchExistingGuestCommand = new DelegateCommand(SearchGuestDialogOpen);
             AbortReservationCreationCommand = new DelegateCommand(AbortExecute);
@@ -100,21 +159,24 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void SearchGuestDialogOpen()
         {
-            using (SearchGuestDialogViewModel = new SearchGuestDialogViewModel(_guestSearch))
+
+            UICommand result= ChoseGuestDialogService.ShowDialog(SearchGuestDialogViewModel.DialogCommands,
+                "Postojeci gost", viewModel: SearchGuestDialogViewModel);
+            if (result != null)
             {
-                UICommand result= ChoseGuestDialogService.ShowDialog(SearchGuestDialogViewModel.DialogCommands,
-                    "Postojeci gost", viewModel: SearchGuestDialogViewModel);
-                if (result != null)
+                if (result.Id is int id )
                 {
                     //returns SelectedGuest.ID as UICommand id;
-                    _guestId = (int)result.Id;
+                    _guestId = id;
                 }
+
             }
+            
         }
 
         private void AddNewGuestExecute()
         {
-            using (AddGuestDialogViewModel = new DialogServiceViewModel(_createGuestService))
+            using (AddGuestDialogViewModel)
             {
                 UICommand result = NewGuestDialogService.ShowDialog(AddGuestDialogViewModel.DialogCommands, "Registracija",
                     viewModel: AddGuestDialogViewModel);
@@ -135,7 +197,7 @@ namespace EtnaSoft.WPF.ViewModels
             // Combobox function
             void ComboboxLogic()
             {
-                var id = (int) _appointmentItem.ResourceId;
+                var id = (int) AppointmentItem.ResourceId;
                 var rooms = _resourceService.CreateResource();
                 List<Room> roomList = rooms.ToList();
                 RoomList = rooms;
@@ -180,6 +242,7 @@ namespace EtnaSoft.WPF.ViewModels
             base.Dispose();
             AddGuestDialogViewModel?.Dispose();
             SearchGuestDialogViewModel?.Dispose();
+            
         }
     }
 }

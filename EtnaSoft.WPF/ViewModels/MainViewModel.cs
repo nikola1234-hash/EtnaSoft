@@ -1,5 +1,6 @@
 ﻿using DevExpress.Mvvm;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using EtnaSoft.WPF.Commands;
@@ -7,6 +8,7 @@ using EtnaSoft.WPF.Navigation;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
+using Squirrel;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -27,8 +29,16 @@ namespace EtnaSoft.WPF.ViewModels
             _viewStore.ViewChanged += OnViewChanged;
             NavigateCommand = new NavigateCommand(viewModelFactory, _viewStore);
             OnLoadCommand = new DelegateCommand(OnLoadExecute);
+            CheckForUpdates();
         }
 
+        private async Task CheckForUpdates()
+        {
+            using (var manager = new UpdateManager(@"C:\Release"))
+            {
+                await manager.UpdateApp();
+            }
+        }
         private void OnLoadExecute()
         {
             NavigateCommand.Execute(ViewType.LoginView);

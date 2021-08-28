@@ -4,12 +4,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
+
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding LoadedCommand}" Event="Loaded" />
+    </dxmvvm:Interaction.Behaviors>
+
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -143,7 +149,14 @@
                             </b:Interaction.Triggers>
                         </Button>
                     </StackPanel>
+                    <StackPanel Margin="0,60,0,0" Orientation="Vertical">
+                        <TextBlock Text="Verzija:" />
+                        <TextBlock Text="{Binding CurrentVersion}" />
+                        <TextBlock Text="Nova verzija:" />
+                        <TextBlock Text="{Binding AvailableVersion}" />
+                    </StackPanel>
                 </StackPanel>
+
             </Grid>
 
         </Border>

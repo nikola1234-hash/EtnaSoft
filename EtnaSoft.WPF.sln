@@ -15,7 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A3C27AA3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtnaSoft.Dal.Tests", "EtnaSoft.Dal.Tests\EtnaSoft.Dal.Tests.csproj", "{BE087670-A2EA-430B-998C-2811C9C33FCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EtnaSoft.Bll", "EtnaSoft.Bll\EtnaSoft.Bll.csproj", "{EF4C14AB-7021-4A20-B2CC-0338E98B3F44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EtnaSoft.Bll", "EtnaSoft.Bll\EtnaSoft.Bll.csproj", "{EF4C14AB-7021-4A20-B2CC-0338E98B3F44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{232E6D6B-CC33-45FA-885C-433635EA8D87}"
+	ProjectSection(SolutionItems) = preProject
+		EtnaSoft.nuspec = EtnaSoft.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

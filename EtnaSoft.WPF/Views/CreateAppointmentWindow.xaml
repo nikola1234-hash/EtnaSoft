@@ -106,14 +106,14 @@
                         SelectedItem="{Binding SelectedRoom}"
                         ValueMember="Id" />
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="LayoutItem">
-                    <dxe:TextEdit />
+                <dxlc:LayoutItem Label="Tip smestaja:">
+                    <dxe:ComboBoxEdit ItemsSource="{Binding StayTypes}" SelectedItem="{Binding SelectedStayType}" />
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Margin="0,0,0,-10" Label="Soba:">
-                    <dxe:ComboBoxEdit />
+                <dxlc:LayoutItem Margin="0,0,0,-10" Label="Broj osoba:">
+                    <dxe:TextEdit Text="{Binding NumberOfPeople}" />
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="LayoutItem">
-                    <dxe:TextEdit />
+                <dxlc:LayoutItem Label="Cena po osobi:">
+                    <dxe:TextEdit Text="{Binding PricePerUnit}" />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>

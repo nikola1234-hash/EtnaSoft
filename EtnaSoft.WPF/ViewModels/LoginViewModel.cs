@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using EtnaSoft.Dal.Exceptions;
 using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
+using Squirrel;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -22,7 +24,30 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
         public MessageViewModel ErrorMessageViewModel { get; set; }
+        private string _currentVersion;
 
+        public string CurrentVersion
+        {
+            get { return _currentVersion; }
+            set
+            {
+                _currentVersion = value;
+                RaisePropertyChanged(nameof(CurrentVersion));
+            }
+        }
+
+        private bool _updateFlag;
+        private string _availableVersion;
+
+        public string AvailableVersion
+        {
+            get { return _availableVersion; }
+            set
+            {
+                _availableVersion = value;
+                RaisePropertyChanged(nameof(AvailableVersion));
+            }
+        }
         public string ErrorMessage
         {
             set
@@ -34,6 +59,7 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IAuthenticator _authenticator;
         private readonly IRenavigate _renavigate;
         private readonly IViewStore _view;
+        public ICommand LoadedCommand { get; }
         public LoginViewModel(IAuthenticator authenticator, IRenavigate renavigate, IViewStore view)
         {
             _authenticator = authenticator;
@@ -41,7 +67,23 @@ namespace EtnaSoft.WPF.ViewModels
             _view = view;
             LoginCommand = new DelegateCommand<object>(OnLogin);
             ErrorMessageViewModel = new MessageViewModel();
+            LoadedCommand = new DelegateCommand(OnViewLoad);
             
+        }
+
+        private async void OnViewLoad()
+        {
+            await CheckForUpdates();
+        }
+
+        private async Task CheckForUpdates()
+        {
+            using (var manager = new UpdateManager(@"C:\Releases"))
+            {
+                CurrentVersion = $"Trenutna verzija {manager.CurrentlyInstalledVersion()}";
+                var releaseEntry = await manager.UpdateApp();
+                AvailableVersion = $"Nova verzija {releaseEntry?.Version.ToString() ?? "Nema novih update"}";
+            }
         }
 
         private void OnLogin(object obj)

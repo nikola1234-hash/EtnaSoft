@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EtnaSoft</id>
+    <version>1.0.0</version>
+    <authors>VilaEtna</authors>
+    <owners>VilaEtna</owners>
+    <description>HotelManagementSystem</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright ©  2021</copyright>
+  </metadata>
+  <files>
+    <file src="EtnaSoft.WPF\bin\Release\*.*" target="lib\net45\" exclude="*.pdb;*.vshost.*"/>
+    <file src="ErtnaSoft.Bo\bin\Release\*.*" target="lib\etna\" exclude="*.pdb;*.vshost.*"/>
+    <file src="EtnaSoft.Bll\bin\Release\*.*" target="lib\etnabll\" exclude="*.pdb;*.vshost.*"/>
+    <file src="EtnaSoft.Dal\bin\Release\*.*" target="lib\etnadal\" exclude="*.pdb;*.vshost.*"/>
+  </files>
+</package>
