@@ -4,6 +4,7 @@ using System.Windows;
 using DevExpress.Mvvm.POCO;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
+using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
 using EtnaSoft.Dal.Infrastucture;
@@ -42,7 +43,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IPasswordHasher, PasswordHasher>();
             service.AddSingleton<IAuthorization, AuthorizationService>();
             service.AddSingleton<IAuthenticator, Authenticator>();
-
+            service.AddSingleton<IComboboxFacade, ComboboxFacade>();
 
             service.AddSingleton<IGuestSearchService,GuestSearchService>();
             service.AddSingleton<IDetailsManager, DetailsManager>();

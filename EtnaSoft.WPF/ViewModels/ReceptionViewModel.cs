@@ -7,6 +7,7 @@ using DevExpress.Xpf.Bars.Native;
 using DevExpress.Xpf.Scheduling;
 using EtnaSoft.Bll.Models;
 using EtnaSoft.Bll.Services;
+using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.WPF.Events;
 using EtnaSoft.WPF.Models;
@@ -62,13 +63,15 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IResourceService _roomResource;
         private readonly ISchedulerService _schedulerService;
         private readonly IBookingService _bookingService;
+
+        private readonly IComboboxFacade _comboboxFacade;
         //private readonly ICreateGuestService _createGuestService;
         private readonly DialogServiceViewModel _dialogServiceViewModel;
         private readonly SearchGuestDialogViewModel _searchGuestDialogViewModel;
 
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
-        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel)
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel, IComboboxFacade comboboxFacade)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -80,6 +83,7 @@ namespace EtnaSoft.WPF.ViewModels
 
             _searchGuestDialogViewModel = searchGuestDialogViewModel;
             _dialogServiceViewModel = dialogServiceViewModel;
+            _comboboxFacade = comboboxFacade;
             _schedulerService = schedulerService;
         }
 
@@ -150,7 +154,7 @@ namespace EtnaSoft.WPF.ViewModels
                 args.Window = new CreateAppointmentWindow
                 {
                     DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator,
-                                                                _roomResource,_dialogServiceViewModel, _searchGuestDialogViewModel)
+                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade)
                 };
             }
             else

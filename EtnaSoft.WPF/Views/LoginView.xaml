@@ -150,10 +150,8 @@
                         </Button>
                     </StackPanel>
                     <StackPanel Margin="0,60,0,0" Orientation="Vertical">
-                        <TextBlock Text="Verzija:" />
-                        <TextBlock Text="{Binding CurrentVersion}" />
-                        <TextBlock Text="Nova verzija:" />
-                        <TextBlock Text="{Binding AvailableVersion}" />
+                        <TextBlock Foreground="White" Text="{Binding CurrentVersion}" />
+                        <TextBlock Foreground="White" Text="{Binding AvailableVersion}" />
                     </StackPanel>
                 </StackPanel>
 

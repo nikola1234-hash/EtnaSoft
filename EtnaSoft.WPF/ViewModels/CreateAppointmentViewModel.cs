@@ -8,7 +8,9 @@ using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
+using DevExpress.XtraScheduler.Outlook.Interop;
 using EtnaSoft.Bll.Services;
+using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.WPF.Events;
 using Prism.Events;
@@ -17,8 +19,9 @@ namespace EtnaSoft.WPF.ViewModels
 {
     public class CreateAppointmentViewModel : AppointmentWindowBase
     {
+        
         private readonly IEventAggregator _eventAggregator;
-        private readonly IResourceService _resourceService;
+        private readonly IComboboxFacade _comboboxFacade;
         public ICommand CreateReservationCommand { get; }
         public ICommand AbortReservationCreationCommand { get; }
         public ICommand SearchExistingGuestCommand { get; }
@@ -55,26 +58,40 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        private int _numberOfPeople;
+        private uint _numberOfPeople;
 
-        public int NumberOfPeople
+        public uint NumberOfPeople
         {
             get { return _numberOfPeople; }
             set
             {
                 _numberOfPeople = value;
+                TotalPriceChanged();
                 RaisePropertyChanged(nameof(NumberOfPeople));
             }
         }
 
-        private decimal _pricePerUnit;
+        private uint _numberOfKids;
+
+        public uint NumberOfKids
+        {
+            get { return _numberOfKids; }
+            set
+            {
+                _numberOfKids = value;
+                TotalPriceChanged();
+                RaisePropertyChanged(nameof(NumberOfKids));
+            }
+        }
+
+        
 
         public decimal PricePerUnit
         {
-            get { return _pricePerUnit; }
+            get { return  SelectedStayType?.Price ?? 0;  }
             set
             {
-                _pricePerUnit = value;
+                
                 RaisePropertyChanged(nameof(PricePerUnit));
             }
         }
@@ -96,10 +113,14 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _stayTypes; }
             set
             {
+                
                 _stayTypes = value;
+                
                 RaisePropertyChanged(nameof(StayTypes));
             }
         }
+
+    
 
         private StayType _selectedStayType;
 
@@ -109,8 +130,24 @@ namespace EtnaSoft.WPF.ViewModels
             set
             {
                 _selectedStayType = value;
+                TotalPriceChanged();
                 RaisePropertyChanged(nameof(SelectedStayType));
+                RaisePropertiesChanged(nameof(PricePerUnit));
+                RaisePropertiesChanged(nameof(PricePerKid));
             }
+        }
+
+     
+
+        public int NumberOfDays
+        {
+            get => EndDate.Date.Subtract(StartDate.Date).Days;
+            set
+            {
+                RaisePropertiesChanged(nameof(NumberOfDays));
+                TotalPriceChanged();
+            }
+
         }
 
         private Room _selectedRoom;
@@ -137,16 +174,57 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
         private AppointmentItem AppointmentItem { get; }
-       
+        private DateTime _startDate;
+
+        public DateTime StartDate
+        {
+            get { return _startDate; }
+            set
+            {
+                if (StartDate > EndDate)
+                {
+                    _startDate = DateTime.Now;
+                }
+                _startDate = value;
+                RaisePropertyChanged(nameof(StartDate));
+                RaisePropertiesChanged(nameof(NumberOfDays));
+            }
+        }
+
+        private DateTime _endDate = DateTime.Now.Date.AddDays(2);
+
+        public DateTime EndDate
+        {
+            get { return _endDate; }
+            set
+            {
+                if (EndDate <= StartDate)
+                {
+                    _endDate = DateTime.Now.Date.AddDays(2);
+                }
+
+                _endDate = value;
+                RaisePropertyChanged(nameof(EndDate));
+                RaisePropertiesChanged(nameof(NumberOfDays));
+            }
+        }
+
+        public decimal PricePerKid
+        {
+            get => SelectedStayType?.Price / 2 ?? 0;
+            set => RaisePropertiesChanged(nameof(PricePerKid));
+
+        }
+
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, IResourceService resourceService, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
-            _resourceService = resourceService;
-         
+
             AppointmentItem = appointmentItem;
             SearchGuestDialogViewModel = searchGuestDialogViewModel;
+            _comboboxFacade = comboboxFacade;
             AddGuestDialogViewModel = dialogServiceViewModel;
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
             SearchExistingGuestCommand = new DelegateCommand(SearchGuestDialogOpen);
@@ -155,6 +233,21 @@ namespace EtnaSoft.WPF.ViewModels
             AddNewGuestCommand = new DelegateCommand(AddNewGuestExecute);
             
            
+        }
+
+        private void TotalPriceChanged()
+        {
+            if (NumberOfKids > 0)
+            {
+                TotalPrice = ((SelectedStayType.Price * NumberOfPeople) + (NumberOfKids * (SelectedStayType.Price / 2))) * NumberOfDays;
+            }
+
+            if (NumberOfKids == 0)
+            {
+                TotalPrice = SelectedStayType.Price * NumberOfPeople * NumberOfDays;
+                
+            }
+            
         }
 
         private void SearchGuestDialogOpen()
@@ -197,15 +290,29 @@ namespace EtnaSoft.WPF.ViewModels
             // Combobox function
             void ComboboxLogic()
             {
+                //Room combobox
                 var id = (int) AppointmentItem.ResourceId;
-                var rooms = _resourceService.CreateResource();
-                List<Room> roomList = rooms.ToList();
-                RoomList = rooms;
-                SelectedRoom = rooms.FirstOrDefault(s => s.Id == id);
-                SelectedIndex = roomList.IndexOf(SelectedRoom);
+                Room selectedRoom;
+                int selectedIndex;
+                RoomList = _comboboxFacade.FillRoomCombobox(id,out selectedRoom, out selectedIndex);
+                SelectedRoom = selectedRoom;
+                SelectedIndex = selectedIndex;
+                //StayTypes combobox
+                StayTypes = _comboboxFacade.FillStayTypeCombobox();
 
             }
+
+            void DateTimeLogic()
+            {
+                StartDate = AppointmentItem.Start;
+                if (AppointmentItem.End > DateTime.MinValue)
+                {
+                    EndDate = AppointmentItem.End;
+                }
+                
+            }
             ComboboxLogic();
+            DateTimeLogic();
         }
 
         private void AbortExecute()
@@ -218,8 +325,15 @@ namespace EtnaSoft.WPF.ViewModels
             // Create Reservation Logic
             // if reservation is succesfull
             // OnAppointmentCreation();
-
-            OnAppointmentCreation();
+            if (_guestId > 0)
+            {
+                OnAppointmentCreation();
+                CloseWindow();
+            }
+            else
+            {
+                MessageService.Show("Gost nije izabran");
+            }
         }
 
 
@@ -242,7 +356,7 @@ namespace EtnaSoft.WPF.ViewModels
             base.Dispose();
             AddGuestDialogViewModel?.Dispose();
             SearchGuestDialogViewModel?.Dispose();
-            
+
         }
     }
 }

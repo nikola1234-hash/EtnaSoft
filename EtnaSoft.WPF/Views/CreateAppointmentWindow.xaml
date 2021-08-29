@@ -107,13 +107,48 @@
                         ValueMember="Id" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Tip smestaja:">
-                    <dxe:ComboBoxEdit ItemsSource="{Binding StayTypes}" SelectedItem="{Binding SelectedStayType}" />
+                    <dxe:ComboBoxEdit
+                        DisplayMember="Title"
+                        ItemsSource="{Binding StayTypes}"
+                        SelectedItem="{Binding SelectedStayType}"
+                        ValueMember="Id" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Margin="0,0,0,-10" Label="Broj osoba:">
-                    <dxe:TextEdit Text="{Binding NumberOfPeople}" />
+                    <dxe:TextEdit Text="{Binding NumberOfPeople, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Deca 50%">
+                    <dxe:TextEdit Text="{Binding NumberOfKids, UpdateSourceTrigger=PropertyChanged}" ToolTip="Deca koja placaju 50% odnosno starosti od 3 do 9 godina." />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Dolazak:">
+                    <dxe:DateEdit DateTime="{Binding StartDate}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Odlazak:">
+                    <dxe:DateEdit DateTime="{Binding EndDate}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Broj Dana:">
+                    <dxe:TextEdit IsReadOnly="True" Text="{Binding NumberOfDays}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Ukupno Cena:">
+                    <dxe:TextEdit IsReadOnly="True" Text="{Binding TotalPrice}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup
+                MinWidth="200"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                Header="Cene"
+                Orientation="Vertical"
+                View="GroupBox">
                 <dxlc:LayoutItem Label="Cena po osobi:">
                     <dxe:TextEdit Text="{Binding PricePerUnit}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Cena po detetu:">
+                    <dxe:TextEdit Text="{Binding PricePerKid}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Ukupno cena:">
+                    <dxe:TextEdit Text="{Binding TotalPrice}" />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>

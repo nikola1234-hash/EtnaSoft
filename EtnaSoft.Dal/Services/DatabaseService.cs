@@ -18,7 +18,7 @@ namespace EtnaSoft.Dal.Services
             using (IDbConnection conn = new SqlConnection(EtnaSettings.ConnectionString))
             {
                 var i = conn.ExecuteScalar(Sql, new { database = dbName}, commandType: CommandType.Text);
-                if (i != null)
+                if ((int) i != 0)
                 {
                     result = true;
                 }

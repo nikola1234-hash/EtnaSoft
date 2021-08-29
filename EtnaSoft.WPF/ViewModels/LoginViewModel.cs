@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -75,14 +77,18 @@ namespace EtnaSoft.WPF.ViewModels
         {
             await CheckForUpdates();
         }
-
+        //TODO: Update online for continuous integration
         private async Task CheckForUpdates()
         {
-            using (var manager = new UpdateManager(@"C:\Releases"))
+
+            var ex = @"C:\Releases";
+            using (var manager = new UpdateManager(ex))
             {
-                CurrentVersion = $"Trenutna verzija {manager.CurrentlyInstalledVersion()}";
+                string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                CurrentVersion = $"Trenutna verzija: {version}";
+                //CurrentVersion = $"Trenutna verzija: {manager.CurrentlyInstalledVersion()}";
                 var releaseEntry = await manager.UpdateApp();
-                AvailableVersion = $"Nova verzija {releaseEntry?.Version.ToString() ?? "Nema novih update"}";
+                AvailableVersion = $"Nova verzija: {releaseEntry?.Version.ToString() ?? "Nema novih update"}";
             }
         }
 

@@ -9,8 +9,4 @@
     <ProjectReference Include="..\EtnaSoft.Dal\EtnaSoft.Dal.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Facade\" />
-  </ItemGroup>
-
 </Project>
