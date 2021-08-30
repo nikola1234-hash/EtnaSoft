@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using Dapper;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace EtnaSoft.Dal.Infrastucture
 {
-    public sealed class GenericDbContext : IGenericDbContext
+    public sealed class GenericDbContext : IGenericDbContext, IDisposable
     {
         //TODO: DEBUG CMD PROPERTY 
         // does it start with CommandType.Text
@@ -53,6 +54,11 @@ namespace EtnaSoft.Dal.Infrastucture
 
                 return output;
             }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

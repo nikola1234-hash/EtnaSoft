@@ -9,8 +9,10 @@ using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
 using DevExpress.XtraScheduler.Outlook.Interop;
+using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
+using EtnaSoft.Bll.Stores;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.WPF.Events;
 using Prism.Events;
@@ -22,6 +24,7 @@ namespace EtnaSoft.WPF.ViewModels
         
         private readonly IEventAggregator _eventAggregator;
         private readonly IComboboxFacade _comboboxFacade;
+        private readonly ICreateReservationService _createReservation;
         public ICommand CreateReservationCommand { get; }
         public ICommand AbortReservationCreationCommand { get; }
         public ICommand SearchExistingGuestCommand { get; }
@@ -58,9 +61,9 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        private uint _numberOfPeople;
+        private int _numberOfPeople;
 
-        public uint NumberOfPeople
+        public int NumberOfPeople
         {
             get { return _numberOfPeople; }
             set
@@ -71,9 +74,9 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        private uint _numberOfKids;
+        private int _numberOfKids;
 
-        public uint NumberOfKids
+        public int NumberOfKids
         {
             get { return _numberOfKids; }
             set
@@ -188,6 +191,8 @@ namespace EtnaSoft.WPF.ViewModels
                 _startDate = value;
                 RaisePropertyChanged(nameof(StartDate));
                 RaisePropertiesChanged(nameof(NumberOfDays));
+                if(SelectedStayType !=null)
+                    TotalPriceChanged();
             }
         }
 
@@ -206,6 +211,9 @@ namespace EtnaSoft.WPF.ViewModels
                 _endDate = value;
                 RaisePropertyChanged(nameof(EndDate));
                 RaisePropertiesChanged(nameof(NumberOfDays));
+                if(SelectedStayType !=null)
+                    TotalPriceChanged();
+                
             }
         }
 
@@ -218,13 +226,14 @@ namespace EtnaSoft.WPF.ViewModels
 
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
 
             AppointmentItem = appointmentItem;
             SearchGuestDialogViewModel = searchGuestDialogViewModel;
             _comboboxFacade = comboboxFacade;
+            _createReservation = createReservation;
             AddGuestDialogViewModel = dialogServiceViewModel;
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
             SearchExistingGuestCommand = new DelegateCommand(SearchGuestDialogOpen);
@@ -322,11 +331,39 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void CreateReservationExecute()
         {
+            RoomReservation CreateRoomReservation()
+            {
+                var output =new RoomReservation
+                {
+                    GuestId = _guestId,
+                    CreatedBy = UserStore.CurrentUser,
+                    RoomId = SelectedRoom.Id,
+                    StayTypeId = SelectedStayType.Id
+                };
+                return output;
+            }
+
+            Reservation CreateReservationObject()
+            {  //TODO: ADD number of kids eventually to the equation
+                var output = new Reservation
+                {
+                    StartDate = StartDate,
+                    EndDate = EndDate,
+                    NumberOfPeople = NumberOfPeople,
+                    TotalPrice = TotalPrice,
+                    CreatedBy = UserStore.CurrentUser
+
+                };
+                return output;
+            }
             // Create Reservation Logic
             // if reservation is succesfull
             // OnAppointmentCreation();
             if (_guestId > 0)
             {
+                var roomRes = CreateRoomReservation();
+                var reservation = CreateReservationObject();
+                _createReservation.CreateReservationInTransaction(roomRes, reservation);
                 OnAppointmentCreation();
                 CloseWindow();
             }

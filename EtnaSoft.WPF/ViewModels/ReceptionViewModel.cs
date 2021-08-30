@@ -63,7 +63,7 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IResourceService _roomResource;
         private readonly ISchedulerService _schedulerService;
         private readonly IBookingService _bookingService;
-
+        private readonly ICreateReservationService _createReservation;
         private readonly IComboboxFacade _comboboxFacade;
         //private readonly ICreateGuestService _createGuestService;
         private readonly DialogServiceViewModel _dialogServiceViewModel;
@@ -71,7 +71,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
-        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel, IComboboxFacade comboboxFacade)
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -84,6 +84,7 @@ namespace EtnaSoft.WPF.ViewModels
             _searchGuestDialogViewModel = searchGuestDialogViewModel;
             _dialogServiceViewModel = dialogServiceViewModel;
             _comboboxFacade = comboboxFacade;
+            _createReservation = createReservation;
             _schedulerService = schedulerService;
         }
 
@@ -154,7 +155,7 @@ namespace EtnaSoft.WPF.ViewModels
                 args.Window = new CreateAppointmentWindow
                 {
                     DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator,
-                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade)
+                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade, _createReservation)
                 };
             }
             else

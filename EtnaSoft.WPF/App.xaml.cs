@@ -44,6 +44,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IAuthorization, AuthorizationService>();
             service.AddSingleton<IAuthenticator, Authenticator>();
             service.AddSingleton<IComboboxFacade, ComboboxFacade>();
+            service.AddSingleton<ICreateReservationService, CreateReservationTransaction>();
 
             service.AddSingleton<IGuestSearchService,GuestSearchService>();
             service.AddSingleton<IDetailsManager, DetailsManager>();
