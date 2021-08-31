@@ -36,9 +36,18 @@
             <dxsch:SchedulerControl.OptionsWindows>
                 <dxsch:OptionsWindows AppointmentWindowType="{x:Type local:CustomAppointmentWindow}" />
             </dxsch:SchedulerControl.OptionsWindows>
-            <!--  AppointmentLabelsSource="{Binding Labels}"  -->
             <dxsch:SchedulerControl.DataSource>
-                <dxsch:DataSource AppointmentsSource="{Binding Bookings}" ResourcesSource="{Binding Rooms}">
+                <dxsch:DataSource
+                    AppointmentLabelsSource="{Binding Labels}"
+                    AppointmentsSource="{Binding Bookings}"
+                    ResourcesSource="{Binding Rooms}">
+                    <dxsch:DataSource.AppointmentLabelMappings>
+
+                        <dxsch:AppointmentLabelMappings
+                            Caption="Caption"
+                            Id="Id"
+                            Color="Color" />
+                    </dxsch:DataSource.AppointmentLabelMappings>
                     <dxsch:DataSource.ResourceMappings>
                         <dxsch:ResourceMappings Caption="RoomNumber" Id="Id" />
                     </dxsch:DataSource.ResourceMappings>
@@ -57,7 +66,7 @@
                             Description="StayTypeId"
                             End="EndDate"
                             Id="Id"
-                            LabelId="IsCheckedIn"
+                            LabelId="LabelId"
                             ResourceId="RoomId"
                             Start="StartDate"
                             StatusId="IsCheckedIn"

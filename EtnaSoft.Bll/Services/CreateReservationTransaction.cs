@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
-using EtnaSoft.Dal.Repositories;
 
 namespace EtnaSoft.Bll.Services
 {
@@ -51,24 +47,21 @@ namespace EtnaSoft.Bll.Services
 
             using (_context = new DbTransactions())
             {
-
-       
                 try
                 {
-                    
                     _context.StartTransaction();
                     var rReservationObject = CreateRoomReservation(roomReservation);
-                    var newRoomReservation  = _context.LoadDataTransaction<RoomReservation, dynamic>("sp_CreateRoomReservation", rReservationObject).FirstOrDefault();
+                    var newRoomReservation = _context
+                        .LoadDataTransaction<RoomReservation, dynamic>("sp_CreateRoomReservation", rReservationObject)
+                        .FirstOrDefault();
                     if (newRoomReservation is null)
                         throw new Exception("Room reservation objekat je null");
 
                     var reservationObject = CreateReservationObject(reservation, newRoomReservation);
                     _context.SaveDataTransaction("sp_CreateReservation", reservationObject);
                     _context.CommitTransaction();
-                    
-                
-                }//TODO: Remove Exception after debug
-                catch(Exception ex)
+                }
+                catch
                 {
                     _context.RollBackTransaction();
                     throw;

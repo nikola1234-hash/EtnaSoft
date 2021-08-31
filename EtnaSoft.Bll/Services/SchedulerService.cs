@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Xml;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Models;
 using EtnaSoft.Bo.Entities;
@@ -20,6 +21,16 @@ namespace EtnaSoft.Bll.Services
         //TODO: Check loading resource;
         public ObservableCollection<Booking> LoadResource()
         {
+
+            int AssignLabelId(bool isCheckedIn)
+            {
+                int labelId = 0;
+                labelId = (int) (isCheckedIn ? ReservationStatusType.CheckedIn : ReservationStatusType.Coming);
+
+
+                return labelId;
+
+            }
             //TODO: FULL BOOKING PROPERTIES
             var reservations = _unit.Reservations.GetAll()
                 .Where(s=> s.StartDate > DateTime.Now.Date.AddYears(-1) && s.IsCanceled == false);
@@ -57,8 +68,10 @@ namespace EtnaSoft.Bll.Services
                     ModifiedBy = r.ModifiedBy,
                     DateCreated = r.DateCreated,
                     DateModified = r.DateModified,
-                    TotalPrice = r.TotalPrice
+                    TotalPrice = r.TotalPrice,
+                    LabelId = AssignLabelId(r.IsCheckedIn)
                 };
+
             ObservableCollection<Booking> bookings = new ObservableCollection<Booking>(query);
             return bookings;
         }
@@ -68,11 +81,12 @@ namespace EtnaSoft.Bll.Services
             var output = _unit.StayTypes.GetAll().ToList();
             return output;
         }
-        [Obsolete]
         public IEnumerable<CustomLabel> LoadCustomLabels()
         {
             var output = _unit.Labels.GetAll();
             return output;
         }
+
+     
     }
 }

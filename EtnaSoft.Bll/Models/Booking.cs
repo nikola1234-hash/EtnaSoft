@@ -30,5 +30,6 @@ namespace EtnaSoft.Bll.Models
         public string ModifiedBy { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
+        public int LabelId { get; set; }
     }
 }

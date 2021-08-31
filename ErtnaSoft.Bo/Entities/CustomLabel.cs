@@ -8,6 +8,7 @@ namespace ErtnaSoft.Bo.Entities
     {
         public int Id { get; set; }
         public string Caption { get; set; }
+        public string Color { get; set; }
         
     }
 }

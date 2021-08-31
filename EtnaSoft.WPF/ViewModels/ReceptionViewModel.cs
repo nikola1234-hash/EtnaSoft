@@ -47,9 +47,9 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        private ObservableCollection<CustomLabel> _labels;
+        private ObservableCollection<ErtnaSoft.Bo.Entities.CustomLabel> _labels;
 
-        public ObservableCollection<CustomLabel> Labels
+        public ObservableCollection<ErtnaSoft.Bo.Entities.CustomLabel> Labels
         {
             get { return _labels; }
             set
@@ -66,7 +66,6 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IBookingService _bookingService;
         private readonly ICreateReservationService _createReservation;
         private readonly IComboboxFacade _comboboxFacade;
-        //private readonly ICreateGuestService _createGuestService;
         private readonly DialogServiceViewModel _dialogServiceViewModel;
         private readonly SearchGuestDialogViewModel _searchGuestDialogViewModel;
         
@@ -99,18 +98,16 @@ namespace EtnaSoft.WPF.ViewModels
                 _eventAggregator.GetEvent<AppointmentViewEvent>().Unsubscribe(token);
             }
 
-            PopulateItems();
+            PopulateBookings();
             UnsubscribeToAppointmentEventAggregator(_subToken);
         }
 
     
-        void PopulateItems()
+        void PopulateBookings()
         {
             if (_isFirstRun)
             {
-                Rooms = _roomResource.CreateResource();
                 Bookings = _schedulerService.LoadResource();
-                _isFirstRun = false;
             }
             else
             {
@@ -122,19 +119,28 @@ namespace EtnaSoft.WPF.ViewModels
             }
 
         }
+
+        void PopulateRooms()
+        {
+            if (_isFirstRun)
+            {
+                Rooms = _roomResource.CreateResource();
+            }
+        }
         private void OnLoad()
         {
         
             //Initialize
-            PopulateItems();
-            
+            PopulateRooms();
+            PopulateBookings();
+            PopulateLabels();
+            _isFirstRun = false;
+        }
 
-            //TODO: LABEL IMPLEMENTATION HERE
-            //If decide to implement labels;
-            //This is a good place to start
-            //Load Custom table Will be set to obsollete intentionally
-            //var labels = _schedulerService.LoadCustomLabels();
-            //Labels = CustomLabel.Create(labels);
+        private void PopulateLabels()
+        {
+            var labels = _schedulerService.LoadCustomLabels();
+            Labels = new ObservableCollection<ErtnaSoft.Bo.Entities.CustomLabel>(labels);
         }
 
         private void OnBookingWindowOpen(object appointmentEvent)
@@ -165,7 +171,7 @@ namespace EtnaSoft.WPF.ViewModels
                 args.Window.DataContext = new AppointmentViewModel(args.Appointment, sender, _schedulerService,
                     _bookingService, _eventAggregator, _detailsManager);
             }
-
+            
             //Needs to be at the end of method
             SubscribeToAppointmentEventAggregator();
 
@@ -173,8 +179,17 @@ namespace EtnaSoft.WPF.ViewModels
 
         public override void Dispose()
         {
-
+            
             base.Dispose();
+            _subToken = null;
+            _dialogServiceViewModel.Dispose();
+            _searchGuestDialogViewModel.Dispose();
+            Bookings.Clear();
+            Rooms.Clear();
+            Labels.Clear();
+            Bookings = null;
+            Rooms = null;
+            Labels = null;
         }
     }
 }
