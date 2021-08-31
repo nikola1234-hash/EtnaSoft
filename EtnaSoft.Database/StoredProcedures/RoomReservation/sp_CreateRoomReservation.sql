@@ -10,10 +10,8 @@
 		INSERT INTO dbo.RoomReservations(GuestId, StayTypeId, RoomId, CreatedBy, DateCreated)
 		VALUES(@GuestId, @StayTypeId, @RoomId, @CreatedBy, @DateCreated);
 		DECLARE @Id int;
-		SET @Id = @@ROWCOUNT;
-		BEGIN 
+		SET @Id = SCOPE_IDENTITY();
+			BEGIN
 			SELECT * from dbo.RoomReservations where Id = @Id;
-		END
-	
-		
+			END
 	END

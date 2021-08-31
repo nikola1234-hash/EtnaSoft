@@ -22,7 +22,7 @@ namespace EtnaSoft.Bll.Services
 
         public void CreateReservationInTransaction(RoomReservation roomReservation, Reservation reservation)
         {
-            RoomReservation newRoomReservation;
+            
             object CreateRoomReservation(RoomReservation rr)
             {
                 var output = new
@@ -58,7 +58,10 @@ namespace EtnaSoft.Bll.Services
                     
                     _context.StartTransaction();
                     var rReservationObject = CreateRoomReservation(roomReservation);
-                    newRoomReservation  = _context.LoadDataTransaction<RoomReservation, dynamic>("sp_CreateRoomReservation", rReservationObject).FirstOrDefault();
+                    var newRoomReservation  = _context.LoadDataTransaction<RoomReservation, dynamic>("sp_CreateRoomReservation", rReservationObject).FirstOrDefault();
+                    if (newRoomReservation is null)
+                        throw new Exception("Room reservation objekat je null");
+
                     var reservationObject = CreateReservationObject(reservation, newRoomReservation);
                     _context.SaveDataTransaction("sp_CreateReservation", reservationObject);
                     _context.CommitTransaction();

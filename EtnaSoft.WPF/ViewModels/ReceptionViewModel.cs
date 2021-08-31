@@ -5,6 +5,7 @@ using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Bars.Native;
 using DevExpress.Xpf.Scheduling;
+using DevExpress.XtraScheduler.Native;
 using EtnaSoft.Bll.Models;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
@@ -68,6 +69,7 @@ namespace EtnaSoft.WPF.ViewModels
         //private readonly ICreateGuestService _createGuestService;
         private readonly DialogServiceViewModel _dialogServiceViewModel;
         private readonly SearchGuestDialogViewModel _searchGuestDialogViewModel;
+        
 
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }

@@ -12,7 +12,7 @@
 		INSERT INTO dbo.Reservations (RoomReservationId, NumberOfPeople, StartDate, EndDate, TotalPrice, CreatedBy, DateCreated)
 		VALUES (@RoomReservationId, @NumberOfPeople, @StartDate, @EndDate, @TotalPrice, @CreatedBy, @DateCreated)
 		DECLARE @Id int;
-		SET @Id = @@IDENTITY;
+		SET @Id = SCOPE_IDENTITY();
 		BEGIN
 			SELECT * from dbo.Reservations WHERE Id = @Id;
 		END

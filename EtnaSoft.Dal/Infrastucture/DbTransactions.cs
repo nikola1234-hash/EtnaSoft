@@ -12,12 +12,14 @@ namespace EtnaSoft.Dal.Infrastucture
     {
         private IDbConnection _connection;
         private IDbTransaction _transaction;
+        private bool _isClosed = false;
         public string ConnectionString => EtnaSettings.ConnectionString;
         public void StartTransaction()
         {
             _connection = new SqlConnection(ConnectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction();
+            _isClosed = false;
         }
 
 
@@ -32,14 +34,14 @@ namespace EtnaSoft.Dal.Infrastucture
                 transaction: _transaction);
         }
 
-        public List<T> LoadDataTransaction<T, U>(string storedProcedure, U parameters)
+        public List<T> LoadDataTransaction<T, TU>(string storedProcedure, TU parameters)
         {
             CommandType cmd = CommandType.StoredProcedure;
             if (!storedProcedure.StartsWith("sp_"))
             {
                 cmd = CommandType.Text;
             }
-            List<T> rows = _connection.Query<T>(storedProcedure, parameters, commandType: cmd,
+            var rows = _connection.Query<T>(storedProcedure, parameters, commandType: cmd,
                 transaction: _transaction).ToList();
             return rows;
         }
@@ -47,6 +49,7 @@ namespace EtnaSoft.Dal.Infrastucture
         {
             _transaction?.Commit();
             _connection?.Close();
+            _isClosed = true;
 
         }
 
@@ -54,12 +57,27 @@ namespace EtnaSoft.Dal.Infrastucture
         {
             _transaction.Rollback();
             _connection.Close();
+
+            _isClosed = true;
         }
 
 
         public void Dispose()
         {
-            CommitTransaction();
+            if (_isClosed == false)
+            {
+                try
+                {
+                    CommitTransaction();
+                }
+                catch 
+                {
+                    //TODO: Log this issue
+                }
+            }
+
+            _transaction = null;
+            _connection = null;
         }
     }
 }
