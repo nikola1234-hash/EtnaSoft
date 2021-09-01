@@ -7,27 +7,24 @@ namespace EtnaSoft.WPF.Models
 {
     public class CustomLabel
     {
+       
         public static ObservableCollection<CustomLabel> Create(IEnumerable<ErtnaSoft.Bo.Entities.CustomLabel> label)
         {
-            var labels = new ObservableCollection<CustomLabel>();
+            ObservableCollection<CustomLabel> labels = new ObservableCollection<CustomLabel>();
 
-
-            System.Windows.Media.Color color;
-            foreach (var i in label)
+            foreach (var l in label)
             {
-                color = Color.FromRgb(30,144,255);
-                if (i.Id == 1)
+                
+                var c = new CustomLabel
                 {
-                    color = Color.FromRgb(50, 205, 50);
-                }
-                var l = new CustomLabel()
-                {
-                    Caption = i.Caption,
-                    Color = color,
-                    Id = i.Id
+                    Id = l.Id,
+                    Caption = l.Caption,
+                    Color = (Color)ColorConverter.ConvertFromString(l.Color)
                 };
-               labels.Add(l);
+                labels.Add(c);
             }
+        
+            
             return labels;
         }
 

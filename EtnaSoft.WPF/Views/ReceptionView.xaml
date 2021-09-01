@@ -52,14 +52,7 @@
                         <dxsch:ResourceMappings Caption="RoomNumber" Id="Id" />
                     </dxsch:DataSource.ResourceMappings>
 
-                    <!--  If we decide to implement labels  -->
-
-                    <!--<dxsch:DataSource.AppointmentLabelMappings>
-                        <dxsch:AppointmentLabelMappings
-                            Caption="Caption"
-                            Id="Id"
-                            Color="Color" />
-                    </dxsch:DataSource.AppointmentLabelMappings>-->
+                   
                     <dxsch:DataSource.AppointmentMappings>
                         <dxsch:AppointmentMappings
                             AllDay="AllDay"

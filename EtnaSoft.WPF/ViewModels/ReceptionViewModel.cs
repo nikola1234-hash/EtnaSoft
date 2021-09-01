@@ -47,9 +47,9 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        private ObservableCollection<ErtnaSoft.Bo.Entities.CustomLabel> _labels;
+        private ObservableCollection<CustomLabel> _labels;
 
-        public ObservableCollection<ErtnaSoft.Bo.Entities.CustomLabel> Labels
+        public ObservableCollection<CustomLabel> Labels
         {
             get { return _labels; }
             set
@@ -139,8 +139,9 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void PopulateLabels()
         {
+            
             var labels = _schedulerService.LoadCustomLabels();
-            Labels = new ObservableCollection<ErtnaSoft.Bo.Entities.CustomLabel>(labels);
+            Labels = CustomLabel.Create(labels);
         }
 
         private void OnBookingWindowOpen(object appointmentEvent)

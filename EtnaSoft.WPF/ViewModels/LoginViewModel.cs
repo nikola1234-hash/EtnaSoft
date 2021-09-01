@@ -9,6 +9,7 @@ using EtnaSoft.Dal.Exceptions;
 using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
 using Squirrel;
+using System.Deployment.Application;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -80,16 +81,23 @@ namespace EtnaSoft.WPF.ViewModels
         //TODO: Update online for continuous integration
         private async Task CheckForUpdates()
         {
-
-            var ex = @"C:\Releases";
-            using (var manager = new UpdateManager(ex))
+            
+            if (ApplicationDeployment.IsNetworkDeployed)
             {
-                string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                CurrentVersion = $"Trenutna verzija: {version}";
-                //CurrentVersion = $"Trenutna verzija: {manager.CurrentlyInstalledVersion()}";
-                var releaseEntry = await manager.UpdateApp();
-                AvailableVersion = $"Nova verzija: {releaseEntry?.Version.ToString() ?? "Nema novih update"}";
+                CurrentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                try
+                {
+                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                    CurrentVersion = string.Empty;
+                    CurrentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(4);
+                }
+                catch
+                {
+                    throw;
+                }
+               
             }
+
         }
 
         private void OnLogin(object obj)

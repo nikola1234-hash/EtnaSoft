@@ -10,5 +10,6 @@ namespace ErtnaSoft.Bo.Entities
         public string Caption { get; set; }
         public string Color { get; set; }
         
+        
     }
 }

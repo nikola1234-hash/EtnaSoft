@@ -27,21 +27,32 @@ namespace EtnaSoft.Dal.Services.Database
         "FILEGROWTH = 10%)";
         private const string InitializeLabels = "INSERT INTO dbo.Labels (Caption, Color) VALUES (@Caption, @Color)";
         private const string InitializeRooms = "INSERT INTO dbo.Rooms (RoomNumber) Values (@RoomNumber)";
+        private const string InitializeTypes = "INSERT INTO dbo.StayTypes (Title, Price) VALUES (@Title, @Price)";
         private List<CustomLabel> _labelList;
         private List<Room> _rooms;
-
+        private List<StayType> _stayTypes;
         public DatabaseCreationService()
         {
            
             LabelList();
             RoomList();
+            StayTypeList();
         }
 
+        private void StayTypeList()
+        {
+            _stayTypes = new List<StayType>
+            {
+                new StayType(){Title = "PP_Standard", Price = 2800M},
+                new StayType(){Title = "PP_Superior", Price = 3200M}
+            };
+
+        }
         private void LabelList()
         {
             _labelList = new List<CustomLabel>
             {
-                new CustomLabel() {Caption = "Prijavljena", Color = "#489C9B0"},
+                new CustomLabel() {Caption = "Prijavljena", Color = "#489C9B"},
 
                 new CustomLabel() {Caption = "Na dolasku", Color = "#FFA500"}
             };
@@ -125,6 +136,12 @@ namespace EtnaSoft.Dal.Services.Database
                     foreach (var room in _rooms)
                     {
                         _transactions.SaveDataTransaction(InitializeRooms, new {RoomNumber = room.RoomNumber});
+                    }
+
+                    foreach (var stayType in _stayTypes)
+                    {
+                        _transactions.SaveDataTransaction(InitializeTypes,
+                            new {Title = stayType.Title, Price = stayType.Price});
                     }
                     _transactions.CommitTransaction();
                     isSuccess = true;
