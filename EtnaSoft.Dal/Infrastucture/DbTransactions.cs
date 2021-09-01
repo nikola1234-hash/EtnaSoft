@@ -23,15 +23,16 @@ namespace EtnaSoft.Dal.Infrastucture
         }
 
 
-        public void SaveDataTransaction<T>(string storedProcedure, T parameters)
+        public int SaveDataTransaction<T>(string storedProcedure, T parameters)
         {
             CommandType cmd = CommandType.StoredProcedure;
             if (!storedProcedure.StartsWith("sp_"))
             {
                 cmd = CommandType.Text;
             }
-            _connection.Execute(storedProcedure, parameters, commandType: cmd,
+            var rows = _connection.Execute(storedProcedure, parameters, commandType: cmd,
                 transaction: _transaction);
+            return rows;
         }
 
         public List<T> LoadDataTransaction<T, TU>(string storedProcedure, TU parameters)

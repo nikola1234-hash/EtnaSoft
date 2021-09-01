@@ -179,8 +179,12 @@ namespace EtnaSoft.WPF.ViewModels
 
         public override void Dispose()
         {
-            
             base.Dispose();
+            ReleaseResources();
+        }
+
+        private void ReleaseResources()
+        {
             _subToken = null;
             _dialogServiceViewModel.Dispose();
             _searchGuestDialogViewModel.Dispose();

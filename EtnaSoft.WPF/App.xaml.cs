@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Windows;
 using DevExpress.Mvvm.POCO;
 using ErtnaSoft.Bo.Entities;
@@ -11,6 +12,8 @@ using EtnaSoft.Dal.Infrastucture;
 using EtnaSoft.Dal.Repositories;
 using EtnaSoft.Dal.Services;
 using EtnaSoft.Dal.Services.Authorization;
+using EtnaSoft.Dal.Services.Converter;
+using EtnaSoft.Dal.Services.Database;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Services.Reception;
@@ -39,6 +42,8 @@ namespace EtnaSoft.WPF
         {
             service.AddSingleton<AdminService>();
             service.AddSingleton<DatabaseService>();
+            service.AddSingleton<DatabaseCreationService>();
+            service.AddSingleton<FileConverter>();
 
             service.AddSingleton<IPasswordHasher, PasswordHasher>();
             service.AddSingleton<IAuthorization, AuthorizationService>();
@@ -85,31 +90,70 @@ namespace EtnaSoft.WPF
         
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
-            EtnaSettings.ConnectionString = ConfigurationManager.ConnectionStrings["SqlDb"].ToString();
-            string dbName = ConfigurationManager.AppSettings["DatabaseName"].ToString();
+            string dirName = ConfigurationManager.AppSettings["DirectoryName"];
+            string fileName = ConfigurationManager.AppSettings["FileName"];
+            var fc = ServiceProvider.GetRequiredService<FileConverter>();
+            string dbScript = "\\Database.sql";
+            void InitializeDatabaseScript()
+            {
+                string path = Directory.GetCurrentDirectory();
+                
+                bool doesFileExist = File.Exists(path + dirName + dbScript);
+                if (doesFileExist)
+                {
+                    var script = File.ReadAllText(path + dirName + dbScript);
+                    var success = fc.Save(path + dirName, script);
+                    if (!success)
+                    {
+                        throw new Exception("FileConverter Save throws exception");
+                    }
+                    File.Delete(path + dirName + dbScript);
+                }
+                
+            }
+            InitializeDatabaseScript();
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            
-            var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
-            mainWindow.DataContext = mainViewModel;
+            EtnaSettings.ConnectionString = ConfigurationManager.ConnectionStrings["SqlDb"].ToString();
+            string dbName = ConfigurationManager.AppSettings["DatabaseName"];
+            EtnaSettings.DbName = dbName;
             var databaseService = ServiceProvider.GetRequiredService<DatabaseService>();
             var databaseExists = databaseService.DoesDatabaseExist(dbName);
             if (databaseExists)
             {
-                var adminService = ServiceProvider.GetRequiredService<AdminService>();
-                bool accountExists = adminService.CheckIfAccountExists();
-                if (!accountExists)
-                {
-                    adminService.FirstUserCreation();
-                }
-
-                mainWindow.Show();
+                CreateMainWindow();
             }
             else
             {
-                MessageBox.Show("Baza nije instalirana");
+                
+                var dbCreation = ServiceProvider.GetRequiredService<DatabaseCreationService>();
+                var success = dbCreation.CreateDatabase(dbName, dirName, fileName,fc );
+                if (success)
+                {
+                    var adminService = ServiceProvider.GetRequiredService<AdminService>();
+                    bool accountExists = adminService.CheckIfAccountExists();
+                    if (!accountExists)
+                    {
+                        adminService.FirstUserCreation();
+                    }
+                    
+                    CreateMainWindow();
+                }
+                else
+                {
+                    MessageBox.Show("Greska u instaliranju baze pokusajte ponovo!");
+                }
+                
             }
           
+        }
+
+        private void CreateMainWindow()
+        {
+            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+
+            var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
+            mainWindow.DataContext = mainViewModel;
+            mainWindow.Show();
         }
     }
 }

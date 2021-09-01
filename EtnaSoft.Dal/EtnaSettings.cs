@@ -7,5 +7,6 @@ namespace EtnaSoft.Dal
             get;
             set;
         }
+        public static string DbName { get; set; }
     }
 }

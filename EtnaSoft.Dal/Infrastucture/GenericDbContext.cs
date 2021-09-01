@@ -16,9 +16,12 @@ namespace EtnaSoft.Dal.Infrastucture
         public string ConnectionString => EtnaSettings.ConnectionString;
         public IEnumerable<TEntity> LoadData<TEntity, TParameters>(string sql, TParameters parameters)
         {
-            
-            
-            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString)
+            {
+                InitialCatalog = EtnaSettings.DbName
+            };
+
+            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(builder.ConnectionString))
             {
                 CommandType cmd = CommandType.Text;
                 // sql db name starts with sp_ its stored procedure
@@ -42,7 +45,11 @@ namespace EtnaSoft.Dal.Infrastucture
 
         public int SaveData<TParameters>(string sql, TParameters parameters)
         {
-            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(ConnectionString))
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString)
+            {
+                InitialCatalog = EtnaSettings.DbName
+            };
+            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(builder.ConnectionString))
             {
                 CommandType cmd = CommandType.Text;
                 if (sql.StartsWith("sp_"))
