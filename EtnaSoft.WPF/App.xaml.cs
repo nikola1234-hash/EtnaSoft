@@ -21,7 +21,10 @@ using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Prism.Events;
+using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace EtnaSoft.WPF
 {
@@ -33,13 +36,20 @@ namespace EtnaSoft.WPF
         private IServiceProvider ServiceProvider { get; }
         public App()
         {
-            ServiceCollection service = new ServiceCollection();
-            ConfigureServices(service);
-            ServiceProvider = service.BuildServiceProvider();
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.File(Directory.GetCurrentDirectory()+"\\log.log")
+                .CreateLogger();
+            ServiceCollection serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+            
         }
 
         private void ConfigureServices(IServiceCollection service)
         {
+
+
+            service.AddLogging(configuration => configuration.AddSerilog()).AddTransient<LoginViewModel>();
             service.AddSingleton<AdminService>();
             service.AddSingleton<DatabaseService>();
             service.AddSingleton<DatabaseCreationService>();
@@ -73,8 +83,6 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IViewStore, ViewStore>();
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
             service.AddSingleton<IEventAggregator, EventAggregator>();
-
-
             service.AddTransient<SearchGuestDialogViewModel>();
             service.AddTransient<DialogServiceViewModel>();
 
@@ -90,67 +98,114 @@ namespace EtnaSoft.WPF
         
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
+            var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
+            logger.LogInformation("[Logging App_OnStartup]");
             string dirName = ConfigurationManager.AppSettings["DirectoryName"];
             string fileName = ConfigurationManager.AppSettings["FileName"];
             var fc = ServiceProvider.GetRequiredService<FileConverter>();
-            string dbScript = "\\Database.sql";
+            string dbScript = "\\Database.sql";//TODO: insert this to Config file
             void InitializeDatabaseScript()
             {
-                string path = Directory.GetCurrentDirectory();
-                
-                bool doesFileExist = File.Exists(path + dirName + dbScript);
-                if (doesFileExist)
+                logger.LogInformation("Initialize database script");
+
+                try
                 {
-                    var script = File.ReadAllText(path + dirName + dbScript);
-                    var success = fc.Save(path + dirName, script);
-                    if (!success)
+                    string path = Directory.GetCurrentDirectory();
+
+                    bool doesFileExist = File.Exists(path + dirName + dbScript);
+                    if (doesFileExist)
                     {
-                        throw new Exception("FileConverter Save throws exception");
+                        var script = File.ReadAllText(path + dirName + dbScript);
+                        var success = fc.Save(path + dirName, script);
+                        if (!success)
+                        {
+                            throw new Exception("FileConverter Save throws exception");
+                        }
+
+                        File.Delete(path + dirName + dbScript);
                     }
-                    File.Delete(path + dirName + dbScript);
+
                 }
-                
+                catch (Exception ex)
+                {
+                    logger.LogError("InitializeDatabaseScript throws error: " + ex);
+                    throw;
+                }
+                finally
+                {
+                    logger.LogInformation("Finished with InitializeDatabaseScript");
+                }
             }
             InitializeDatabaseScript();
-
-            EtnaSettings.ConnectionString = ConfigurationManager.ConnectionStrings["SqlDb"].ToString();
-            string dbName = ConfigurationManager.AppSettings["DatabaseName"];
-            EtnaSettings.DbName = dbName;
-            var databaseService = ServiceProvider.GetRequiredService<DatabaseService>();
-            var databaseExists = databaseService.DoesDatabaseExist(dbName);
-            if (databaseExists)
+            string dbName = string.Empty;
+            try
             {
-                CreateMainWindow();
+                logger.LogInformation("Assigning strings from configuration file");
+                EtnaSettings.ConnectionString = ConfigurationManager.ConnectionStrings["SqlDb"].ToString();
+                dbName = ConfigurationManager.AppSettings["DatabaseName"];
+                EtnaSettings.DbName = dbName;
             }
-            else
+            catch (Exception ex)
             {
-                
-                var dbCreation = ServiceProvider.GetRequiredService<DatabaseCreationService>();
-                var success = dbCreation.CreateDatabase(dbName, dirName, fileName,fc );
-                if (success)
+                logger.LogError("Errors found on assigning strings from configuration file: " + ex);
+                throw;
+            }
+            finally
+            {
+                logger.LogInformation("[Finished with logging configuration strings]");
+            }
+
+            try
+            {
+                logger.LogInformation("Getting DatabaseService And Checking if it exists");
+                var databaseService = ServiceProvider.GetRequiredService<DatabaseService>();
+                var databaseExists = databaseService.DoesDatabaseExist(dbName);
+                if (databaseExists)
                 {
-                    var adminService = ServiceProvider.GetRequiredService<AdminService>();
-                    bool accountExists = adminService.CheckIfAccountExists();
-                    if (!accountExists)
-                    {
-                        adminService.FirstUserCreation();
-                    }
-                    
+                    logger.LogInformation("Database does exist starting main window");
                     CreateMainWindow();
                 }
                 else
                 {
-                    MessageBox.Show("Greska u instaliranju baze pokusajte ponovo!");
+                    logger.LogInformation("Database doesnt exist attempting to create a new one");
+                    var dbCreation = ServiceProvider.GetRequiredService<DatabaseCreationService>();
+                    var success = dbCreation.CreateDatabase(dbName, dirName, fileName, fc);
+                    if (success)
+                    {
+                        logger.LogInformation("Database exists.. Checking if master user exists");
+                        var adminService = ServiceProvider.GetRequiredService<AdminService>();
+                        bool accountExists = adminService.CheckIfAccountExists();
+                        if (!accountExists)
+                        {
+                            logger.LogInformation("User does not exists, attempting to create a master user.");
+                            adminService.FirstUserCreation();
+                        }
+
+                        logger.LogInformation("Starting main windows");
+                        CreateMainWindow();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Greska u instaliranju baze pokusajte ponovo!");
+                    }
+
                 }
-                
             }
-          
+            catch (Exception ex)
+            {
+                logger.LogCritical("Application couldnt start: " + ex);
+                throw;
+            }
+            finally
+            {
+                logger.LogInformation("Finished loggin main application startup.");
+            }
         }
 
         private void CreateMainWindow()
         {
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-
+            
             var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
             mainWindow.DataContext = mainViewModel;
             mainWindow.Show();

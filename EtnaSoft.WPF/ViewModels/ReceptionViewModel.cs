@@ -111,10 +111,7 @@ namespace EtnaSoft.WPF.ViewModels
             }
             else
             {
-                if(Bookings.Any())
-                {
-                    Bookings.Clear();
-                }
+                Bookings?.Clear();
                 Bookings = _schedulerService.LoadResource();
             }
 

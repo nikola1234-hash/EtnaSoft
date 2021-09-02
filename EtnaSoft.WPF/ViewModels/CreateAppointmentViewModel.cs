@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
-using DevExpress.XtraScheduler.Outlook.Interop;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
@@ -217,6 +211,44 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
+        private string _firstName
+;
+
+        public string FirstName
+
+        {
+            get { return _firstName; }
+            set
+            {
+                _firstName = value;
+                RaisePropertyChanged(nameof(FirstName));
+            }
+        }
+
+        private string _lastName;
+
+        public string LastName
+        {
+            get { return _lastName; }
+            set
+            {
+                _lastName = value;
+                RaisePropertyChanged(nameof(LastName));
+            }
+        }
+
+        private string _telephone;
+
+        public string Telephone
+        {
+            get { return _telephone; }
+            set
+            {
+                _telephone = value;
+                RaisePropertyChanged(nameof(Telephone));
+            }
+        }
+
         public decimal PricePerKid
         {
             get => SelectedStayType?.Price / 2 ?? 0;
@@ -265,24 +297,43 @@ namespace EtnaSoft.WPF.ViewModels
             }
             
         }
-
+        /// <summary>
+        /// Clear the fields
+        /// </summary>
+        void ClearGuestFields()
+        {
+            FirstName = string.Empty;
+            LastName = string.Empty;
+            Telephone = string.Empty;
+        }
+     
+        /// <summary>
+        /// Search Guest in database,
+        /// Dialog result returns guest Id 
+        /// </summary>
         private void SearchGuestDialogOpen()
         {
+        
 
             UICommand result= ChoseGuestDialogService.ShowDialog(SearchGuestDialogViewModel.DialogCommands,
                 "Postojeci gost", viewModel: SearchGuestDialogViewModel);
             if (result != null)
             {
-                if (result.Id is int id )
+                if (result.Id is Guest guest )
                 {
-                    //returns SelectedGuest.ID as UICommand id;
-                    _guestId = id;
+                    _guestId = guest.Id;
+                    ClearGuestFields();
+                    FirstName = guest.FirstName;
+                    LastName = guest.LastName;
+                    Telephone = guest.Telephone;
                 }
 
             }
             
         }
-
+        /// <summary>
+        /// Adds Guest to database, returns newly created guest Id
+        /// </summary>
         private void AddNewGuestExecute()
         {
             using (AddGuestDialogViewModel)
@@ -291,9 +342,14 @@ namespace EtnaSoft.WPF.ViewModels
                     viewModel: AddGuestDialogViewModel);
                 if (result != null)
                 {
-                    if (result.Id is int id)
+                    if (result.Id is Guest guest)
                     {
-                        _guestId = id;
+                        _guestId = guest.Id;
+                        ClearGuestFields();
+                        FirstName = guest.FirstName;
+                        LastName = guest.LastName;
+                        Telephone = guest.Telephone;
+                        
                     }
                   
                 }
@@ -333,7 +389,9 @@ namespace EtnaSoft.WPF.ViewModels
             ComboboxLogic();
             DateTimeLogic();
         }
-
+        /// <summary>
+        /// Close Application Windows
+        /// </summary>
         private void AbortExecute()
         {
             CloseWindow();

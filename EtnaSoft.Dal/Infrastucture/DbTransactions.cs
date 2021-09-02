@@ -14,6 +14,10 @@ namespace EtnaSoft.Dal.Infrastucture
         private IDbTransaction _transaction;
         private bool _isClosed = false;
         public string ConnectionString => EtnaSettings.ConnectionString;
+        /// <summary>
+        /// Starts Transaction
+        /// ands sets connection state to open
+        /// </summary>
         public void StartTransaction()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString)
@@ -27,7 +31,14 @@ namespace EtnaSoft.Dal.Infrastucture
             _isClosed = false;
         }
 
-
+        /// <summary>
+        /// Saves Transaction
+        /// </summary>
+        /// <typeparam name="T">Bussiness Object</typeparam>
+        /// <param name="storedProcedure">sp_ at the beggining of string sets Command Parameter
+        /// to stored procedure, otherwise its CommandParameter.Text</param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public int SaveDataTransaction<T>(string storedProcedure, T parameters)
         {
             CommandType cmd = CommandType.StoredProcedure;
@@ -51,6 +62,9 @@ namespace EtnaSoft.Dal.Infrastucture
                 transaction: _transaction).ToList();
             return rows;
         }
+        /// <summary>
+        /// Commits Transaction and closes connection
+        /// </summary>
         public void CommitTransaction()
         {
             _transaction?.Commit();

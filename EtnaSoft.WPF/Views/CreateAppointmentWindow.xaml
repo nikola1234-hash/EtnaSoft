@@ -73,7 +73,7 @@
                         MediumGlyph="{dx:DXImage SvgImages/Save/Save.svg}"
                         RibbonStyle="Default" />
                     <dxb:BarButtonItem
-                        Command="{Binding AbortReservationCommand}"
+                        Command="{Binding AbortReservationCreationCommand}"
                         Content="Odustani"
                         Glyph="{dx:DXImage SvgImages/Scheduling/Delete.svg}"
                         LargeGlyph="{dx:DXImage SvgImages/Scheduling/Delete.svg}"
@@ -134,22 +134,40 @@
                     <dxe:TextEdit IsReadOnly="True" Text="{Binding TotalPrice}" />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
-            <dxlc:LayoutGroup
-                MinWidth="200"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Stretch"
-                Header="Cene"
-                Orientation="Vertical"
-                View="GroupBox">
-                <dxlc:LayoutItem Label="Cena po osobi:">
-                    <dxe:TextEdit Text="{Binding PricePerUnit}" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Cena po detetu:">
-                    <dxe:TextEdit Text="{Binding PricePerKid}" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Ukupno cena:">
-                    <dxe:TextEdit Text="{Binding TotalPrice}" />
-                </dxlc:LayoutItem>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutGroup
+                    MinWidth="200"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    Header="Cene"
+                    Orientation="Vertical"
+                    View="GroupBox">
+                    <dxlc:LayoutItem Label="Cena po osobi:">
+                        <dxe:TextEdit Text="{Binding PricePerUnit}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Cena po detetu:">
+                        <dxe:TextEdit Text="{Binding PricePerKid}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Ukupno cena:">
+                        <dxe:TextEdit Text="{Binding TotalPrice}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup
+                    Width="375"
+                    Header="Podaci o gostu"
+                    View="GroupBox">
+                    <dxlc:LayoutGroup Orientation="Vertical">
+                        <dxlc:LayoutItem Label="Ime:">
+                            <dxe:TextEdit IsReadOnly="True" Text="{Binding FirstName}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Prezime:">
+                            <dxe:TextEdit IsReadOnly="True" Text="{Binding LastName}" />
+                        </dxlc:LayoutItem>
+                        <dxlc:LayoutItem Label="Telefon:">
+                            <dxe:TextEdit IsReadOnly="True" Text="{Binding Telephone}" />
+                        </dxlc:LayoutItem>
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
     </DockPanel>

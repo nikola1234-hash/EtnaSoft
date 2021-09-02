@@ -102,7 +102,7 @@ namespace EtnaSoft.WPF.ViewModels
         {
             if (!_allowCloseDialog)
             {
-                SelectUiCommand.Id = SelectedGuest.Id;
+                SelectUiCommand.Id = SelectedGuest;
             }
         }
 

@@ -10,11 +10,16 @@ using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
 using Squirrel;
 using System.Deployment.Application;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace EtnaSoft.WPF.ViewModels
 {
     public class LoginViewModel : EtnaBaseViewModel
     {
+
+
+
         private string _username;
 
         public string Username
@@ -62,12 +67,15 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IAuthenticator _authenticator;
         private readonly IRenavigate _renavigate;
         private readonly IViewStore _view;
+        private readonly ILogger<LoginViewModel> _logger;
         public ICommand LoadedCommand { get; }
-        public LoginViewModel(IAuthenticator authenticator, IRenavigate renavigate, IViewStore view)
+        public LoginViewModel(IAuthenticator authenticator, IRenavigate renavigate, IViewStore view, ILogger<LoginViewModel> logger)
         {
+            
             _authenticator = authenticator;
             _renavigate = renavigate;
             _view = view;
+            _logger = logger;
             LoginCommand = new DelegateCommand<object>(OnLogin);
             ErrorMessageViewModel = new MessageViewModel();
             LoadedCommand = new DelegateCommand(OnViewLoad);
@@ -81,6 +89,7 @@ namespace EtnaSoft.WPF.ViewModels
         //TODO: Update online for continuous integration
         private async Task CheckForUpdates()
         {
+            _logger.LogInformation("Started checking for updates");
             
             if (ApplicationDeployment.IsNetworkDeployed)
             {
@@ -91,11 +100,13 @@ namespace EtnaSoft.WPF.ViewModels
                     CurrentVersion = string.Empty;
                     CurrentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(4);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    _logger.LogError("Checking for updates throws exception : " + ex);
                     throw;
                 }
-               
+
+                _logger.LogInformation("Finished checking for errors");
             }
 
         }
