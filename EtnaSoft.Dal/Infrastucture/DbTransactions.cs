@@ -16,7 +16,12 @@ namespace EtnaSoft.Dal.Infrastucture
         public string ConnectionString => EtnaSettings.ConnectionString;
         public void StartTransaction()
         {
-            _connection = new SqlConnection(ConnectionString);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString)
+            {
+                InitialCatalog = EtnaSettings.DbName
+            };
+            
+            _connection = new SqlConnection(builder.ConnectionString);
             _connection.Open();
             _transaction = _connection.BeginTransaction();
             _isClosed = false;

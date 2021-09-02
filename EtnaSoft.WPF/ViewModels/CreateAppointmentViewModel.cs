@@ -248,12 +248,19 @@ namespace EtnaSoft.WPF.ViewModels
         {
             if (NumberOfKids > 0)
             {
-                TotalPrice = ((SelectedStayType.Price * NumberOfPeople) + (NumberOfKids * (SelectedStayType.Price / 2))) * NumberOfDays;
+                if (SelectedStayType != null)
+                {
+                    TotalPrice = ((SelectedStayType.Price * NumberOfPeople) + (NumberOfKids * (SelectedStayType.Price / 2))) * NumberOfDays;
+                }
+          
             }
 
             if (NumberOfKids == 0)
             {
-                TotalPrice = SelectedStayType.Price * NumberOfPeople * NumberOfDays;
+                if (SelectedStayType != null)
+                {
+                    TotalPrice = SelectedStayType.Price * NumberOfPeople * NumberOfDays; 
+                }
                 
             }
             
@@ -284,8 +291,11 @@ namespace EtnaSoft.WPF.ViewModels
                     viewModel: AddGuestDialogViewModel);
                 if (result != null)
                 {
-                    MessageService.Show("Dialog clicked button " + result.Id);
-                
+                    if (result.Id is int id)
+                    {
+                        _guestId = id;
+                    }
+                  
                 }
             }
            

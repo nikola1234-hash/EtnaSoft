@@ -166,7 +166,7 @@ namespace EtnaSoft.WPF.ViewModels
 
           var newGuest = GuestMappingLogic();
           var createdGuest = _guestService.CreateGuest(newGuest);
-          RegisterUICommand.Id = createdGuest;
+          RegisterUICommand.Id = createdGuest.Id;
       }
 
       public override void Dispose()
