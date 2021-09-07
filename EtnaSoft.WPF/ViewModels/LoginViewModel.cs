@@ -63,7 +63,11 @@ namespace EtnaSoft.WPF.ViewModels
                 ErrorMessageViewModel.Message = value;
             }
         }
-
+        private IDialogService DialogService
+        {
+            get => GetService<IDialogService>();
+        }
+        private ChangePasswordDialogViewModel ChangePasswordDialog { get; set; }
         private readonly IAuthenticator _authenticator;
         private readonly IRenavigate _renavigate;
         private readonly IViewStore _view;
@@ -121,6 +125,12 @@ namespace EtnaSoft.WPF.ViewModels
                     var successLogin = _authenticator.Login(Username, pass);
                     if (successLogin)
                     {
+                        
+                        if (Username == "Admin" && pass == "admin")
+                        {
+                            ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass);
+                            UICommand result = DialogService.ShowDialog()
+                        }
                         _view.CurrentViewModel = _renavigate.Navigate();
                     }
                 }

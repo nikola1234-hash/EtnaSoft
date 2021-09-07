@@ -87,5 +87,33 @@ namespace EtnaSoft.Dal.Services.Authorization
 
             return registration;
         }
+
+        public ChangePasswordStatus ChangePassword(string username, string password, string oldPassword)
+        {
+            ChangePasswordStatus status = ChangePasswordStatus.Success;
+
+            var user = _unitOfWork.Users.GetAll().FirstOrDefault(s => s.Username == username);
+            if (user is null)
+            {
+                status = ChangePasswordStatus.Failed;
+                return status;
+            }
+            var passwordsMatch = _hasher.VerifyHashedPassword(user.PasswordHash, oldPassword);
+            if (passwordsMatch == PasswordVerificationResult.Failed)
+            {
+                status = ChangePasswordStatus.Failed;
+            }
+
+            var newHash = _hasher.HashPassword(password);
+            user.PasswordHash = newHash;
+            var success = _unitOfWork.Users.Update(user.Id, user);
+            if (!success)
+            {
+                throw new Exception("User update not successful");
+            }
+
+
+            return status;
+        }
     }
 }

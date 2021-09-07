@@ -169,6 +169,7 @@
     <Compile Include="Stores\Renavigate.cs" />
     <Compile Include="ViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\AppointmentWindowBase.cs" />
+    <Compile Include="ViewModels\ChangePasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
     <Compile Include="ViewModels\EtnaBaseViewModel.cs" />
@@ -177,6 +178,9 @@
     <Compile Include="ViewModels\MessageViewModel.cs" />
     <Compile Include="ViewModels\ReceptionViewModel.cs" />
     <Compile Include="ViewModels\SearchGuestDialogViewModel.cs" />
+    <Compile Include="Views\ChangePasswordDialog.xaml.cs">
+      <DependentUpon>ChangePasswordDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateAppointmentWindow.xaml.cs">
       <DependentUpon>CreateAppointmentWindow.xaml</DependentUpon>
     </Compile>
@@ -223,6 +227,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\NavigationStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChangePasswordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

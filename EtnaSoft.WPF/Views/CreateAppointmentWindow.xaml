@@ -2,6 +2,7 @@
     x:Class="EtnaSoft.WPF.Views.CreateAppointmentWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Serialization="clr-namespace:DevExpress.Xpf.LayoutControl.Serialization;assembly=DevExpress.Xpf.LayoutControl.v20.1"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
@@ -24,19 +25,19 @@
     </dx:ThemedWindow.Resources>
     <dxmvvm:Interaction.Behaviors>
         <dx:DXMessageBoxService />
-        <dx:DialogService Name="newGuestService" DialogWindowStartupLocation="CenterOwner">
+        <dx:DialogService x:Name="newGuestService" DialogWindowStartupLocation="CenterOwner">
             <dx:DialogService.ViewTemplate>
                 <DataTemplate>
                     <view:DialogServiceView />
                 </DataTemplate>
             </dx:DialogService.ViewTemplate>
             <dx:DialogService.DialogStyle>
-                <Style TargetType="dx:DXDialogWindow">
+                <Style TargetType="{x:Type dx:DXDialogWindow}">
                     <Setter Property="SizeToContent" Value="WidthAndHeight" />
                 </Style>
             </dx:DialogService.DialogStyle>
         </dx:DialogService>
-        <dx:DialogService Name="choseGuestService" DialogWindowStartupLocation="CenterScreen">
+        <dx:DialogService x:Name="choseGuestService" DialogWindowStartupLocation="CenterScreen">
             <dx:DialogService.ViewTemplate>
                 <DataTemplate>
                     <view:ExistingGuestDialogView />
@@ -53,6 +54,7 @@
             DockPanel.Dock="Top"
             MinimizationButtonVisibility="Auto"
             RibbonStyle="Office2010"
+            ShowApplicationButton="False"
             ToolbarShowMode="Hide">
             <dxr:RibbonControl.ToolbarItems>
 
@@ -97,44 +99,77 @@
             </dxr:RibbonPage>
         </dxr:RibbonControl>
         <dxlc:LayoutControl dxe:ValidationService.IsValidationContainer="True" Orientation="Vertical">
-            <dxlc:LayoutGroup>
-                <dxlc:LayoutItem Label="Soba">
-                    <dxe:ComboBoxEdit
-                        DisplayMember="RoomNumber"
-                        ItemsSource="{Binding RoomList}"
-                        SelectedIndex="{Binding SelectedIndex}"
-                        SelectedItem="{Binding SelectedRoom}"
-                        ValueMember="Id" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Tip smestaja:">
-                    <dxe:ComboBoxEdit
-                        DisplayMember="Title"
-                        ItemsSource="{Binding StayTypes}"
-                        SelectedItem="{Binding SelectedStayType}"
-                        ValueMember="Id" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Margin="0,0,0,-10" Label="Broj osoba:">
-                    <dxe:TextEdit Text="{Binding NumberOfPeople, UpdateSourceTrigger=PropertyChanged}" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Deca 50%">
-                    <dxe:TextEdit Text="{Binding NumberOfKids, UpdateSourceTrigger=PropertyChanged}" ToolTip="Deca koja placaju 50% odnosno starosti od 3 do 9 godina." />
-                </dxlc:LayoutItem>
+            <dxlc:LayoutGroup Header="Osnovni podaci:" View="GroupBox">
+                <dxlc:LayoutGroup
+                    Serialization:SerializableItem.TypeName="LayoutGroup"
+                    dx:ScrollViewerTouchBehavior.IsEnabled="True"
+                    Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Soba">
+                        <dxe:ComboBoxEdit
+                            DisplayMember="RoomNumber"
+                            ItemsSource="{Binding RoomList}"
+                            SelectedIndex="{Binding SelectedIndex}"
+                            SelectedItem="{Binding SelectedRoom}"
+                            ValueMember="Id" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Dolazak:">
+                        <dxe:DateEdit DateTime="{Binding StartDate}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup
+                    Serialization:SerializableItem.TypeName="LayoutGroup"
+                    dx:ScrollViewerTouchBehavior.IsEnabled="True"
+                    Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Tip smestaja:">
+                        <dxe:ComboBoxEdit
+                            DisplayMember="Title"
+                            ItemsSource="{Binding StayTypes}"
+                            SelectedItem="{Binding SelectedStayType}"
+                            ValueMember="Id" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Odlazak:">
+                        <dxe:DateEdit DateTime="{Binding EndDate}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup
+                    Serialization:SerializableItem.TypeName="LayoutGroup"
+                    dx:ScrollViewerTouchBehavior.IsEnabled="True"
+                    Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Broj osoba:">
+                        <dxe:TextEdit Text="{Binding NumberOfPeople, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Broj Dana:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding NumberOfDays}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup
+                    Serialization:SerializableItem.TypeName="LayoutGroup"
+                    dx:ScrollViewerTouchBehavior.IsEnabled="True"
+                    Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Deca 50%">
+                        <dxe:TextEdit Text="{Binding NumberOfKids, UpdateSourceTrigger=PropertyChanged}" ToolTip="Deca koja placaju 50% odnosno starosti od 3 do 9 godina." />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Ukupno Cena:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding TotalPrice}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
-            <dxlc:LayoutGroup>
-                <dxlc:LayoutItem Label="Dolazak:">
-                    <dxe:DateEdit DateTime="{Binding StartDate}" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Odlazak:">
-                    <dxe:DateEdit DateTime="{Binding EndDate}" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Broj Dana:">
-                    <dxe:TextEdit IsReadOnly="True" Text="{Binding NumberOfDays}" />
-                </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Ukupno Cena:">
-                    <dxe:TextEdit IsReadOnly="True" Text="{Binding TotalPrice}" />
-                </dxlc:LayoutItem>
-            </dxlc:LayoutGroup>
-            <dxlc:LayoutGroup>
+            <dxlc:LayoutGroup Serialization:SerializableItem.TypeName="LayoutGroup" dx:ScrollViewerTouchBehavior.IsEnabled="True">
+                <dxlc:LayoutGroup
+                    Width="375"
+                    Header="Podaci o gostu"
+                    Orientation="Vertical"
+                    View="GroupBox">
+                    <dxlc:LayoutItem Label="Ime:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding FirstName}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Prezime:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding LastName}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Telefon:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding Telephone}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
                 <dxlc:LayoutGroup
                     MinWidth="200"
                     HorizontalAlignment="Left"
@@ -143,30 +178,14 @@
                     Orientation="Vertical"
                     View="GroupBox">
                     <dxlc:LayoutItem Label="Cena po osobi:">
-                        <dxe:TextEdit Text="{Binding PricePerUnit}" />
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding PricePerUnit}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Cena po detetu:">
-                        <dxe:TextEdit Text="{Binding PricePerKid}" />
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding PricePerKid}" />
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Ukupno cena:">
-                        <dxe:TextEdit Text="{Binding TotalPrice}" />
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding TotalPrice}" />
                     </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-                <dxlc:LayoutGroup
-                    Width="375"
-                    Header="Podaci o gostu"
-                    View="GroupBox">
-                    <dxlc:LayoutGroup Orientation="Vertical">
-                        <dxlc:LayoutItem Label="Ime:">
-                            <dxe:TextEdit IsReadOnly="True" Text="{Binding FirstName}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Prezime:">
-                            <dxe:TextEdit IsReadOnly="True" Text="{Binding LastName}" />
-                        </dxlc:LayoutItem>
-                        <dxlc:LayoutItem Label="Telefon:">
-                            <dxe:TextEdit IsReadOnly="True" Text="{Binding Telephone}" />
-                        </dxlc:LayoutItem>
-                    </dxlc:LayoutGroup>
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>

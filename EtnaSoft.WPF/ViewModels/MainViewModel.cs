@@ -29,16 +29,10 @@ namespace EtnaSoft.WPF.ViewModels
             _viewStore.ViewChanged += OnViewChanged;
             NavigateCommand = new NavigateCommand(viewModelFactory, _viewStore);
             OnLoadCommand = new DelegateCommand(OnLoadExecute);
-            CheckForUpdates();
+         
         }
 
-        private async Task CheckForUpdates()
-        {
-            using (var manager = new UpdateManager(@"C:\Release"))
-            {
-                await manager.UpdateApp();
-            }
-        }
+     
         private void OnLoadExecute()
         {
             NavigateCommand.Execute(ViewType.LoginView);
