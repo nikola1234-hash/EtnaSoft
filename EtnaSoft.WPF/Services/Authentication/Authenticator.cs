@@ -1,8 +1,9 @@
 ﻿using System;
-using EtnaSoft.Bll.Stores;
+
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
 using EtnaSoft.Dal.Services.Authorization;
+using EtnaSoft.Dal.Stores;
 
 namespace EtnaSoft.WPF.Services.Authentication
 {

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using DevExpress.Mvvm;
+using DevExpress.Mvvm.POCO;
 using EtnaSoft.Dal.Services.Authorization;
 
 namespace EtnaSoft.WPF.ViewModels
@@ -13,13 +15,11 @@ namespace EtnaSoft.WPF.ViewModels
     {
         public string Username { get; set; }
 
-        public IAuthorization _auth
-        {
-            get => GetService<IAuthorization>();
-        }
+        private readonly IAuthorization _auth;
         public string Password { get; set; }
         private string _oldPassword;
         public UICommand ChangeCommand { get; set; }
+        public List<UICommand> Commands { get; set; }
         public string OldPassword
         {
             get { return _oldPassword; }
@@ -27,8 +27,10 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 _oldPassword = value;
                 RaisePropertyChanged(nameof(OldPassword));
+                RaisePropertyChanged(nameof(OldPasswordMatch));
             }
         }
+
 
         private bool _oldPasswordMatch;
 
@@ -46,6 +48,7 @@ namespace EtnaSoft.WPF.ViewModels
                 {
                     _oldPasswordMatch = value;
                     RaisePropertiesChanged(nameof(OldPasswordMatch));
+                    
                 }
                
             }
@@ -60,6 +63,7 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 _newPassword = value;
                 RaisePropertyChanged(nameof(NewPassword));
+                RaisePropertyChanged(nameof(NewPasswordMatch));
             }
         }
 
@@ -72,6 +76,7 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 _repeatNewPassword = value;
                 RaisePropertyChanged(nameof(RepeatNewPassword));
+                RaisePropertyChanged(nameof(NewPasswordMatch));
             }
         }
 
@@ -90,6 +95,7 @@ namespace EtnaSoft.WPF.ViewModels
                 {
                     _newPasswordMatch = value;
                     RaisePropertyChanged(nameof(NewPasswordMatch));
+
                 }
              
             }
@@ -100,17 +106,22 @@ namespace EtnaSoft.WPF.ViewModels
         {
             set => ErrorMessageViewModel.Message = value;
         }
-        public ChangePasswordDialogViewModel(string username, string password)
+        public ChangePasswordDialogViewModel(string username, string password, IAuthorization auth)
         {
             Username = username;
             Password = password;
-            ChangeCommand = new UICommand()
+            _auth = auth;
+            Commands = new List<UICommand>();
+            ChangeCommand = new UICommand
             {
-                Id= MessageBoxResult.OK,
+                Id = MessageBoxResult.OK,
                 Caption = "Izmeni",
                 IsDefault = true,
-                Command = new DelegateCommand(ChangePasswordExecute, CanChangePasswordExecute)
+                Command = new DelegateCommand(ChangePasswordExecute),
+                Placement = Dock.Bottom,
+                Alignment = DialogButtonAlignment.Center
             };
+            Commands.Add(ChangeCommand);
         }
 
         private bool CanChangePasswordExecute()

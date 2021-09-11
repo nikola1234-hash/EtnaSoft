@@ -5,6 +5,7 @@ using System.Text;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Exceptions;
 using EtnaSoft.Dal.Infrastucture;
+using EtnaSoft.Dal.Stores;
 using Microsoft.AspNet.Identity;
 
 namespace EtnaSoft.Dal.Services.Authorization
@@ -13,6 +14,7 @@ namespace EtnaSoft.Dal.Services.Authorization
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPasswordHasher _hasher;
+        private string _currentUser => UserStore.CurrentUser;
         public AuthorizationService(IUnitOfWork unitOfWork, IPasswordHasher hasher)
         {
             _unitOfWork = unitOfWork;
@@ -77,7 +79,8 @@ namespace EtnaSoft.Dal.Services.Authorization
                 Name = name,
                 LastName = lastName,
                 Username = username,
-                PasswordHash = hashedPassword
+                PasswordHash = hashedPassword,
+                CreatedBy = _currentUser
             };
             var createdUser = _unitOfWork.Users.Create(newUser);
             if (createdUser is null)
@@ -106,6 +109,9 @@ namespace EtnaSoft.Dal.Services.Authorization
 
             var newHash = _hasher.HashPassword(password);
             user.PasswordHash = newHash;
+            user.ModifiedBy = _currentUser;
+            
+            
             var success = _unitOfWork.Users.Update(user.Id, user);
             if (!success)
             {

@@ -7,8 +7,8 @@ using System;
 using System.Configuration;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
-using EtnaSoft.Bll.Stores;
 using EtnaSoft.Dal.Services;
+using EtnaSoft.Dal.Stores;
 
 namespace EtnaSoft.WPF.ViewModels
 {

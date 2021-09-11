@@ -162,7 +162,9 @@ namespace EtnaSoft.WPF
                 var databaseExists = databaseService.DoesDatabaseExist(dbName);
                 if (databaseExists)
                 {
+                    
                     logger.LogInformation("Database does exist starting main window");
+                    
                     CreateMainWindow();
                 }
                 else

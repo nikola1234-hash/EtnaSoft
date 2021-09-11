@@ -10,11 +10,20 @@ using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
 using Squirrel;
 using System.Deployment.Application;
+using System.Windows;
+using EtnaSoft.Bo.Entities;
+using EtnaSoft.Dal.Services.Authorization;
 using Serilog;
 using Microsoft.Extensions.Logging;
 
 namespace EtnaSoft.WPF.ViewModels
 {
+    public enum DefaultAccount
+    {
+        Admin = 1,
+        admin = 2
+
+    }
     public class LoginViewModel : EtnaBaseViewModel
     {
 
@@ -69,17 +78,19 @@ namespace EtnaSoft.WPF.ViewModels
         }
         private ChangePasswordDialogViewModel ChangePasswordDialog { get; set; }
         private readonly IAuthenticator _authenticator;
+        private readonly IAuthorization _auth;
         private readonly IRenavigate _renavigate;
         private readonly IViewStore _view;
         private readonly ILogger<LoginViewModel> _logger;
         public ICommand LoadedCommand { get; }
-        public LoginViewModel(IAuthenticator authenticator, IRenavigate renavigate, IViewStore view, ILogger<LoginViewModel> logger)
+        public LoginViewModel(IAuthenticator authenticator, IRenavigate renavigate, IViewStore view, ILogger<LoginViewModel> logger, IAuthorization auth)
         {
             
             _authenticator = authenticator;
             _renavigate = renavigate;
             _view = view;
             _logger = logger;
+            _auth = auth;
             LoginCommand = new DelegateCommand<object>(OnLogin);
             ErrorMessageViewModel = new MessageViewModel();
             LoadedCommand = new DelegateCommand(OnViewLoad);
@@ -125,11 +136,17 @@ namespace EtnaSoft.WPF.ViewModels
                     var successLogin = _authenticator.Login(Username, pass);
                     if (successLogin)
                     {
-                        
-                        if (Username == "Admin" && pass == "admin")
+                        bool isDefaultAccount = Username == DefaultAccount.Admin.ToString() &&
+                                                pass == DefaultAccount.admin.ToString();
+                        if (isDefaultAccount)
                         {
-                            ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass);
-                            UICommand result = DialogService.ShowDialog()
+                            ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass, _auth);
+                            UICommand result = DialogService.ShowDialog(changePassword.Commands, "Promeni lozinku",
+                                viewModel:changePassword);
+                            if (result != null)
+                            {
+                                MessageBox.Show("Uspesno promenjena lozinka");
+                            }
                         }
                         _view.CurrentViewModel = _renavigate.Navigate();
                     }

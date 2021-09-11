@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EtnaSoft.Bll.Stores;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
 using EtnaSoft.Dal.Infrastucture;
 using EtnaSoft.Dal.Services;
+using EtnaSoft.Dal.Stores;
 
 namespace EtnaSoft.Bll.Services
 {

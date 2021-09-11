@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ErtnaSoft.Bo.Entities;
-using EtnaSoft.Bll.Stores;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
+using EtnaSoft.Dal.Stores;
 
 namespace EtnaSoft.Bll.Services
 {

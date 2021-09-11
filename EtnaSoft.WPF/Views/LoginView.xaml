@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:EtnaSoft.WPF.Views">
@@ -17,13 +18,13 @@
     <dxmvvm:Interaction.Behaviors>
         <dxmvvm:EventToCommand Command="{Binding LoadedCommand}" Event="Loaded" />
         <dx:DXMessageBoxService />
-        <dx:DialogService x:Name="changePassword" DialogWindowStartupLocation="CenterScreen">
-            <dx:DialogService.ViewTemplate>
+        <dxwui:WinUIDialogService x:Name="changePassword" DialogWindowStartupLocation="CenterScreen">
+            <dxwui:WinUIDialogService.ViewTemplate>
                 <DataTemplate>
                     <view:ChangePasswordDialog />
                 </DataTemplate>
-            </dx:DialogService.ViewTemplate>
-        </dx:DialogService>
+            </dxwui:WinUIDialogService.ViewTemplate>
+        </dxwui:WinUIDialogService>
     </dxmvvm:Interaction.Behaviors>
 
 

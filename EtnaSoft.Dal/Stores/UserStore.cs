@@ -1,4 +1,4 @@
-﻿namespace EtnaSoft.Bll.Stores
+﻿namespace EtnaSoft.Dal.Stores
 {
     public static class UserStore
     {

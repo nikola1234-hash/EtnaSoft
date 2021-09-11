@@ -39,10 +39,17 @@ namespace EtnaSoft.Dal.Repositories
 
         public bool Update(int id, User user)
         {
-            user.Id = id;
-            DynamicParameters dynamicUser = new DynamicParameters(user);
+            var updateUser = new
+            {
+                Id= id,
+                Name = user.Name,
+                LastName = user.LastName,
+                Username = user.Username,
+                PasswordHash = user.PasswordHash,
+                ModifiedBy = user.ModifiedBy
+            };
             bool output = false;
-            int i = _context.SaveData(UpdateById, dynamicUser);
+            int i = _context.SaveData(UpdateById, updateUser);
             if (i == 1)
             {
                 output = true;
