@@ -10,6 +10,7 @@ using EtnaSoft.Bll.Models;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Bo.Entities;
+using EtnaSoft.Dal.Services;
 using EtnaSoft.WPF.Events;
 using EtnaSoft.WPF.Models;
 using EtnaSoft.WPF.Services.Reception;
@@ -66,13 +67,14 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IBookingService _bookingService;
         private readonly ICreateReservationService _createReservation;
         private readonly IComboboxFacade _comboboxFacade;
+        private readonly IAvailableRoomsService _availableRooms;
         private readonly DialogServiceViewModel _dialogServiceViewModel;
         private readonly SearchGuestDialogViewModel _searchGuestDialogViewModel;
         
 
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
-        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation)
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation, IAvailableRoomsService availableRooms)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -86,6 +88,7 @@ namespace EtnaSoft.WPF.ViewModels
             _dialogServiceViewModel = dialogServiceViewModel;
             _comboboxFacade = comboboxFacade;
             _createReservation = createReservation;
+            _availableRooms = availableRooms;
             _schedulerService = schedulerService;
         }
 
@@ -161,7 +164,7 @@ namespace EtnaSoft.WPF.ViewModels
                 args.Window = new CreateAppointmentWindow
                 {
                     DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator,
-                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade, _createReservation)
+                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade, _createReservation, _availableRooms)
                 };
             }
             else

@@ -64,6 +64,7 @@
     <Folder Include="StoredProcedures\User" />
     <Folder Include="StoredProcedures\Reservation" />
     <Folder Include="StoredProcedures\RoomReservation" />
+    <Folder Include="StoredProcedures\Room" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -83,6 +84,7 @@
     <Build Include="Tables\Labels.sql" />
     <Build Include="Tables\PaymentStatuses.sql" />
     <Build Include="StoredProcedures\Guest\sp_GuestUpdate.sql" />
+    <Build Include="StoredProcedures\Room\sp_LoadFreeRooms.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EtnaSoft.Database.publish.xml" />

@@ -12,6 +12,7 @@ namespace EtnaSoft.Bll.Services.Facade
         private readonly ISchedulerService _scheduler;
         private readonly IResourceService _resource;
         
+        
 
         public ComboboxFacade(ISchedulerService scheduler, IResourceService resource)
         {

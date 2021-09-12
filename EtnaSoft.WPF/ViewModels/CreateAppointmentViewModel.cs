@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
@@ -7,6 +8,7 @@ using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Bo.Entities;
+using EtnaSoft.Dal.Services;
 using EtnaSoft.Dal.Stores;
 using EtnaSoft.WPF.Events;
 using Prism.Events;
@@ -19,6 +21,7 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly IComboboxFacade _comboboxFacade;
         private readonly ICreateReservationService _createReservation;
+        private readonly IAvailableRoomsService _availableRooms;
         public ICommand CreateReservationCommand { get; }
         public ICommand AbortReservationCreationCommand { get; }
         public ICommand SearchExistingGuestCommand { get; }
@@ -187,6 +190,7 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertiesChanged(nameof(NumberOfDays));
                 if(SelectedStayType !=null)
                     TotalPriceChanged();
+                LoadAvailableRooms(StartDate, EndDate);
             }
         }
 
@@ -207,6 +211,7 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertiesChanged(nameof(NumberOfDays));
                 if(SelectedStayType !=null)
                     TotalPriceChanged();
+                LoadAvailableRooms(StartDate, EndDate);
                 
             }
         }
@@ -258,7 +263,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation, IAvailableRoomsService availableRooms) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
 
@@ -266,6 +271,7 @@ namespace EtnaSoft.WPF.ViewModels
             SearchGuestDialogViewModel = searchGuestDialogViewModel;
             _comboboxFacade = comboboxFacade;
             _createReservation = createReservation;
+            _availableRooms = availableRooms;
             AddGuestDialogViewModel = dialogServiceViewModel;
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
             SearchExistingGuestCommand = new DelegateCommand(SearchGuestDialogOpen);
@@ -275,7 +281,22 @@ namespace EtnaSoft.WPF.ViewModels
             
            
         }
+        /// <summary>
+        /// Loads Available Rooms for dates
+        /// </summary>
+        private void LoadAvailableRooms(DateTime startDate, DateTime endDate)
+        {
+            if (RoomList != null)
+            {
+                
+                if (RoomList.Any())
+                {
+                    RoomList.Clear();
+                }
 
+                RoomList = _availableRooms.LoadAvailableRooms(startDate, endDate);
+            }
+        }
         private void TotalPriceChanged()
         {
             if (NumberOfKids > 0)
