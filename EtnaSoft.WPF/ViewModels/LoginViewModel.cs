@@ -76,7 +76,6 @@ namespace EtnaSoft.WPF.ViewModels
         {
             get => GetService<IDialogService>();
         }
-        private ChangePasswordDialogViewModel ChangePasswordDialog { get; set; }
         private readonly IAuthenticator _authenticator;
         private readonly IAuthorization _auth;
         private readonly IRenavigate _renavigate;
@@ -128,6 +127,23 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void OnLogin(object obj)
         {
+            bool IsDefaultAccount(string pass)
+            {
+                return Username == DefaultAccount.Admin.ToString() &&
+                       pass == DefaultAccount.admin.ToString();
+            }
+
+            void ChangePasswordDialog(string pass)
+            {
+                ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass, _auth);
+                UICommand result = DialogService.ShowDialog(changePassword.Commands, "Promeni lozinku",
+                    viewModel: changePassword);
+                if (result != null)
+                {
+                    MessageBox.Show("Uspesno promenjena lozinka");
+                }
+            }
+
             if (obj is PasswordBox passwordBox)
             {
                 var pass = passwordBox.Password;
@@ -136,19 +152,13 @@ namespace EtnaSoft.WPF.ViewModels
                     var successLogin = _authenticator.Login(Username, pass);
                     if (successLogin)
                     {
-                        bool isDefaultAccount = Username == DefaultAccount.Admin.ToString() &&
-                                                pass == DefaultAccount.admin.ToString();
-                        if (isDefaultAccount)
-                        {
-                            ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass, _auth);
-                            UICommand result = DialogService.ShowDialog(changePassword.Commands, "Promeni lozinku",
-                                viewModel:changePassword);
-                            if (result != null)
-                            {
-                                MessageBox.Show("Uspesno promenjena lozinka");
-                            }
-                        }
-                        _view.CurrentViewModel = _renavigate.Navigate();
+                       if (IsDefaultAccount(pass))
+                       {
+                           _logger.LogInformation("This account is default one, popping modal for password change");
+                           ChangePasswordDialog(pass);
+                           _logger.LogInformation("Password change done.");
+                       }
+                       _view.CurrentViewModel = _renavigate.Navigate();
                     }
                 }
                 catch (UserNotActiveExeption)
@@ -167,8 +177,9 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand CloseCommand { get; }
         public override void Dispose()
         {
-            ErrorMessageViewModel?.Dispose();
+            
             base.Dispose();
+            ErrorMessageViewModel?.Dispose();
         }
     }
 }

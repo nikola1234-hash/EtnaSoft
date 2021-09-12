@@ -150,15 +150,7 @@ namespace EtnaSoft.WPF.ViewModels
         public override void Dispose()
         {
             base.Dispose();
-            ReleaseResources();
-        }
-        //TODO: This is an experiment of reflection Disposing properties
-        private void ReleaseResources()
-        {
-            foreach (var property in this.GetType().GetProperties())
-            {
-                property.SetValue(this, string.Empty);
-            }
+         
         }
     }
 }
