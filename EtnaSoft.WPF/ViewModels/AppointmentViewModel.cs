@@ -154,6 +154,40 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
+        private decimal _pricePerPerson;
+
+        private decimal CalculatePricePerPerson()
+        {
+            if (NumberOfPeople > 0)
+            {
+                return TotalPrice / NumberOfPeople;
+            }
+            else
+            {
+                return 0M;
+            }
+        }
+        public decimal PricePerPerson
+        {
+            get { return CalculatePricePerPerson();}
+            set
+            {
+                _pricePerPerson = value;
+                RaisePropertyChanged(nameof(PricePerPerson));
+            }
+        }
+
+        private int _stayTypeIndex;
+
+        public int StayTypeIndex
+        {
+            get { return _stayTypeIndex; }
+            set
+            {
+                _stayTypeIndex = value;
+                RaisePropertyChanged(nameof(StayTypeIndex));
+            }
+        }
         public bool SaveButtonEnabled
         {
             get => IsRoomReservationDirty || IsGuestDirty || IsReservationDirty;
@@ -446,34 +480,40 @@ namespace EtnaSoft.WPF.ViewModels
         //TODO: Map rest of custom fiels
         private void OnLoad()
         {
+            void PopulateFields()
+            {
+                NumberOfPeople = (int) _appointmentItem.CustomFields["NumberOfPeople"];
+                TotalPrice = (decimal) _appointmentItem.CustomFields["TotalPrice"];
+                FirstName = (string) _appointmentItem.CustomFields["FirstName"];
+                LastName = (string) _appointmentItem.CustomFields["LastName"];
+                Telephone = (string) _appointmentItem.CustomFields["Telephone"];
+                Address = (string) _appointmentItem.CustomFields["Address"];
+                EmailAddress = (string) _appointmentItem.CustomFields["EmailAddress"];
+                IsCheckedIn = (bool) _appointmentItem.CustomFields["IsCheckedIn"];
+                IsCanceled = (bool) _appointmentItem.CustomFields["IsCanceled"];
+                UniqueNumber = (string) _appointmentItem.CustomFields["UniqueNumber"];
+                RoomNumber = (string) _appointmentItem.CustomFields["RoomNumber"];
+                StartDate = _appointmentItem.Start;
+                EndDate = _appointmentItem.End;
+            }
+
+            void PopulateStayType(int id)
+            {
+                
+                var stayTypes = _schedulerService.LoadStayTypes();
+                var stayType = _schedulerService.LoadStayTypes().FirstOrDefault(s => s.Id == id);
+                StayTypes = stayTypes;
+                SelectedStayType = stayType;
+                //TODO: Doesnt give proper index, make it work
+                StayTypeIndex = stayTypes.IndexOf(stayType);
+            }
 
             //Textboxes
-            NumberOfPeople = (int) _appointmentItem.CustomFields["NumberOfPeople"];
-            TotalPrice = (decimal) _appointmentItem.CustomFields["TotalPrice"];
-            FirstName = (string) _appointmentItem.CustomFields["FirstName"];
-            LastName = (string) _appointmentItem.CustomFields["LastName"];
-            Telephone = (string) _appointmentItem.CustomFields["Telephone"];
-            Address = (string) _appointmentItem.CustomFields["Address"];
-            EmailAddress = (string) _appointmentItem.CustomFields["EmailAddress"];
-            IsCheckedIn = (bool)_appointmentItem.CustomFields["IsCheckedIn"];
-            IsCanceled = (bool)_appointmentItem.CustomFields["IsCanceled"];
-            UniqueNumber = (string) _appointmentItem.CustomFields["UniqueNumber"];
-            RoomNumber = (string) _appointmentItem.CustomFields["RoomNumber"];
-            StartDate = _appointmentItem.Start;
-            EndDate = _appointmentItem.End;
+            PopulateFields();
 
 
-            
-            var id = (int) _appointmentItem.CustomFields["StayTypeId"];
-
-
-
-
-
-            var stayTypes = _schedulerService.LoadStayTypes();
-            var stayType = _schedulerService.LoadStayTypes().FirstOrDefault(s => s.Id == id);
-            StayTypes = stayTypes;
-            SelectedStayType = stayType;
+            int stayTypeId = (int) _appointmentItem.CustomFields["StayTypeId"];
+            PopulateStayType(stayTypeId);
         } 
         
         private void ExecuteRemove()

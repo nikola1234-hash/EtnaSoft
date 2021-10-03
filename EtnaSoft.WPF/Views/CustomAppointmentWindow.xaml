@@ -66,8 +66,6 @@
                             LargeGlyph="{dx:DXImage SvgImages/XAF/Action_Grant.svg}" />
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Groups_Options}}">
-                        <dxb:BarEditItem x:Name="barItemLabel" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Options_Label}}" />
-                        <dxb:BarEditItem x:Name="barItemStatus" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Options_Status}}" />
                         <dxb:BarEditItem
                             x:Name="barItemResources"
                             Content="Soba:‎"
@@ -79,8 +77,6 @@
                                     EventName="EditValueChanged" />
                             </dxmvvm:Interaction.Behaviors>
                         </dxb:BarEditItem>
-                        <dxb:BarEditItem x:Name="barItemResource" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Options_Resource}}" />
-                        <dxb:BarEditItem x:Name="barItemReminder" Style="{DynamicResource {dxscht:AppointmentWindowCommandBarThemeKey ResourceKey=Items_Options_Reminder}}" />
                     </dxr:RibbonPageGroup>
 
                 </dxr:RibbonPage>
@@ -114,13 +110,17 @@
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup>
-                <dxlc:LayoutItem Label="Ukupno Cena:" Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=LayoutItem_Location}}">
-                    <dxe:TextEdit x:Name="editorLocation" Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_Location}}" />
+                <dxlc:LayoutItem Label="Cena po osobi:" Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=LayoutItem_Location}}">
+                    <dxe:TextEdit
+                        x:Name="editorLocation"
+                        Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_Location}}"
+                        Text="{Binding PricePerPerson}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Tip Smestaja: ">
                     <dxe:ComboBoxEdit
                         DisplayMember="Title"
                         ItemsSource="{Binding StayTypes}"
+                        SelectedIndex="{Binding StayTypeIndex, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItem="{Binding SelectedStayType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         ValueMember="Id">
                         <dxe:ComboBoxEdit.StyleSettings>
@@ -128,59 +128,42 @@
                         </dxe:ComboBoxEdit.StyleSettings>
                     </dxe:ComboBoxEdit>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="LayoutItem">
-                    <dxe:TextEdit />
+                <dxlc:LayoutItem
+                    x:Name="layoutStartTime"
+                    Label="Dolazak:"
+                    Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=LayoutItem_StartTime}}">
+                    <DockPanel>
+                        <dxe:DateEdit
+                            x:Name="editorStartDate"
+                            Width="150"
+                            DateTime="{Binding StartDate}"
+                            DockPanel.Dock="Left"
+                            Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_StartDate}}" />
+                    </DockPanel>
                 </dxlc:LayoutItem>
-                <dxlc:LayoutItem Label="Prijavljeni">
-                    <dxe:PopupImageEdit />
+                <dxlc:LayoutItem
+                    x:Name="layoutEndTime"
+                    Label="Odlazak:"
+                    RenderTransformOrigin="0.5,0.5"
+                    Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=LayoutItem_EndTime}}">
+                    <dxlc:LayoutItem.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform />
+                            <SkewTransform />
+                            <RotateTransform Angle="-0.058" />
+                            <TranslateTransform />
+                        </TransformGroup>
+                    </dxlc:LayoutItem.RenderTransform>
+                    <DockPanel>
+                        <dxe:DateEdit
+                            x:Name="editorEndDate"
+                            Width="150"
+                            DateTime="{Binding EndDate}"
+                            DockPanel.Dock="Left"
+                            Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_EndDate}}" />
+                    </DockPanel>
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
-            <dxlc:LayoutItem
-                x:Name="layoutStartTime"
-                Label="Dolazak:"
-                Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=LayoutItem_StartTime}}">
-                <DockPanel>
-                    <dxe:DateEdit
-                        x:Name="editorStartDate"
-                        Width="150"
-                        DateTime="{Binding StartDate}"
-                        DockPanel.Dock="Left"
-                        Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_StartDate}}" />
-                    <dxe:TextEdit
-                        x:Name="editorStartTime"
-                        Width="150"
-                        Margin="4,0,0,0"
-                        DockPanel.Dock="Left"
-                        Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_StartTime}}" />
-                    <dxe:CheckEdit
-                        x:Name="editorAllDay"
-                        Margin="16,0,0,0"
-                        Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_AllDay}}" />
-                </DockPanel>
-            </dxlc:LayoutItem>
-            <dxlc:LayoutItem
-                x:Name="layoutEndTime"
-                Label="Odlazak:"
-                Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=LayoutItem_EndTime}}">
-                <DockPanel>
-                    <dxe:DateEdit
-                        x:Name="editorEndDate"
-                        Width="150"
-                        DateTime="{Binding EndDate}"
-                        DockPanel.Dock="Left"
-                        Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_EndDate}}" />
-                    <dxe:TextEdit
-                        x:Name="editorEndTime"
-                        Width="150"
-                        Margin="4,0,0,0"
-                        DockPanel.Dock="Left"
-                        Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_EndTime}}" />
-                    <dxsch:TimeZoneEdit
-                        x:Name="editorTimeZone"
-                        Margin="16,0,0,0"
-                        Style="{DynamicResource {dxscht:AppointmentWindowThemeKey ResourceKey=Editor_TimeZone}}" />
-                </DockPanel>
-            </dxlc:LayoutItem>
             <dxlc:LayoutItem />
             <dxlc:LayoutGroup View="GroupBox">
                 <dxlc:LayoutGroup Orientation="Vertical">
