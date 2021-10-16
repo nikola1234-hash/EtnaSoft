@@ -54,6 +54,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<DatabaseService>();
             service.AddSingleton<DatabaseCreationService>();
             service.AddSingleton<FileConverter>();
+            
 
             service.AddSingleton<IPasswordHasher, PasswordHasher>();
             service.AddSingleton<IAuthorization, AuthorizationService>();
@@ -62,6 +63,11 @@ namespace EtnaSoft.WPF
             service.AddSingleton<ICreateReservationService, CreateReservationTransaction>();
             service.AddSingleton<IAvailableRoomsService, AvailableRoomsService>();
 
+            //Content page navigation
+            service.AddSingleton<IContentViewStore, ContentViewStore>();
+            service.AddSingleton<IContentViewFactory, ContentViewFactory>();
+            service.AddTransient<ContentViewModel>();
+            service.AddTransient<UserContentViewModel>();
 
             service.AddSingleton<IGuestSearchService,GuestSearchService>();
             service.AddSingleton<IDetailsManager, DetailsManager>();

@@ -26,6 +26,9 @@
             <DataTemplate DataType="{x:Type viewModels:CreateAppointmentViewModel}">
                 <views:CreateAppointmentWindow />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:UserContentViewModel}">
+                <views:UserContentView/>
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>

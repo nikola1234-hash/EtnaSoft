@@ -499,13 +499,13 @@ namespace EtnaSoft.WPF.ViewModels
 
             void PopulateStayType(int id)
             {
-                
-                var stayTypes = _schedulerService.LoadStayTypes();
-                var stayType = _schedulerService.LoadStayTypes().FirstOrDefault(s => s.Id == id);
+                List<StayType> stayTypes = _schedulerService.LoadStayTypes();
+                StayType stayType = _schedulerService.LoadStayTypes().FirstOrDefault(s => s.Id == id);
                 StayTypes = stayTypes;
                 SelectedStayType = stayType;
                 //TODO: Doesnt give proper index, make it work
-                StayTypeIndex = stayTypes.IndexOf(stayType);
+                int index = stayTypes.IndexOf(SelectedStayType);
+                StayTypeIndex = index;
             }
 
             //Textboxes

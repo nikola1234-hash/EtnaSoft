@@ -153,6 +153,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
+    <Compile Include="Commands\NavigateContentCommand.cs" />
     <Compile Include="Events\AppointmentViewEvent.cs" />
     <Compile Include="Models\CustomLabel.cs" />
     <Compile Include="Models\PaymentState.cs" />
@@ -160,16 +161,22 @@
       <DependentUpon>NavigationBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Navigation\ViewType.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\Authentication\Authenticator.cs" />
     <Compile Include="Services\Authentication\IAuthenticator.cs" />
+    <Compile Include="Services\ContentViewFactory.cs" />
+    <Compile Include="Services\IContentViewFactory.cs" />
     <Compile Include="Services\IEtnaViewModelFactory.cs" />
     <Compile Include="Services\Reception\DetailsManager.cs" />
     <Compile Include="Services\Reception\IDetailsManager.cs" />
+    <Compile Include="Stores\ContentViewStore.cs" />
+    <Compile Include="Stores\IContentViewStore.cs" />
     <Compile Include="Stores\IRenavigate.cs" />
     <Compile Include="Stores\Renavigate.cs" />
     <Compile Include="ViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\AppointmentWindowBase.cs" />
     <Compile Include="ViewModels\ChangePasswordDialogViewModel.cs" />
+    <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
     <Compile Include="ViewModels\EtnaBaseViewModel.cs" />
@@ -178,6 +185,7 @@
     <Compile Include="ViewModels\MessageViewModel.cs" />
     <Compile Include="ViewModels\ReceptionViewModel.cs" />
     <Compile Include="ViewModels\SearchGuestDialogViewModel.cs" />
+    <Compile Include="ViewModels\UserContentViewModel.cs" />
     <Compile Include="Views\ChangePasswordDialog.xaml.cs">
       <DependentUpon>ChangePasswordDialog.xaml</DependentUpon>
     </Compile>
@@ -201,6 +209,9 @@
     </Compile>
     <Compile Include="Views\ReceptionView.xaml.cs">
       <DependentUpon>ReceptionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserContentView.xaml.cs">
+      <DependentUpon>UserContentView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -259,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReceptionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -371,6 +386,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
