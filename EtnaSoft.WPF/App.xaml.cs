@@ -68,6 +68,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IContentViewFactory, ContentViewFactory>();
             service.AddTransient<ContentViewModel>();
             service.AddTransient<UserContentViewModel>();
+            service.AddTransient<GuestContentViewModel>();
 
             service.AddSingleton<IGuestSearchService,GuestSearchService>();
             service.AddSingleton<IDetailsManager, DetailsManager>();
@@ -83,7 +84,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IRepository<RoomReservation>, RoomReservationRepository>();
             service.AddSingleton<IRepository<StayType>, StayTypeRepository>();
             service.AddSingleton<IRepository<CustomLabel>, LabelRepository>();
-
+            service.AddSingleton<IUpdateReservationDateDragService, UpdateReservationDateDragService>();
             service.AddSingleton<IUnitOfWork, UnitOfWork>();
             service.AddSingleton<IGenericDbContext, GenericDbContext>();
 

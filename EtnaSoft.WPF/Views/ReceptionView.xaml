@@ -20,6 +20,16 @@
             PassEventArgsToCommand="True"
             SourceName="schedule" />
         <interactivity:EventToCommand Command="{Binding LoadedCommand}" Event="Loaded" />
+        <interactivity:EventToCommand
+            Command="{Binding BookingDrag}"
+            EventName="DropAppointment"
+            PassEventArgsToCommand="True"
+            SourceName="schedule" />
+        <interactivity:EventToCommand
+            Command="{Binding BookingResize}"
+            EventName="CommitAppointmentResize"
+            PassEventArgsToCommand="True"
+            SourceName="schedule" />
 
     </interactivity:Interaction.Behaviors>
     <Grid>
@@ -27,6 +37,10 @@
         <dxsch:SchedulerControl
             x:Name="schedule"
             ActiveViewIndex="0"
+            AllowAppointmentConflicts="False"
+            AllowAppointmentCopy="False"
+            AllowAppointmentDrag="True"
+            AllowAppointmentMultiSelect="False"
             FirstDayOfWeek="Monday"
             GroupType="Resource"
             ShowDateNavigationPanel="True">
@@ -52,7 +66,7 @@
                         <dxsch:ResourceMappings Caption="RoomNumber" Id="Id" />
                     </dxsch:DataSource.ResourceMappings>
 
-                   
+
                     <dxsch:DataSource.AppointmentMappings>
                         <dxsch:AppointmentMappings
                             AllDay="AllDay"

@@ -4,7 +4,8 @@ namespace EtnaSoft.WPF.Services
 {
     public enum ContentViewType
     {
-        UserContent
+        UserContent,
+        GuestContent
     }
     public interface IContentViewFactory
     {

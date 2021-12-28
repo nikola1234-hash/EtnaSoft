@@ -25,6 +25,9 @@
                 RibbonStyle="Office2019"
                 ShowApplicationButton="False"
                 ToolbarShowMode="Hide">
+                <dxr:RibbonControl.ToolbarItems>
+                    <dxb:BarButtonItem Content="BarButtonItem" />
+                </dxr:RibbonControl.ToolbarItems>
                 <dxr:RibbonControl.PageHeaderItems>
                     <dxb:BarButtonItem Content="BarButtonItem" />
                 </dxr:RibbonControl.PageHeaderItems>
@@ -42,7 +45,17 @@
                                 Glyph="{dx:DXImage SvgImages/Business Objects/BO_Customer.svg}"
                                 LargeGlyph="{dx:DXImage SvgImages/Business Objects/BO_Customer.svg}"
                                 MediumGlyph="{dx:DXImage SvgImages/Business Objects/BO_Customer.svg}" />
-                            
+
+                        </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup Caption="Gosti">
+                            <dxb:BarButtonItem
+                                Command="{Binding NavigateContentCommand}"
+                                CommandParameter="{x:Static services:ContentViewType.GuestContent}"
+                                Content="Gosti"
+                                Glyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
+                                LargeGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
+                                MediumGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
+                                RibbonStyle="Large" />
                         </dxr:RibbonPageGroup>
                     </dxr:RibbonPage>
                 </dxr:RibbonDefaultPageCategory>

@@ -9,7 +9,7 @@ namespace EtnaSoft.WPF.Commands
 {
     public abstract class BaseCommand : ICommand
     {
-        public bool CanExecute(object parameter)
+        public virtual bool CanExecute(object parameter)
         {
             return true;
         }

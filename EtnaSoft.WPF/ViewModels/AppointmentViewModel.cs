@@ -495,6 +495,7 @@ namespace EtnaSoft.WPF.ViewModels
                 RoomNumber = (string) _appointmentItem.CustomFields["RoomNumber"];
                 StartDate = _appointmentItem.Start;
                 EndDate = _appointmentItem.End;
+                PricePerPerson = (TotalPrice / NumberOfPeople) / NumberOfDays;
             }
 
             void PopulateStayType(int id)

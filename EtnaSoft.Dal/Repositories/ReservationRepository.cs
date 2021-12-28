@@ -36,7 +36,12 @@ namespace EtnaSoft.Dal.Repositories
             var output = _context.LoadData<Reservation, dynamic>(GetResById, new {Id= id}).FirstOrDefault();
             return output;
         }
-
+        /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entity"></param>
+        /// <returns>Returns boolean</returns>
         public bool Update(int id, Reservation entity)
         {  
             //Man Entity and return anonymus type
