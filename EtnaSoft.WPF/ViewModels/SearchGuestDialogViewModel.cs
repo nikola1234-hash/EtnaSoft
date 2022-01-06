@@ -56,7 +56,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         public ICommand SearchCommand { get; set; }
 
-        private bool _allowCloseDialog = false;
+        private bool _allowCloseDialog;
 
         public bool AllowCloseDialog
         {

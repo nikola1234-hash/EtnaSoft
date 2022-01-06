@@ -18,7 +18,22 @@ namespace EtnaSoft.Bll.Services
             _unit = unit;
         }
 
-        
+        public bool UndoCheckIn(int id)
+        {
+            bool success = false;
+            var reservation = _unit.Reservations.GetById(id);
+            reservation.IsCheckedIn = false;
+            success = _unit.Reservations.Update(id, reservation);
+            return success;
+        }
+
+        public bool CheckInStatus(int id)
+        {
+            bool success = false;
+            var reservation = _unit.Reservations.GetById(id);
+            return reservation.IsCheckedIn;
+        }
+
         public bool CheckIn(int id)
         {
             bool success = false;

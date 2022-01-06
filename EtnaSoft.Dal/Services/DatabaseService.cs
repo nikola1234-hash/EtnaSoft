@@ -8,7 +8,7 @@ using Dapper;
 
 namespace EtnaSoft.Dal.Services
 {
-    public class DatabaseService
+    public sealed class DatabaseService
     {
         public const string Sql = @"select count(*) from master.dbo.sysdatabases where name=@database";
 

@@ -11,10 +11,12 @@ namespace EtnaSoft.WPF.Services
     {
         private readonly UserContentViewModel _userContentView;
         private readonly GuestContentViewModel _guestContentView;
-        public ContentViewFactory(UserContentViewModel userContentView, GuestContentViewModel guestContentView)
+        private readonly CreateGuestContentViewModel _createGuestContentView;
+        public ContentViewFactory(UserContentViewModel userContentView, GuestContentViewModel guestContentView, CreateGuestContentViewModel createGuestContentView)
         {
             _userContentView = userContentView;
             _guestContentView = guestContentView;
+            _createGuestContentView = createGuestContentView;
         }
 
         public ContentViewModel CreateContentViewModel(ContentViewType type)
@@ -25,7 +27,8 @@ namespace EtnaSoft.WPF.Services
                     return _userContentView;
                 case ContentViewType.GuestContent:
                     return _guestContentView;
-                
+                case ContentViewType.CreateGuestContent:
+                    return _createGuestContentView;
                 default:
                     throw new Exception("No views");
             }

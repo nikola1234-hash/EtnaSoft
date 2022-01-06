@@ -56,6 +56,13 @@
                                 LargeGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
                                 MediumGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
                                 RibbonStyle="Large" />
+                            <dxb:BarButtonItem
+                                Command="{Binding NavigateContentCommand}"
+                                CommandParameter="{x:Static services:ContentViewType.CreateGuestContent}"
+                                Content="Dodaj Gosta"
+                                Glyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
+                                LargeGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
+                                MediumGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}" />
                         </dxr:RibbonPageGroup>
                     </dxr:RibbonPage>
                 </dxr:RibbonDefaultPageCategory>

@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
     xmlns:dxmvvm="clr-namespace:DevExpress;assembly=DevExpress.Mvvm.v20.1"
     xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduling"
+    xmlns:dxscht="http://schemas.devexpress.com/winfx/2008/xaml/scheduling/themekeys"
     xmlns:interactivity="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,7 +21,7 @@
             EventName="AppointmentWindowShowing"
             PassEventArgsToCommand="True"
             SourceName="schedule" />
-        <interactivity:EventToCommand Command="{Binding LoadedCommand}" Event="Loaded" />
+        <interactivity:EventToCommand Command="{Binding LoadedCommand}" Event="FrameworkElement.Loaded" />
         <interactivity:EventToCommand
             Command="{Binding BookingDrag}"
             EventName="DropAppointment"
@@ -30,6 +32,7 @@
             EventName="CommitAppointmentResize"
             PassEventArgsToCommand="True"
             SourceName="schedule" />
+
 
     </interactivity:Interaction.Behaviors>
     <Grid>
@@ -44,6 +47,44 @@
             FirstDayOfWeek="Monday"
             GroupType="Resource"
             ShowDateNavigationPanel="True">
+            <dxsch:SchedulerControl.OptionsContextMenu>
+                <dxsch:OptionsContextMenu>
+                    <dxsch:OptionsContextMenu.AppointmentContextMenu>
+                        <dxb:PopupMenu>
+                            <dxb:BarButtonItem
+                                x:Name="Appointment_Open"
+                                Content="Otvori rezervaciju"
+                                Style="{DynamicResource {dxscht:SchedulerCommandBarThemeKey ResourceKey=Items_Appointment_Actions_Open}}" />
+                            <dxb:BarItemLinkSeparator />
+                            <dxb:BarButtonItem
+                                x:Name="Appointment_EditSeries"
+                                Command="{Binding CheckInCommand}"
+                                CommandParameter="{Binding ElementName=schedule, Path=SelectedAppointments[0]}"
+                                Content="Prijavi rezervaciju"
+                                Style="{DynamicResource {dxscht:SchedulerCommandBarThemeKey}}" />
+                            <dxb:BarItemLinkSeparator />
+                            <dxb:BarButtonItem
+                                x:Name="Appointment_RestoreOccurrence"
+                                Command="{Binding InvoicesCommand}"
+                                CommandParameter="{Binding ElementName=schedule, Path=SelectedAppointments[0]}"
+                                Content="Racuni Sobe"
+                                Style="{DynamicResource {dxscht:SchedulerCommandBarThemeKey}}" />
+                            <dxb:BarItemLinkSeparator />
+                            <dxb:BarSubItem
+                                x:Name="Appointment_LabelAs"
+                                Content="Etiketiraj"
+                                Style="{DynamicResource {dxscht:SchedulerCommandBarThemeKey ResourceKey=Items_Appointment_Options_LabelAs}}" />
+                            <dxb:BarItemLinkSeparator />
+                            <dxb:BarButtonItem
+                                x:Name="Appointment_Delete"
+                                Command="{Binding DeleteReservationCommand}"
+                                CommandParameter="{Binding ElementName=schedule, Path=SelectedAppointments[0]}"
+                                Content="Izbrisi rezervaciju"
+                                Style="{DynamicResource {dxscht:SchedulerCommandBarThemeKey ResourceKey=Items_Appointment_Actions_Delete}}" />
+                        </dxb:PopupMenu>
+                    </dxsch:OptionsContextMenu.AppointmentContextMenu>
+                </dxsch:OptionsContextMenu>
+            </dxsch:SchedulerControl.OptionsContextMenu>
 
 
 

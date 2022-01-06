@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
-using DevExpress.Utils.CommonDialogs.Internal;
-using DevExpress.Xpf.Bars.Native;
 using DevExpress.Xpf.Scheduling;
-using DevExpress.XtraScheduler.Native;
 using EtnaSoft.Bll.Models;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
@@ -21,9 +17,9 @@ using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public class ReceptionViewModel : EtnaBaseViewModel
+    public sealed class ReceptionViewModel : EtnaBaseViewModel
     {
-
+        
         private readonly IEventAggregator _eventAggregator;
         private readonly IDetailsManager _detailsManager;
         private ObservableCollection<Room> _rooms;
@@ -61,8 +57,10 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(Labels));
             }
         }
+
+       
         
-        private bool _isFirstRun = true;
+        
         private SubscriptionToken _subToken;
         private readonly IResourceService _roomResource;
         private readonly ISchedulerService _schedulerService;
@@ -73,17 +71,30 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly DialogServiceViewModel _dialogServiceViewModel;
         private readonly SearchGuestDialogViewModel _searchGuestDialogViewModel;
         private readonly IUpdateReservationDateDragService _dragUpdate;
-
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
         public ICommand<object> BookingDrag { get; }
         public ICommand<object> BookingResize { get; }
-        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService, IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager, SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation, IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate)
+        public ICommand<object> CheckInCommand { get; }
+        public ICommand<object> InvoicesCommand { get; }
+        public ICommand<object> DeleteReservationCommand { get; }
+        
+        public ICommand<object>PopUpMenuShowingCommand { get; }
+        public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService,
+            IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager,
+            SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel,
+            IComboboxFacade comboboxFacade, ICreateReservationService createReservation,
+            IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
             BookingDrag = new DelegateCommand<object>(BookingDragCommand);
             BookingResize = new DelegateCommand<object>(BookingResizeCommand);
+            CheckInCommand = new DelegateCommand<object>(ReservationCheckIn);
+            InvoicesCommand = new DelegateCommand<object>(ShowInvoicePanel);
+            DeleteReservationCommand = new DelegateCommand<object>(DeleteReservation);
+            PopUpMenuShowingCommand = new DelegateCommand<object>(PopUpMenuShowing);
+
             _roomResource = roomResource;
             _bookingService = bookingService;
             _eventAggregator = eventAggregator;
@@ -96,7 +107,52 @@ namespace EtnaSoft.WPF.ViewModels
             _createReservation = createReservation;
             _availableRooms = availableRooms;
             _dragUpdate = dragUpdate;
+           
             _schedulerService = schedulerService;
+        }
+
+        private void PopUpMenuShowing(object obj)
+        {
+           //TODO: Context menu PopUp Customization if needed
+        }
+
+        private void DeleteReservation(object reservation)
+        {
+            if (reservation is AppointmentItem booking)
+            {
+                int id = (int) booking.Id;
+                var result = MessageBox.Show("Da li ste sigurni da zelite da izbrisete izabranu rezervaciju?",
+                    "Upozorenje", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _bookingService.Cancel(id);
+                    PopulateBookings();
+                }
+            }
+        }
+
+        private void ShowInvoicePanel(object reservation)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ReservationCheckIn(object reservation)
+        {
+            if (reservation is AppointmentItem booking)
+            {
+                
+                int id = (int)booking.Id;
+                var isCheckedIn = _bookingService.CheckInStatus(id);
+                if (!isCheckedIn)
+                {
+                    _bookingService.CheckIn(id);
+                    PopulateBookings();
+                }
+                else
+                {
+                    MessageBox.Show("Rezervacija je vec prijavljena");
+                }
+            }
         }
 
         private void BookingResizeCommand(object obj)
@@ -125,22 +181,20 @@ namespace EtnaSoft.WPF.ViewModels
         {
             if (obj is DropAppointmentEventArgs eventArgs)
             {
-               var i = MessageBox.Show("Da li zelite da izmenite datum rezervacije?", "Obavestenje", MessageBoxButton.YesNo);
-               if (i == MessageBoxResult.Yes)
+               var answeResult = MessageBox.Show("Da li zelite da izmenite datum rezervacije?", "Obavestenje", MessageBoxButton.YesNo);
+               if (answeResult == MessageBoxResult.Yes)
                {
                    //TODO: Raskaciti event naci resenje!
                    eventArgs.SourceAppointments[0].ResourceIdsChanged += ReceptionViewModel_ResourceIdsChanged;
-                   bool success = false;
-                   bool isDateDirty = false;
                    var startDate = eventArgs.DragAppointments[0].Start;
                    var endDate = eventArgs.DragAppointments[0].End;
                    var sourceStartDate = eventArgs.SourceAppointments[0].Start;
                    var sourceEndDate = eventArgs.SourceAppointments[0].End;
-                   isDateDirty = sourceStartDate != startDate || sourceEndDate != endDate;
+                   var isDateDirty = sourceStartDate != startDate || sourceEndDate != endDate;
                    if (isDateDirty)
                    {
                        var id = (int)eventArgs.SourceAppointments[0].Id;
-                       success = _dragUpdate.DragUpdateDate(id,startDate, endDate);
+                       var success = _dragUpdate.DragUpdateDate(id,startDate, endDate);
                        if (success)
                        {
                            MessageBox.Show("Uspesno promenjen datum rezervacije");
@@ -156,6 +210,7 @@ namespace EtnaSoft.WPF.ViewModels
         {
             if (sender is AppointmentItem bookingItem)
             {
+                
                 int roomId = (int) bookingItem.ResourceId;
                 int id = (int) bookingItem.Id;
                 bool success = _dragUpdate.DragUpdateRoom(id, roomId);
@@ -259,13 +314,13 @@ namespace EtnaSoft.WPF.ViewModels
             _subToken = null;
             _dialogServiceViewModel.Dispose();
             _searchGuestDialogViewModel.Dispose();
-            Bookings.Clear();
+            //Bookings.Clear();c# 
             
-            Rooms.Clear();
-            Labels.Clear();
-            Bookings = null;
-            Rooms = null;
-            Labels = null;
+            //Rooms.Clear();
+            //Labels.Clear();
+            //Bookings = null;
+            //Rooms = null;
+            //Labels = null;
         }
     }
 }

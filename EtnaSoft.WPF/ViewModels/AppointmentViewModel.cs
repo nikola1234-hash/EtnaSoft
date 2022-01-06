@@ -2,19 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Bars;
 using DevExpress.Xpf.Scheduling;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bo.Entities;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using DevExpress.Xpf.Core;
-using DevExpress.Xpf.Core.Native;
-using DevExpress.Xpf.Editors;
 using EtnaSoft.WPF.Events;
 using EtnaSoft.WPF.Services.Reception;
 using Prism.Events;
@@ -543,10 +536,7 @@ namespace EtnaSoft.WPF.ViewModels
             _eventAggregator.GetEvent<AppointmentViewEvent>().Publish();
         }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
+       
     }
 }
 

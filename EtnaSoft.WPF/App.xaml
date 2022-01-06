@@ -32,6 +32,9 @@
             <DataTemplate DataType="{x:Type viewModels:GuestContentViewModel}">
                 <views:GuestContentView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:CreateGuestContentViewModel}">
+                <views:CreateGuestContentView />
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>

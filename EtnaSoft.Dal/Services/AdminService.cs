@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 using Microsoft.AspNet.Identity;
@@ -15,7 +14,10 @@ namespace EtnaSoft.Dal.Services
             _unit = unit;
             _hasher = hasher;
         }
-
+        /// <summary>
+        /// Checking if Admin User Exists
+        /// </summary>
+        /// <returns>Boolean, true if exists.</returns>
         public bool CheckIfAccountExists()
         {
             bool output = false;
@@ -24,6 +26,9 @@ namespace EtnaSoft.Dal.Services
             output = user != null;
             return output;
         }
+        /// <summary>
+        /// Creates First Admin user, which later it will be changed.
+        /// </summary>
         public void FirstUserCreation()
         {
             string username = "Admin";

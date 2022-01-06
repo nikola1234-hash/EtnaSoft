@@ -3,19 +3,98 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:dxprg="http://schemas.devexpress.com/winfx/2008/xaml/propertygrid"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding LoadCommand}" Event="FrameworkElement.Loaded" />
+    </dxmvvm:Interaction.Behaviors>
+    <Grid Margin="12" KeyboardNavigation.ControlTabNavigation="Cycle">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="12" />
+            <ColumnDefinition Width="420" />
+        </Grid.ColumnDefinitions>
 
+        <dxg:GridControl
+            Name="grid"
+            ItemsSource="{Binding GuestInfos}"
+            SelectionMode="Row">
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn
+                    MinWidth="100"
+                    FieldName="FirstName"
+                    Header="Ime" />
+                <dxg:GridColumn
+                    MinWidth="100"
+                    FieldName="LastName"
+                    Header="Prezime" />
+                <dxg:GridColumn
+                    MinWidth="100"
+                    FieldName="BirthDate"
+                    Header="Datum rodjenja">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:DateEditSettings DisplayFormat="d" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn
+                    MinWidth="100"
+                    FieldName="Title"
+                    Header="Position" />
+                <dxg:GridColumn MinWidth="100" FieldName="Notes">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:MemoEditSettings
+                            MemoTextWrapping="Wrap"
+                            MemoVerticalScrollBarVisibility="Auto"
+                            PopupWidth="250"
+                            ShowIcon="True" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <dxg:TableView
+                    Name="view"
+                    AutoWidth="True"
+                    ShowGroupedColumns="True">
+                    <dxmvvm:Interaction.Behaviors />
+                </dxg:TableView>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
         <dxprg:PropertyGridControl
-            Width="790"
-            Height="440"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top" />
-
+            x:Name="pGrid"
+            Grid.Column="2"
+            ExpandCategoriesWhenSelectedObjectChanged="True"
+            SelectedObjects="{Binding Path=SelectedItems, ElementName=grid}"
+            ShowCategories="Hidden"
+            ShowProperties="WithPropertyDefinitions"
+            SortMode="Definitions">
+            <dxprg:PropertyGridControl.PropertyDefinitions>
+                <dxprg:PropertyDefinition AllowExpanding="Never" Path="Photo">
+                    <dxprg:PropertyDefinition.EditSettings>
+                        <dxe:ImageEditSettings ShowMenuMode="Always" />
+                    </dxprg:PropertyDefinition.EditSettings>
+                </dxprg:PropertyDefinition>
+                <dxprg:PropertyDefinition Header="First name" Path="FirstName" />
+                <dxprg:PropertyDefinition Header="Last name" Path="LastName" />
+                <dxprg:PropertyDefinition Path="BirthDate" />
+                <dxprg:PropertyDefinition Path="Country" />
+                <dxprg:PropertyDefinition Path="City" />
+                <dxprg:PropertyDefinition Path="Address" />
+                <dxprg:PropertyDefinition Header="Home phone" Path="HomePhone" />
+                <dxprg:PropertyDefinition Path="Address" />
+                <dxprg:PropertyDefinition Path="Notes">
+                    <dxprg:PropertyDefinition.EditSettings>
+                        <dxe:TextEditSettings AcceptsReturn="True" TextWrapping="Wrap" />
+                    </dxprg:PropertyDefinition.EditSettings>
+                </dxprg:PropertyDefinition>
+            </dxprg:PropertyGridControl.PropertyDefinitions>
+        </dxprg:PropertyGridControl>
     </Grid>
 </UserControl>
