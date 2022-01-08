@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Dapper;
+using System.Text;
 using ErtnaSoft.Bo.Entities;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 using EtnaSoft.Dal.Stores;
-using Microsoft.AspNet.Identity;
 
 namespace EtnaSoft.Dal.Repositories
 {
-    
-    public class GuestRepository : IRepository<Guest>
+    public class GuestDataGridRepository : IRepository<DataGridGuest>
     {
-
-        private const string GetAllGuests = "SELECT * from dbo.Guests";
+          private const string GetAllGuests = "SELECT * from dbo.Guests";
         private const string GetByIdGuest = "Select * from dbo.Guests where Id = @Id";
         private const string CreateGuest = "sp_CreateGuest";
 
@@ -23,23 +20,23 @@ namespace EtnaSoft.Dal.Repositories
 
         private readonly IGenericDbContext _context;
 
-        public GuestRepository(IGenericDbContext context)
+        public GuestDataGridRepository(IGenericDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<Guest> GetAll()
+        public IEnumerable<DataGridGuest> GetAll()
         {
-            IEnumerable<Guest> output = _context.LoadData<Guest, dynamic>(GetAllGuests, new { });
+            IEnumerable<DataGridGuest> output = _context.LoadData<DataGridGuest, dynamic>(GetAllGuests, new { });
             return output;
         }
 
-        public Guest GetById(int id)
+        public DataGridGuest GetById(int id)
         {
-            Guest output = _context.LoadData<Guest, dynamic>(GetByIdGuest, new {Id = id}).FirstOrDefault();
+            DataGridGuest output = _context.LoadData<DataGridGuest, dynamic>(GetByIdGuest, new {Id = id}).FirstOrDefault();
             return output;
         }
-        public Guest Create(Guest guest)
+        public DataGridGuest Create(DataGridGuest guest)
         {
             object MapGuest()
             {
@@ -57,11 +54,11 @@ namespace EtnaSoft.Dal.Repositories
                 return guestParam;
             }
             var newGuest = MapGuest();
-            Guest createdGuest = _context.LoadData<Guest, dynamic>(CreateGuest, newGuest).FirstOrDefault();
+            DataGridGuest createdGuest = _context.LoadData<DataGridGuest, dynamic>(CreateGuest, newGuest).FirstOrDefault();
             return createdGuest;
         }
 
-        public bool Update(int id, Guest guest)
+        public bool Update(int id, DataGridGuest guest)
         {
             bool output = false;
             var guestUpdate = new 
@@ -98,6 +95,5 @@ namespace EtnaSoft.Dal.Repositories
             return output;
         }
     }
-
-  
+    
 }

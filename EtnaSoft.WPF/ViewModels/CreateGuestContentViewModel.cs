@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.WPF.Helpers;
+using EtnaSoft.WPF.Views;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -88,22 +91,122 @@ namespace EtnaSoft.WPF.ViewModels
 
         public DateTime? BirthDate
         {
-            get => DateTime.Now.Date.AddYears(-20);
+            get => _birthDate;
             set => SetValue(ref _birthDate, value);
+        }
+
+        private Guest _selectedGuest;
+
+        public Guest SelectedGuest
+        {
+            get { return _selectedGuest; }
+            set
+            {
+                _selectedGuest = value;
+                RaisePropertyChanged(nameof(SelectedGuest));
+            }
+        }
+
+        private ObservableCollection<Guest> _dataGrid = new ObservableCollection<Guest>();
+
+        public ObservableCollection<Guest> DataGrid
+        {
+            get { return ReturnGuests(); }
+            set
+            {
+                if (value == _dataGrid)
+                {
+                    return;
+                }
+                _dataGrid = value;
+                RaisePropertyChanged(nameof(DataGrid));
+            }
         }
 
         #endregion
 
 
         private readonly ICreateGuestService _createGuestService;
+        private readonly IGuestSearchService _guestSearchService;
+        private readonly IUpdateGuestService _updateGuestService;
+        private readonly IGuestDataGridService _guestDataGridService;
         public ICommand CreateGuestCommand { get; }
-        
-        public CreateGuestContentViewModel(ICreateGuestService createGuestService)
+        public ICommand LoadCommand { get; }
+        public ICommand<object> CellDoubleClickCommand { get; }
+        public CreateGuestContentViewModel(ICreateGuestService createGuestService, IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService, IGuestDataGridService guestDataGridService)
         {
             _createGuestService = createGuestService;
+            _guestSearchService = guestSearchService;
+            _updateGuestService = updateGuestService;
+            _guestDataGridService = guestDataGridService;
             CreateGuestCommand = new DelegateCommand(CreateGuest);
+            LoadCommand = new DelegateCommand(OnLoad);
+            CellDoubleClickCommand = new DelegateCommand<object>(OnCellDoubleClick);
+
         }
 
+        private void OnCellDoubleClick(object obj)
+        {
+            var guest = (Guest)obj;
+            var window = new EditGuestWindow()
+            {
+                DataContext = new EditGuestViewModel(guest)
+            };
+            window.Show();
+
+        }
+
+    
+
+       
+
+        //Ovde si stao
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var result = MessageBox.Show("Da li zelite da izmenite zapis?", "Obavestenje", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                var guest = sender as Guest;
+                var success = SaveData(guest);
+                if (success)
+                {
+                    MessageBox.Show("Uspesno izmenjen zapis");
+                }
+            }
+        }
+
+        private bool SaveData(Guest guest)
+        {
+            return _updateGuestService.UpdateGuestData(guest);
+        }
+
+      
+
+        private void OnLoad()
+        {
+            
+            
+        }
+
+        private ObservableCollection<Guest> ReturnGuests()
+        {
+            var guests = _guestSearchService.GetGuests();
+          
+          
+            
+            return new ObservableCollection<Guest>(guests);
+        }
+        private void ClearFields()
+        {
+            FirstName = string.Empty;
+            LastName = string.Empty;
+            Address = string.Empty;
+            Telephone = string.Empty;
+            EmailAddress = string.Empty;
+            BirthDate = DateTime.Now.Date.AddYears(-20);
+            UniqueNumber = string.Empty;
+
+        }
         private string EnableValidationAndGetError()
         {
             string error = ((IDataErrorInfo)this).Error;
@@ -130,10 +233,13 @@ namespace EtnaSoft.WPF.ViewModels
                     Address = Address,
                     EmailAddress = EmailAddress,
                     BirthDate = BirthDate,
-                    UniqueNumber = UniqueNumber
+                    UniqueNumber = UniqueNumber,
+                    Telephone = Telephone
                 };
                 var guest = _createGuestService.CreateGuest(newGuest);
-                this.GetService<IMessageBoxService>().Show("Uspesno upisan gost.", "Obavestenje", MessageBoxButton.OK);
+                ClearFields();
+                RaisePropertyChanged(nameof(DataGrid));
+                MessageBox.Show("Uspesno upisan gost.", "Obavestenje", MessageBoxButton.OK);
             }
             catch (Exception ex)
             {

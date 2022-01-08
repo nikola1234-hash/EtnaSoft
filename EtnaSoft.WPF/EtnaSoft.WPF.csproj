@@ -156,9 +156,12 @@
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
     <Compile Include="Commands\NavigateContentCommand.cs" />
+    <Compile Include="Controls\EtnaDataGrid.cs" />
     <Compile Include="Events\AppointmentViewEvent.cs" />
     <Compile Include="Helpers\RequiredValidationRule.cs" />
     <Compile Include="Models\CustomLabel.cs" />
+    <Compile Include="Models\DataGridGuest.cs" />
+    <Compile Include="Models\ObservableObject.cs" />
     <Compile Include="Models\PaymentState.cs" />
     <Compile Include="Navigation\NavigationBar.xaml.cs">
       <DependentUpon>NavigationBar.xaml</DependentUpon>
@@ -183,6 +186,7 @@
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
     <Compile Include="ViewModels\CreateGuestContentViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
+    <Compile Include="ViewModels\EditGuestViewModel.cs" />
     <Compile Include="ViewModels\EtnaBaseViewModel.cs" />
     <Compile Include="ViewModels\GuestContentViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
@@ -205,6 +209,9 @@
     </Compile>
     <Compile Include="Views\DialogServiceView.xaml.cs">
       <DependentUpon>DialogServiceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditGuestWindow.xaml.cs">
+      <DependentUpon>EditGuestWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExistingGuestDialogView.xaml.cs">
       <DependentUpon>ExistingGuestDialogView.xaml</DependentUpon>
@@ -269,6 +276,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DialogServiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditGuestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

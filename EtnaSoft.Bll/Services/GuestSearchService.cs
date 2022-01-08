@@ -16,7 +16,7 @@ namespace EtnaSoft.Bll.Services
             _unit = unit;
         }
 
-        public IEnumerable<Guest> GetGuests(string keyword)
+        public IEnumerable<Guest> GetGuests(string keyword = "")
         {
             List<string> words = new List<string>();
             var guests = _unit.Guests.GetAll();

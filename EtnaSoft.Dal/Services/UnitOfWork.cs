@@ -1,6 +1,7 @@
 ﻿using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
+using EtnaSoft.Dal.Repositories;
 
 
 namespace EtnaSoft.Dal.Services
@@ -9,7 +10,7 @@ namespace EtnaSoft.Dal.Services
     {
         public UnitOfWork(IRepository<User> users, IRepository<Guest> guests, IRepository<Room> rooms,
             IRepository<Reservation> reservations, IRepository<RoomReservation> roomReservations,
-            IRepository<StayType> stayTypes, IRepository<CustomLabel> labels)
+            IRepository<StayType> stayTypes, IRepository<CustomLabel> labels, IRepository<DataGridGuest> guestDataGrid)
         {
             Guests = guests;
             Users = users;
@@ -18,6 +19,7 @@ namespace EtnaSoft.Dal.Services
             RoomReservations = roomReservations;
             StayTypes = stayTypes;
             Labels = labels;
+            DataGridGuests = guestDataGrid;
         }
 
         public IRepository<Guest> Guests { get;  }
@@ -27,5 +29,7 @@ namespace EtnaSoft.Dal.Services
         public IRepository<RoomReservation> RoomReservations { get; }
         public IRepository<StayType> StayTypes { get; }
         public IRepository<CustomLabel> Labels { get; }
+        public IRepository<DataGridGuest> DataGridGuests { get; }
+        
     }
 }
