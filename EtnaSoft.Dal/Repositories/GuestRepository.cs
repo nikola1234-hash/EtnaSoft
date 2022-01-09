@@ -89,7 +89,7 @@ namespace EtnaSoft.Dal.Repositories
         {
             bool output = false;
 
-            int i = _context.SaveData($"UPDATE dbo.Guests Set IsActive = 0, ModifiedBy = {UserStore.CurrentUser} WHERE Id = @Id", new { Id = id });
+            int i = _context.SaveData($"UPDATE dbo.Guests Set IsActive = 0, ModifiedBy = '{UserStore.CurrentUser}' WHERE Id = @Id", new { Id = id });
             if (i == 1)
             {
                 output = true;

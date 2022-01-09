@@ -2,18 +2,21 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DevExpress.ClipboardSource.SpreadsheetML;
 using DevExpress.Mvvm;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.WPF.Helpers;
 using EtnaSoft.WPF.Views;
+using EtnaSoft.WPF.Window;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public sealed class CreateGuestContentViewModel : ContentViewModel, IDataErrorInfo
+    public sealed class CreateGuestContentViewModel : ContentViewModel, IDataErrorInfo, IDisposable
     {
         #region Fields
 
@@ -133,6 +136,7 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand CreateGuestCommand { get; }
         public ICommand LoadCommand { get; }
         public ICommand<object> CellDoubleClickCommand { get; }
+        
         public CreateGuestContentViewModel(ICreateGuestService createGuestService, IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService, IGuestDataGridService guestDataGridService)
         {
             _createGuestService = createGuestService;
@@ -148,39 +152,32 @@ namespace EtnaSoft.WPF.ViewModels
         private void OnCellDoubleClick(object obj)
         {
             var guest = (Guest)obj;
+            var viewModel = new EditGuestViewModel(guest, _updateGuestService);
             var window = new EditGuestWindow()
             {
-                DataContext = new EditGuestViewModel(guest)
+                DataContext = viewModel
             };
-            window.Show();
+            viewModel.OnUserDataChange += ViewModel_OnUserDataChange1; 
+            window.ShowDialog();
 
+            viewModel.OnUserDataChange -= ViewModel_OnUserDataChange1;
+            viewModel = null;
+
+        }
+
+        private void ViewModel_OnUserDataChange1(object sender)
+        {
+            if (DataGrid.Any())
+            {
+                DataGrid.Clear();
+            }
+
+            DataGrid = ReturnGuests();
+            
+            
         }
 
     
-
-       
-
-        //Ovde si stao
-        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var result = MessageBox.Show("Da li zelite da izmenite zapis?", "Obavestenje", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {
-                var guest = sender as Guest;
-                var success = SaveData(guest);
-                if (success)
-                {
-                    MessageBox.Show("Uspesno izmenjen zapis");
-                }
-            }
-        }
-
-        private bool SaveData(Guest guest)
-        {
-            return _updateGuestService.UpdateGuestData(guest);
-        }
-
-      
 
         private void OnLoad()
         {
@@ -291,5 +288,7 @@ namespace EtnaSoft.WPF.ViewModels
 
             }
         }
+        
     }
+    
 }

@@ -1,0 +1,82 @@
+﻿<dx:ThemedWindow
+    x:Class="EtnaSoft.WPF.Window.EditGuestWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Serialization="clr-namespace:DevExpress.Xpf.LayoutControl.Serialization;assembly=DevExpress.Xpf.LayoutControl.v20.1"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    Title="EditGuestWindow"
+    Width="1000"
+    Height="800">
+
+    <Grid>
+        <dxmvvm:Interaction.Behaviors>
+            <dxmvvm:EventToCommand Command="{Binding LoadCommand}" Event="Loaded" />
+            <dxmvvm:WindowService />
+            <dx:DXMessageBoxService />
+        </dxmvvm:Interaction.Behaviors>
+        <dxlc:LayoutControl Orientation="Vertical">
+            <dxlc:LayoutGroup
+                Header="Izmena Gosta"
+                IsEnabled="{Binding IsEditable}"
+                View="GroupBox">
+                <dxlc:LayoutGroup
+                    Serialization:SerializableItem.TypeName="LayoutGroup"
+                    dx:ScrollViewerTouchBehavior.IsEnabled="True"
+                    Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Ime">
+                        <dxe:TextEdit Text="{Binding FirstName}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Email">
+                        <dxe:TextEdit Text="{Binding EmailAddress}" />
+                    </dxlc:LayoutItem>
+
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Prezime">
+                        <dxe:TextEdit Text="{Binding LastName}" />
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="JMBG">
+                        <dxe:TextEdit Text="{Binding UniqueNumber}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Vertical">
+
+                    <dxlc:LayoutItem Label="Telefon">
+                        <dxe:TextEdit Text="{Binding Telephone}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Datum Rodjenja">
+                        <dxe:DateEdit DateTime="{Binding BirthDate}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Orientation="Vertical">
+                    <dxlc:LayoutItem Label="Adresa">
+                        <dxe:TextEdit Text="{Binding Address}" />
+                    </dxlc:LayoutItem>
+
+                    <dxlc:LayoutItem Label="Aktivan">
+                        <dxe:CheckEdit IsChecked="{Binding IsActive}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+
+                <dxlc:LayoutItem Label="Izmeni podatke gosta">
+                    <dxe:CheckEdit ClickMode="Press" IsChecked="{Binding IsEditable}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutItem>
+                <Button
+                    Command="{Binding SaveCommand}"
+                    Content="Sacuvaj"
+                    IsEnabled="{Binding IsEditable}" />
+            </dxlc:LayoutItem>
+
+        </dxlc:LayoutControl>
+
+    </Grid>
+</dx:ThemedWindow>

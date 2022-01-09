@@ -4,6 +4,6 @@ namespace EtnaSoft.Bll.Services
 {
     public interface IUpdateGuestService
     {
-        bool UpdateGuestData(Guest guest);
+        bool UpdateGuestData(int id, Guest guest);
     }
 }

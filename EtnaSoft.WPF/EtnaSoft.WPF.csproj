@@ -181,6 +181,7 @@
     <Compile Include="Stores\Renavigate.cs" />
     <Compile Include="ViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\AppointmentWindowBase.cs" />
+    <Compile Include="ViewModels\Base\EditGuestViewModelBase.cs" />
     <Compile Include="ViewModels\ChangePasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
@@ -210,9 +211,6 @@
     <Compile Include="Views\DialogServiceView.xaml.cs">
       <DependentUpon>DialogServiceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditGuestWindow.xaml.cs">
-      <DependentUpon>EditGuestWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ExistingGuestDialogView.xaml.cs">
       <DependentUpon>ExistingGuestDialogView.xaml</DependentUpon>
     </Compile>
@@ -230,6 +228,9 @@
     </Compile>
     <Compile Include="Views\UserContentView.xaml.cs">
       <DependentUpon>UserContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\EditGuestWindow.xaml.cs">
+      <DependentUpon>EditGuestWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -279,10 +280,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditGuestWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ExistingGuestDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -304,6 +301,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\EditGuestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

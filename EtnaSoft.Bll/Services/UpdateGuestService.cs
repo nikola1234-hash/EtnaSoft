@@ -13,9 +13,13 @@ namespace EtnaSoft.Bll.Services
         }
 
 
-        public bool UpdateGuestData(Guest guest)
+        public bool UpdateGuestData(int id, Guest guest)
         {
-            return _unit.Guests.Update(guest.Id, guest);
+            if (guest.IsActive == false)
+            {
+                _unit.Guests.Delete(id);
+            }
+            return _unit.Guests.Update(id, guest);
         }
     }
 }

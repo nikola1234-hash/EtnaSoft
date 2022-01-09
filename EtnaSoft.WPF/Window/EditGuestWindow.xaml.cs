@@ -1,8 +1,8 @@
-﻿using System;
+﻿using DevExpress.Xpf.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,12 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace EtnaSoft.WPF.Views
+
+namespace EtnaSoft.WPF.Window
 {
     /// <summary>
     /// Interaction logic for EditGuestWindow.xaml
     /// </summary>
-    public partial class EditGuestWindow : Window
+    public partial class EditGuestWindow : ThemedWindow
     {
         public EditGuestWindow()
         {
