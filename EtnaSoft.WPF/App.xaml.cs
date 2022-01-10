@@ -92,6 +92,9 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IGuestService, GuestService>();
             service.AddSingleton<IUpdateGuestService, UpdateGuestService>();
             service.AddSingleton<IGuestDataGridService, GuestDataGridService>();
+            service.AddSingleton<IGuestHistoryService, GuestHistoryService>();
+
+
 
             service.AddSingleton<IRenavigate, Renavigate>();
             service.AddSingleton<IViewStore, ViewStore>();

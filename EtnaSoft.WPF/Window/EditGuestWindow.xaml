@@ -68,6 +68,7 @@
                 <dxlc:LayoutItem Label="Izmeni podatke gosta">
                     <dxe:CheckEdit ClickMode="Press" IsChecked="{Binding IsEditable}" />
                 </dxlc:LayoutItem>
+                <dxlc:LayoutItem />
             </dxlc:LayoutGroup>
             <dxlc:LayoutItem>
                 <Button
@@ -75,6 +76,13 @@
                     Content="Sacuvaj"
                     IsEnabled="{Binding IsEditable}" />
             </dxlc:LayoutItem>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutGroup Header="LayoutGroup" View="Tabs">
+                    <dxlc:LayoutGroup Header="Istorijat">
+                        <DataGrid IsReadOnly="True" ItemsSource="{Binding GuestBookingHistories}" />
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutGroup>
+            </dxlc:LayoutGroup>
 
         </dxlc:LayoutControl>
 

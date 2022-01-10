@@ -132,17 +132,18 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly ICreateGuestService _createGuestService;
         private readonly IGuestSearchService _guestSearchService;
         private readonly IUpdateGuestService _updateGuestService;
-        private readonly IGuestDataGridService _guestDataGridService;
+        private readonly IGuestHistoryService _guestHistoryService;
         public ICommand CreateGuestCommand { get; }
         public ICommand LoadCommand { get; }
         public ICommand<object> CellDoubleClickCommand { get; }
         
-        public CreateGuestContentViewModel(ICreateGuestService createGuestService, IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService, IGuestDataGridService guestDataGridService)
+        public CreateGuestContentViewModel(ICreateGuestService createGuestService, IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService, IGuestHistoryService guestHistoryService)
         {
             _createGuestService = createGuestService;
             _guestSearchService = guestSearchService;
             _updateGuestService = updateGuestService;
-            _guestDataGridService = guestDataGridService;
+            _guestHistoryService = guestHistoryService;
+            
             CreateGuestCommand = new DelegateCommand(CreateGuest);
             LoadCommand = new DelegateCommand(OnLoad);
             CellDoubleClickCommand = new DelegateCommand<object>(OnCellDoubleClick);
@@ -152,7 +153,7 @@ namespace EtnaSoft.WPF.ViewModels
         private void OnCellDoubleClick(object obj)
         {
             var guest = (Guest)obj;
-            var viewModel = new EditGuestViewModel(guest, _updateGuestService);
+            var viewModel = new EditGuestViewModel(guest, _updateGuestService, _guestHistoryService);
             var window = new EditGuestWindow()
             {
                 DataContext = viewModel

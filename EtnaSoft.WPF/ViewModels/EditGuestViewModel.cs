@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.Native;
-using DevExpress.Utils.CommonDialogs.Internal;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.WPF.ViewModels.Base;
@@ -14,6 +13,9 @@ namespace EtnaSoft.WPF.ViewModels
     {
         public Guest Guest { get; private set; }
         private readonly IUpdateGuestService _updateGuestService;
+        private readonly IGuestHistoryService _guestHistoryService;
+
+
         public delegate void UserDataChanged(object sender);
 
         public IWindowService WindowService
@@ -49,10 +51,23 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(IsEditable));
             }
         }
-        public EditGuestViewModel(Guest guest, IUpdateGuestService updateGuestService)
+
+        private ObservableCollection<GuestBookingHistory> _guestBookingHistories;
+
+        public ObservableCollection<GuestBookingHistory> GuestBookingHistories
+        {
+            get { return _guestBookingHistories; }
+            set
+            {
+                _guestBookingHistories = value;
+                RaisePropertyChanged(nameof(GuestBookingHistories));
+            }
+        }
+        public EditGuestViewModel(Guest guest, IUpdateGuestService updateGuestService, IGuestHistoryService guestHistoryService)
         {
             Guest = guest;
             _updateGuestService = updateGuestService;
+            _guestHistoryService = guestHistoryService;
             SaveCommand = new DelegateCommand(SaveData);
             LoadCommand = new DelegateCommand(OnLoad);
            
@@ -68,6 +83,11 @@ namespace EtnaSoft.WPF.ViewModels
             UniqueNumber = Guest.UniqueNumber;
             IsActive = Guest.IsActive;
             BirthDate = Guest.BirthDate;
+
+            var guesthistory = _guestHistoryService.GetGuestBookingHistory(GuestId);
+            GuestBookingHistories = new ObservableCollection<GuestBookingHistory>(guesthistory);
+
+
         }
 
         public int GuestId => Guest.Id;
@@ -220,6 +240,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         public override void Dispose()
         {
+            GuestBookingHistories = null;
             base.Dispose();
         }
     }

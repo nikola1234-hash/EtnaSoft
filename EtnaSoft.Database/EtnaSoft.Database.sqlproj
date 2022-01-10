@@ -85,6 +85,7 @@
     <Build Include="Tables\PaymentStatuses.sql" />
     <Build Include="StoredProcedures\Guest\sp_GuestUpdate.sql" />
     <Build Include="StoredProcedures\Room\sp_LoadFreeRooms.sql" />
+    <Build Include="StoredProcedures\Guest\sp_GuestHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EtnaSoft.Database.publish.xml" />
