@@ -32,7 +32,11 @@
             EventName="CommitAppointmentResize"
             PassEventArgsToCommand="True"
             SourceName="schedule" />
-
+        <interactivity:EventToCommand
+            Command="{Binding FetchAppointmentsCommand}"
+            EventName="VisibleIntervalsChanged"
+            PassEventArgsToCommand="True"
+            SourceName="schedule" />
 
     </interactivity:Interaction.Behaviors>
     <Grid>
@@ -47,6 +51,8 @@
             FirstDayOfWeek="Monday"
             GroupType="Resource"
             ShowDateNavigationPanel="True">
+
+
             <dxsch:SchedulerControl.OptionsContextMenu>
                 <dxsch:OptionsContextMenu>
                     <dxsch:OptionsContextMenu.AppointmentContextMenu>
@@ -92,6 +98,7 @@
                 <dxsch:OptionsWindows AppointmentWindowType="{x:Type local:CustomAppointmentWindow}" />
             </dxsch:SchedulerControl.OptionsWindows>
             <dxsch:SchedulerControl.DataSource>
+
                 <dxsch:DataSource
                     AppointmentLabelsSource="{Binding Labels}"
                     AppointmentsSource="{Binding Bookings}"
@@ -145,6 +152,8 @@
                 x:Name="timelineView1"
                 ResourcesPerPage="10"
                 SnapToCellsMode="Auto" />
+
         </dxsch:SchedulerControl>
+
     </Grid>
 </UserControl>

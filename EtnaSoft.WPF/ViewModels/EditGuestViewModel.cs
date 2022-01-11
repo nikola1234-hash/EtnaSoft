@@ -2,10 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using DevExpress.Mvvm;
-using DevExpress.Mvvm.Native;
+using DevExpress.Xpo.Logger;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.WPF.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -14,9 +15,10 @@ namespace EtnaSoft.WPF.ViewModels
         public Guest Guest { get; private set; }
         private readonly IUpdateGuestService _updateGuestService;
         private readonly IGuestHistoryService _guestHistoryService;
-
+        private readonly ILogger<EditGuestViewModel> _logger;
 
         public delegate void UserDataChanged(object sender);
+        public event UserDataChanged OnUserDataChange;
 
         public IWindowService WindowService
         {
@@ -34,7 +36,7 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        public event UserDataChanged OnUserDataChange;
+        
         
         public ICommand SaveCommand { get; }
         public ICommand LoadCommand { get; }
@@ -63,11 +65,12 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(GuestBookingHistories));
             }
         }
-        public EditGuestViewModel(Guest guest, IUpdateGuestService updateGuestService, IGuestHistoryService guestHistoryService)
+        public EditGuestViewModel(Guest guest, IUpdateGuestService updateGuestService, IGuestHistoryService guestHistoryService, ILogger<EditGuestViewModel> logger)
         {
             Guest = guest;
             _updateGuestService = updateGuestService;
             _guestHistoryService = guestHistoryService;
+            _logger = logger;
             SaveCommand = new DelegateCommand(SaveData);
             LoadCommand = new DelegateCommand(OnLoad);
            
@@ -84,8 +87,18 @@ namespace EtnaSoft.WPF.ViewModels
             IsActive = Guest.IsActive;
             BirthDate = Guest.BirthDate;
 
-            var guesthistory = _guestHistoryService.GetGuestBookingHistory(GuestId);
-            GuestBookingHistories = new ObservableCollection<GuestBookingHistory>(guesthistory);
+            try
+            {
+                _logger.LogInformation("Getting guest history from db.");
+                var guesthistory = _guestHistoryService.GetGuestBookingHistory(GuestId);
+                GuestBookingHistories = new ObservableCollection<GuestBookingHistory>(guesthistory);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Exception in assigning guest history.", ex);
+                throw ex;
+                
+            }
 
 
         }
@@ -218,14 +231,13 @@ namespace EtnaSoft.WPF.ViewModels
             };
             try
             {
+                _logger.LogInformation("Attempting to Update GuestData");
                 _updateGuestService.UpdateGuestData(GuestId,guestToUpdate);
-                if (IsActive == false)
-                {
-
-                }
+                _logger.LogInformation("Successful");
             }
             catch (Exception ex)
             {
+                _logger.LogError("Error while updating Guest.", ex);
                 throw ex;
             }
 
@@ -233,9 +245,6 @@ namespace EtnaSoft.WPF.ViewModels
             OnUserDataChange?.Invoke(this);
 
             MessageBoxService.Show("Uspesno izmenjen zapis");
-            this.WindowService.ReturnSuccess();
-            this.WindowService.Close();
-
         }
 
         public override void Dispose()

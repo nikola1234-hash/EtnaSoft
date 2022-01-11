@@ -13,6 +13,7 @@ using EtnaSoft.Bll.Services;
 using EtnaSoft.WPF.Helpers;
 using EtnaSoft.WPF.Views;
 using EtnaSoft.WPF.Window;
+using Microsoft.Extensions.Logging;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -133,17 +134,19 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IGuestSearchService _guestSearchService;
         private readonly IUpdateGuestService _updateGuestService;
         private readonly IGuestHistoryService _guestHistoryService;
+        private readonly ILogger<EditGuestViewModel> _editGuestLogger;
         public ICommand CreateGuestCommand { get; }
         public ICommand LoadCommand { get; }
         public ICommand<object> CellDoubleClickCommand { get; }
         
-        public CreateGuestContentViewModel(ICreateGuestService createGuestService, IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService, IGuestHistoryService guestHistoryService)
+        public CreateGuestContentViewModel(ICreateGuestService createGuestService, IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService, IGuestHistoryService guestHistoryService, ILogger<EditGuestViewModel> editGuestLogger)
         {
             _createGuestService = createGuestService;
             _guestSearchService = guestSearchService;
             _updateGuestService = updateGuestService;
             _guestHistoryService = guestHistoryService;
-            
+            _editGuestLogger = editGuestLogger;
+
             CreateGuestCommand = new DelegateCommand(CreateGuest);
             LoadCommand = new DelegateCommand(OnLoad);
             CellDoubleClickCommand = new DelegateCommand<object>(OnCellDoubleClick);
@@ -153,7 +156,7 @@ namespace EtnaSoft.WPF.ViewModels
         private void OnCellDoubleClick(object obj)
         {
             var guest = (Guest)obj;
-            var viewModel = new EditGuestViewModel(guest, _updateGuestService, _guestHistoryService);
+            var viewModel = new EditGuestViewModel(guest, _updateGuestService, _guestHistoryService, _editGuestLogger);
             var window = new EditGuestWindow()
             {
                 DataContext = viewModel

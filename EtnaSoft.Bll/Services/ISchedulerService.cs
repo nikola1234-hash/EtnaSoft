@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Models;
@@ -13,7 +14,7 @@ namespace EtnaSoft.Bll.Services
     }
     public interface ISchedulerService
     {
-        ObservableCollection<Booking> LoadResource();
+        ObservableCollection<Booking> LoadResource(object startDate = null, object endDate = null);
         List<StayType> LoadStayTypes();
         IEnumerable<CustomLabel> LoadCustomLabels();
     }

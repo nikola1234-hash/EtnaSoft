@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
@@ -34,7 +35,7 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        private ObservableCollection<Booking> _bookings;
+        private ObservableCollection<Booking> _bookings = new ObservableCollection<Booking>();
 
         public ObservableCollection<Booking> Bookings
         {
@@ -78,7 +79,7 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand<object> CheckInCommand { get; }
         public ICommand<object> InvoicesCommand { get; }
         public ICommand<object> DeleteReservationCommand { get; }
-        
+        public ICommand<object> FetchAppointmentsCommand { get; }
         public ICommand<object>PopUpMenuShowingCommand { get; }
         public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService,
             IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager,
@@ -94,7 +95,7 @@ namespace EtnaSoft.WPF.ViewModels
             InvoicesCommand = new DelegateCommand<object>(ShowInvoicePanel);
             DeleteReservationCommand = new DelegateCommand<object>(DeleteReservation);
             PopUpMenuShowingCommand = new DelegateCommand<object>(PopUpMenuShowing);
-
+            FetchAppointmentsCommand = new DelegateCommand<object>(OnFetchAppointments);
             _roomResource = roomResource;
             _bookingService = bookingService;
             _eventAggregator = eventAggregator;
@@ -109,6 +110,31 @@ namespace EtnaSoft.WPF.ViewModels
             _dragUpdate = dragUpdate;
            
             _schedulerService = schedulerService;
+        }
+
+        /// <summary>
+        /// When Month View Changes Unload Old Bookings and load new ones
+        /// </summary>
+        private void OnFetchAppointments(object obj)
+        {
+            if (obj is VisibleIntervalsChangedEventArgs args)
+            {
+                var index = args.VisibleIntervals.Count();
+                var startDate = args.VisibleIntervals.ElementAt(0);
+                var endDate = args.VisibleIntervals.ElementAt(index - 1);
+                //Just in case if its null
+                if (Bookings == null)
+                {
+                    Bookings = _schedulerService.LoadResource(startDate.Start, endDate.Start);
+                    return;
+                }
+                if (Bookings.Any())
+                {
+                    Bookings.Clear();
+                }
+                Bookings = _schedulerService.LoadResource(startDate.Start, endDate.Start);
+            }
+        
         }
 
         private void PopUpMenuShowing(object obj)
@@ -146,7 +172,7 @@ namespace EtnaSoft.WPF.ViewModels
                 if (!isCheckedIn)
                 {
                     _bookingService.CheckIn(id);
-                    PopulateBookings();
+                    PopulateBookings((DateTime)booking.Start, (DateTime)booking.Start.AddDays(7));
                 }
                 else
                 {
@@ -173,7 +199,9 @@ namespace EtnaSoft.WPF.ViewModels
 
                     }
                 }
-                PopulateBookings();
+
+                // Populate from startDate + 7 days
+                PopulateBookings(startDate, startDate.AddDays(7));
             }
         }
 
@@ -234,16 +262,26 @@ namespace EtnaSoft.WPF.ViewModels
         }
 
     
-        void PopulateBookings()
+        void PopulateBookings(object startDate = null, object endDate = null)
         {
+            DateTime sDate = DateTime.Now.Date;
+            DateTime eDate = DateTime.Now.Date.AddDays(7);
+            if (startDate != null && endDate != null)
+            {
+                sDate = (DateTime)startDate;
+                eDate = (DateTime)endDate;
+                startDate = null;
+                endDate = null;
+            }
+
             if (Bookings == null)
             {
-                Bookings = _schedulerService.LoadResource();
+                Bookings = _schedulerService.LoadResource(sDate, eDate);
             }
             else
             {
                 Bookings?.Clear();
-                Bookings = _schedulerService.LoadResource();
+                Bookings = _schedulerService.LoadResource(sDate, eDate);
             }
         }
 
@@ -257,7 +295,7 @@ namespace EtnaSoft.WPF.ViewModels
         {
             //Initialize
             PopulateRooms();
-            PopulateBookings();
+            //PopulateBookings();
             PopulateLabels();
            
         }
