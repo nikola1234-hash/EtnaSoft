@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EtnaSoft.Bo.Entities
+﻿namespace ErtnaSoft.Bo.Entities
 {
     public class Room : Entity
     {

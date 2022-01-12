@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Security.Principal;
 
-namespace EtnaSoft.Bo.Entities
+namespace ErtnaSoft.Bo.Entities
 {
     public class Reservation : Audit
     {

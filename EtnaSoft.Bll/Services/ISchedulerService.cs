@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Models;
-using EtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.Bll.Services
 {

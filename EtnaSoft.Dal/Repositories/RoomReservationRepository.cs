@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Dapper;
 using ErtnaSoft.Bo.Entities;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Dal.Repositories

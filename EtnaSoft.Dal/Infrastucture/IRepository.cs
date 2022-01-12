@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using EtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.Dal.Infrastucture
 {

@@ -6,7 +6,6 @@ using DevExpress.Mvvm.POCO;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
 using EtnaSoft.Dal.Infrastucture;
 using EtnaSoft.Dal.Repositories;

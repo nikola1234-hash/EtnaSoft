@@ -1,5 +1,4 @@
 ﻿using System;
-using EtnaSoft.Bo.Entities;
 
 namespace ErtnaSoft.Bo.Entities
 {

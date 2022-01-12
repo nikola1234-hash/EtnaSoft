@@ -1,4 +1,5 @@
-﻿namespace EtnaSoft.Bo.Entities
+﻿
+namespace ErtnaSoft.Bo.Entities
 {
     public class User : Audit
     {

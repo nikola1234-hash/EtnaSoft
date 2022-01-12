@@ -2,7 +2,6 @@
 using System.Linq;
 using Dapper;
 using ErtnaSoft.Bo.Entities;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 using EtnaSoft.Dal.Stores;
 using Microsoft.AspNet.Identity;

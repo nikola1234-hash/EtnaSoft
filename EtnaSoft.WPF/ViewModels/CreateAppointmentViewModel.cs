@@ -7,7 +7,6 @@ using DevExpress.Xpf.Scheduling;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Services;
 using EtnaSoft.Dal.Stores;
 using EtnaSoft.WPF.Events;

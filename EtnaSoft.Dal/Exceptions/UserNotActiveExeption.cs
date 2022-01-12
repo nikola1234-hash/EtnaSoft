@@ -1,5 +1,5 @@
 ﻿using System;
-using EtnaSoft.Bo.Entities;
+using ErtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.Dal.Exceptions
 {

@@ -1,6 +1,5 @@
 ﻿using System;
-
-using EtnaSoft.Bo.Entities;
+using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
 using EtnaSoft.Dal.Services.Authorization;
 using EtnaSoft.Dal.Stores;

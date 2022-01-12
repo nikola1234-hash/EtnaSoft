@@ -1,7 +1,5 @@
 ﻿
 
-using EtnaSoft.Bo.Entities;
-
 namespace ErtnaSoft.Bo.Entities
 {
     public class RoomReservation : Audit

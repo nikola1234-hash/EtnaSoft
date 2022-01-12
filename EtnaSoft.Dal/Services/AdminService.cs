@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using EtnaSoft.Bo.Entities;
+using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 using Microsoft.AspNet.Identity;
 

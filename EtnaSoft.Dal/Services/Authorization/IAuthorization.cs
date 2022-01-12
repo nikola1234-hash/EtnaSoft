@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EtnaSoft.Bo.Entities;
+using ErtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.Dal.Services.Authorization
 {

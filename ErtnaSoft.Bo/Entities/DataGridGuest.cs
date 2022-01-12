@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ErtnaSoft.Bo.Annotations;
-using EtnaSoft.Bo.Entities;
 
 namespace ErtnaSoft.Bo.Entities
 {

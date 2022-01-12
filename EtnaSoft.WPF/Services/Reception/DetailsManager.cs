@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Stores;
 using EtnaSoft.WPF.ViewModels;
 

@@ -11,7 +11,6 @@ using EtnaSoft.WPF.Stores;
 using Squirrel;
 using System.Deployment.Application;
 using System.Windows;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Services.Authorization;
 using Serilog;
 using Microsoft.Extensions.Logging;

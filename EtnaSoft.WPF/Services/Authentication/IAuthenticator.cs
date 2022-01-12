@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.WPF.Services.Authentication
 {

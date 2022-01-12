@@ -6,7 +6,6 @@ using System.Threading;
 using System.Xml;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Models;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Bll.Services

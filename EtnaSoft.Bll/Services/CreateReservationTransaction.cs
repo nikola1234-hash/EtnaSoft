@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ErtnaSoft.Bo.Entities;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Bll.Services

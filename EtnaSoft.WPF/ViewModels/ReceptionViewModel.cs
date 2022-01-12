@@ -5,16 +5,16 @@ using System.Windows;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
+using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Models;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Services;
 using EtnaSoft.WPF.Events;
-using EtnaSoft.WPF.Models;
 using EtnaSoft.WPF.Services.Reception;
 using EtnaSoft.WPF.Views;
 using Prism.Events;
+using CustomLabel = EtnaSoft.WPF.Models.CustomLabel;
 
 namespace EtnaSoft.WPF.ViewModels
 {

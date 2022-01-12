@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using EtnaSoft.Bo.Entities;
+using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 
 namespace EtnaSoft.Dal.Repositories

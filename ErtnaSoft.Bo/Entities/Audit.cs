@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EtnaSoft.Bo.Entities
+namespace ErtnaSoft.Bo.Entities
 {
     public class Audit : Entity
     {

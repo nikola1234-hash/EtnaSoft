@@ -7,7 +7,6 @@ using System.IO;
 using System.Text;
 using Dapper;
 using ErtnaSoft.Bo.Entities;
-using EtnaSoft.Bo.Entities;
 using EtnaSoft.Dal.Infrastucture;
 using EtnaSoft.Dal.Services.Converter;
 
