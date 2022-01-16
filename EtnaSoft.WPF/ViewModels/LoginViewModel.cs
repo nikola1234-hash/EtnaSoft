@@ -102,26 +102,8 @@ namespace EtnaSoft.WPF.ViewModels
         //TODO: Update online for continuous integration
         private async Task CheckForUpdates()
         {
-            _logger.LogInformation("Started checking for updates");
+            //TODO: Update App Logic Here
             
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                CurrentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
-                try
-                {
-                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
-                    CurrentVersion = string.Empty;
-                    CurrentVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString(4);
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError("Checking for updates throws exception : " + ex);
-                    throw;
-                }
-
-                _logger.LogInformation("Finished checking for errors");
-            }
-
         }
 
         private void OnLogin(object obj)
