@@ -15,5 +15,6 @@ namespace EtnaSoft.WPF.ViewModels
         public void Dispose()
         {
         }
+
     }
 }

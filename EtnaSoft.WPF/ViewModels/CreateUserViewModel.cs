@@ -1,44 +1,109 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Input;
 using DevExpress.Mvvm;
 using EtnaSoft.Dal.Services.Authorization;
 using EtnaSoft.Dal.Services.UserServices;
-
-
+using EtnaSoft.Dal.Stores;
+using EtnaSoft.WPF.Helpers;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public sealed class CreateUserViewModel : ContentViewModel
+    public sealed class CreateUserViewModel : ContentViewModel, IDataErrorInfo
     {
         private readonly IAuthorization _authorization;
-
-        private UserService userService;
+        public MessageViewModel ErrorMessageViewModel { get; set; }
+        private readonly IUserService userService;
         public ICommand CreateCommand { get; }
+        public ICommand CloseCommand { get; }
         public IMessageBoxService MessageService
         {
             get { return this.GetService<IMessageBoxService>(); }
         }
-        public CreateUserViewModel(IAuthorization authorization)
+
+   
+        public ICurrentWindowService WindowService => this.GetService<ICurrentWindowService>();
+        public CreateUserViewModel(IAuthorization authorization, IUserService userService)
         {
             _authorization = authorization;
+            this.userService = userService;
             CreateCommand = new DelegateCommand(OnUserCreate);
+            CloseCommand = new DelegateCommand(OnClose);
+
+            ErrorMessageViewModel = new MessageViewModel();
+
         }
 
+        private void OnClose()
+        {
+            ErrorMessageViewModel.Dispose();
+            CloseWindow();
+        }
         private void OnUserCreate()
         {
-            var result = _authorization.RegisterUser(FirstName, LastName, Username, Password, RepeatPassword);
-            if (result == RegistrationStatus.Success)
+            var validation = EnableValidationAndGetError();
+            if (validation != null)
+                return;
+            try
             {
-                MessageService.Show($"Uspesno kreiran korisnik: {Username}");
-            }
-            else if(result == RegistrationStatus.UsernameAlreadyExists)
-            {
-                MessageService.Show($"Korisnik sa ovim imenom vec postoji");
+                var result = _authorization.RegisterUser(FirstName, LastName, Username, Password, RepeatPassword);
+                if (result == RegistrationStatus.Success)
+                {
+                    var messageBoxResult =
+                        MessageService.Show(
+                            $"Uspesno kreiran korisnik: {Username}. Da li zelite da unesete novi zapis?", "Obavestenje",
+                            MessageBoxButton.YesNo);
+                    if (messageBoxResult == MessageBoxResult.Yes)
+                    {
+                        ClearFields();
+                    }
+                    else
+                    {
+                        CloseWindow();
+                    }
+                }
+                else if (result == RegistrationStatus.UsernameAlreadyExists)
+                {
+                    MessageService.Show($"Korisnik sa ovim imenom vec postoji");
 
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
+        }
+        //If User is not admin disable form
+        public bool IsFormEnabled => UserStore.CurrentUser == "Admin";
+        void CloseWindow()
+        {
+            this.WindowService.Close();
+        }
+        /// <summary>
+        /// This method uses reflectionn on this class to clear all
+        /// string fields.
+        /// </summary>
+        void ClearFields()
+        {
+            var properties = this.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                if (property.PropertyType == typeof(string))
+                {
+                    property.SetValue(this, string.Empty, null);
+                }
             }
         }
 
-
-        public bool PasswordsMatch => Password == RepeatPassword;
+        bool PasswordNotEmptyAndMatch()
+        {
+            return !string.IsNullOrWhiteSpace(Password)
+                   && !string.IsNullOrWhiteSpace(RepeatPassword)
+                   && Password == RepeatPassword;
+        }
+        public bool PasswordsMatch => PasswordNotEmptyAndMatch();
 
 
         private string _firstName;
@@ -68,6 +133,13 @@ namespace EtnaSoft.WPF.ViewModels
 
         private string _username;
 
+        public string ErrorMessage
+        {
+            set
+            {
+                ErrorMessageViewModel.Message = value;
+            }
+        }
         public string Username
         {
             get { return _username; }
@@ -77,7 +149,10 @@ namespace EtnaSoft.WPF.ViewModels
                 var result = userService.DoesUserExists(s => s.Username == _username);
                 if (result)
                 {
-                    MessageService.Show($"Korisnik sa ovim imenom vec postoji u bazi!");
+                    MessageService.Show($"Ovo Korisnicko ime postoji u bazi, izaberite drugo");
+                    _username = string.Empty;
+                    RaisePropertyChanged(nameof(Username));
+
                     return;
                 }
                 RaisePropertyChanged(nameof(Username));
@@ -106,5 +181,70 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(RepeatPassword));
             }
         }
+
+        private string EnableValidationAndGetError()
+        {
+            string error =((IDataErrorInfo)this).Error;
+            if (!string.IsNullOrEmpty(error))
+            {
+                this.RaisePropertiesChanged();
+                return error;
+            }
+
+            return null;
+        }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string firstName = BindableBase.GetPropertyName(() => FirstName);
+                string lastName = BindableBase.GetPropertyName(() => LastName);
+                string username = BindableBase.GetPropertyName(() => Username);
+                string password = BindableBase.GetPropertyName(() => Password);
+                string repeatPassword = BindableBase.GetPropertyName(() => RepeatPassword);
+
+                if (columnName == firstName)
+                {
+                    return RequiredValidationRule.GetErrorMessage(firstName, FirstName);
+                }
+                else if (columnName == lastName)
+                {
+                    return RequiredValidationRule.GetErrorMessage(lastName, LastName);
+                }
+                else if (columnName == username)
+                {
+                    return RequiredValidationRule.GetErrorMessage(username, Username);
+                }
+                else if (columnName == password)
+                {
+                    return RequiredValidationRule.GetErrorMessage(password, Password);
+                }
+                else if (columnName == repeatPassword)
+                {
+                    return RequiredValidationRule.GetErrorMessage(repeatPassword, RepeatPassword);
+                }
+                return null;
+            }
+        }
+
+        public string Error
+        {
+            get
+            {
+                IDataErrorInfo me = (IDataErrorInfo)this;
+                string errors = me[BindableBase.GetPropertyName(() => FirstName)] +
+                                me[BindableBase.GetPropertyName(() => LastName)] +
+                                me[BindableBase.GetPropertyName(() => Username)] +
+                                me[BindableBase.GetPropertyName(() => Password)] +
+                                me[BindableBase.GetPropertyName(() => RepeatPassword)];
+                if (!string.IsNullOrEmpty(errors))
+                    return "Ova polja moraju biti popunjena";
+
+                return null;
+            }
+        }
+        
+        
     }
 }

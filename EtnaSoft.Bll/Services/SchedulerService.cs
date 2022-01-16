@@ -17,6 +17,13 @@ namespace EtnaSoft.Bll.Services
         {
             _unit = unit;
         }
+
+        public int BookingsComingToday()
+        {
+            var reservation = _unit.Reservations.GetAll().Where(s => s.StartDate == DateTime.Now.Date);
+            return reservation.Count();
+        }
+
         //TODO: Check loading resource;
         public ObservableCollection<Booking> LoadResource(object startDate = null, object endDate = null)
         {

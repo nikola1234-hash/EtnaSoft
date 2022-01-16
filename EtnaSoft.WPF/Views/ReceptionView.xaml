@@ -37,6 +37,11 @@
             EventName="VisibleIntervalsChanged"
             PassEventArgsToCommand="True"
             SourceName="schedule" />
+        <interactivity:NotificationService
+            ApplicationId="{Binding ApplicationId}"
+            CustomNotificationPosition="BottomRight"
+            UseWin8NotificationsIfAvailable="True" />
+
 
     </interactivity:Interaction.Behaviors>
     <Grid>

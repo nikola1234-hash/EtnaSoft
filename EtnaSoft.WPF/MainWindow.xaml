@@ -27,11 +27,48 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <nav:NavigationBar
             Grid.Row="0"
             Background="{StaticResource DefaultBrushMenu}"
             Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" />
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" />
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                Orientation="Horizontal"
+                Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock
+                    Margin="5"
+                    HorizontalAlignment="Left"
+                    Text="Trenutni korisnik:" />
+                <TextBlock
+                    Margin="5"
+                    HorizontalAlignment="Left"
+                    Text="{Binding CurrentUser}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Visibility="{Binding IsLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button
+                    Width="150"
+                    Margin="5"
+                    Command="{Binding LogoutCommand}"
+                    Content="Logout" />
+            </StackPanel>
+        </Grid>
+
+
+
+
+
     </Grid>
 </dx:ThemedWindow>

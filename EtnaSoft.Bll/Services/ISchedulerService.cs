@@ -14,6 +14,7 @@ namespace EtnaSoft.Bll.Services
     public interface ISchedulerService
     {
         ObservableCollection<Booking> LoadResource(object startDate = null, object endDate = null);
+        int BookingsComingToday();
         List<StayType> LoadStayTypes();
         IEnumerable<CustomLabel> LoadCustomLabels();
     }

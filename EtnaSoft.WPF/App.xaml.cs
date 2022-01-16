@@ -13,6 +13,7 @@ using EtnaSoft.Dal.Services;
 using EtnaSoft.Dal.Services.Authorization;
 using EtnaSoft.Dal.Services.Converter;
 using EtnaSoft.Dal.Services.Database;
+using EtnaSoft.Dal.Services.UserServices;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Services.Reception;
@@ -69,7 +70,10 @@ namespace EtnaSoft.WPF
             service.AddTransient<UserContentViewModel>();
             service.AddTransient<GuestContentViewModel>();
             service.AddTransient<CreateGuestContentViewModel>();
+            service.AddTransient<CreateUserViewModel>();
 
+
+            service.AddSingleton<IUserService, UserService>();
             service.AddSingleton<IGuestSearchService,GuestSearchService>();
             service.AddSingleton<IDetailsManager, DetailsManager>();
             service.AddSingleton<IUpdateBookingService, UpdateBookingService>();

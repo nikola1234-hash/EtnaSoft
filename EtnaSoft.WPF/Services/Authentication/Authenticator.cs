@@ -33,6 +33,7 @@ namespace EtnaSoft.WPF.Services.Authentication
 
         public void Logout()
         {
+            UserStore.CurrentUser = null;
             CurrentUser = null;
         }
     }

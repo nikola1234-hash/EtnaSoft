@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using DevExpress.DocumentServices.ServiceModel.ServiceOperations;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
 using ErtnaSoft.Bo.Entities;
@@ -11,6 +12,7 @@ using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Dal.Services;
 using EtnaSoft.WPF.Events;
+using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Services.Reception;
 using EtnaSoft.WPF.Views;
 using Prism.Events;
@@ -72,6 +74,7 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly DialogServiceViewModel _dialogServiceViewModel;
         private readonly SearchGuestDialogViewModel _searchGuestDialogViewModel;
         private readonly IUpdateReservationDateDragService _dragUpdate;
+        private readonly IAuthenticator _authenticator;
         public ICommand<object> EditBookingCommand { get; }
         public ICommand LoadedCommand { get; }
         public ICommand<object> BookingDrag { get; }
@@ -81,11 +84,17 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand<object> DeleteReservationCommand { get; }
         public ICommand<object> FetchAppointmentsCommand { get; }
         public ICommand<object>PopUpMenuShowingCommand { get; }
+
+        private INotificationService NotificationService
+        {
+            get => this.GetService<INotificationService>();
+        }
+
         public ReceptionViewModel(IResourceService roomResource, ISchedulerService schedulerService,
             IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager,
             SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel,
             IComboboxFacade comboboxFacade, ICreateReservationService createReservation,
-            IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate)
+            IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate, IAuthenticator authenticator)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -108,7 +117,8 @@ namespace EtnaSoft.WPF.ViewModels
             _createReservation = createReservation;
             _availableRooms = availableRooms;
             _dragUpdate = dragUpdate;
-           
+            _authenticator = authenticator;
+
             _schedulerService = schedulerService;
         }
 
@@ -142,6 +152,20 @@ namespace EtnaSoft.WPF.ViewModels
            //TODO: Context menu PopUp Customization if needed
         }
 
+        public void Logout()
+        {
+            _authenticator.Logout();
+        }
+        public static string ApplicationId
+        {
+            get { return "ReceptionView"; }
+        }
+        public void ShowNotification(string message)
+        {
+            INotification notification = NotificationService.CreatePredefinedNotification(message, "Imate novu notifikaciju", "Notifikacija");
+            
+            notification.ShowAsync();
+        }
         private void DeleteReservation(object reservation)
         {
             if (reservation is AppointmentItem booking)
@@ -293,6 +317,17 @@ namespace EtnaSoft.WPF.ViewModels
         }
         private void OnLoad()
         {
+            string soba = "sobu";
+            var number = _schedulerService.BookingsComingToday();
+            if (number > 1 && number <= 4)
+            {
+                soba = "sobe";
+            }
+            else if (number > 5)
+            {
+                soba = "soba";
+            }
+            ShowNotification($"Danas imate {number} {soba} na dolasku.");
             //Initialize
             PopulateRooms();
             //PopulateBookings();

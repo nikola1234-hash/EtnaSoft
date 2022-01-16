@@ -1,0 +1,132 @@
+﻿<dx:ThemedWindow
+    x:Class="EtnaSoft.WPF.Window.CreateUserWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:helpers="clr-namespace:EtnaSoft.WPF.Helpers"
+    Title="CreateUserWindow"
+    Width="473.874"
+    Height="800"
+    ResizeMode="NoResize"
+    ShowStatusPanel="False"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="SingleBorderWindow">
+
+
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:CurrentWindowService />
+        <dx:DXMessageBoxService />
+    </dxmvvm:Interaction.Behaviors>
+
+
+    <DockPanel dxe:ValidationService.IsValidationContainer="True">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.15*" />
+                <RowDefinition Height="0.85*" />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Grid.Row="1"
+                MaxWidth="300"
+                Margin="20,0,20,0">
+                <GroupBox Margin="0,0,0,0" Header="Ime">
+                    <dxe:TextEdit
+                        Margin="16,12,16,16"
+                        VerticalAlignment="Center"
+                        CharacterCasing="{Binding SelectedItem, ElementName=casing, Mode=TwoWay}"
+                        Text="{Binding FirstName}">
+                        <Binding
+                            Mode="TwoWay"
+                            Path="FirstName"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <helpers:RequiredValidationRule FieldName="FirstName" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </dxe:TextEdit>
+                </GroupBox>
+                <GroupBox Margin="0,16,0,0" Header="Prezime">
+                    <dxe:TextEdit
+                        Margin="16,12,16,16"
+                        VerticalAlignment="Center"
+                        Text="{Binding LastName}">
+                        <Binding
+                            Mode="TwoWay"
+                            Path="LastName"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <helpers:RequiredValidationRule FieldName="LastName" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </dxe:TextEdit>
+
+                </GroupBox>
+                <GroupBox Margin="0,16,0,0" Header="Korisnik">
+                    <dxe:TextEdit
+                        x:Name="dateTimeEditor"
+                        Margin="16,12,16,16"
+                        VerticalAlignment="Center"
+                        ShowErrorToolTip="True"
+                        Text="{Binding Username}">
+                        <Binding
+                            Mode="TwoWay"
+                            Path="Username"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <helpers:RequiredValidationRule FieldName="Username" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </dxe:TextEdit>
+                </GroupBox>
+                <GroupBox Margin="0,16,0,0" Header="Lozinka&#xA;">
+                    <dxe:PasswordBoxEdit
+                        Margin="16,12,16,16"
+                        PasswordChar="*"
+                        Text="{Binding Password}">
+                        <Binding
+                            Mode="TwoWay"
+                            Path="Password"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <helpers:RequiredValidationRule FieldName="Password" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </dxe:PasswordBoxEdit>
+                </GroupBox>
+                <GroupBox Margin="0,16,0,0" Header="Lozinka&#xA;">
+                    <dxe:PasswordBoxEdit
+                        Margin="16,12,16,16"
+                        PasswordChar="*"
+                        Text="{Binding RepeatPassword}">
+                        <Binding
+                            Mode="TwoWay"
+                            Path="RepeatPassword"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <helpers:RequiredValidationRule FieldName="RepeatPassword" />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </dxe:PasswordBoxEdit>
+                </GroupBox>
+                <Button
+                    Width="150px"
+                    Margin="0,20"
+                    Command="{Binding CreateCommand}"
+                    Content="Kreiraj korisnika"
+                    IsEnabled="{Binding PasswordsMatch}" />
+                <Button
+                    Width="150px"
+                    Command="{Binding CloseCommand}"
+                    Content="Izadji" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</dx:ThemedWindow>

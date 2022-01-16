@@ -7,7 +7,7 @@ using ErtnaSoft.Bo.Entities;
 namespace EtnaSoft.Dal.Services.UserServices
 {
     //TODO: Register Dependency
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IUnitOfWork _unit;
 

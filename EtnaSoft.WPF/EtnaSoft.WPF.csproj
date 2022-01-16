@@ -236,6 +236,9 @@
     <Compile Include="Views\UserContentView.xaml.cs">
       <DependentUpon>UserContentView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window\CreateUserWindow.xaml.cs">
+      <DependentUpon>CreateUserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Window\EditGuestWindow.xaml.cs">
       <DependentUpon>EditGuestWindow.xaml</DependentUpon>
     </Compile>
@@ -312,6 +315,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\CreateUserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
