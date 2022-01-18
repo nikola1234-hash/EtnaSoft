@@ -66,12 +66,14 @@ namespace EtnaSoft.WPF
             //Content page navigation
             service.AddSingleton<IContentViewStore, ContentViewStore>();
             service.AddSingleton<IContentViewFactory, ContentViewFactory>();
+            service.AddSingleton<IWindowViewModelFactory, WindowViewModelFactory>();
+
             service.AddTransient<ContentViewModel>();
             service.AddTransient<UserContentViewModel>();
             service.AddTransient<GuestContentViewModel>();
             service.AddTransient<CreateGuestContentViewModel>();
             service.AddTransient<CreateUserViewModel>();
-
+            service.AddTransient<RoomsManagerViewModel>();
 
             service.AddSingleton<IUserService, UserService>();
             service.AddSingleton<IGuestSearchService,GuestSearchService>();

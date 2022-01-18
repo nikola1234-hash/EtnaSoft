@@ -21,6 +21,7 @@
     </dx:ThemedWindow.Resources>
     <dxmvvm:Interaction.Behaviors>
         <dxmvvm:EventToCommand Command="{Binding OnLoadCommand}" EventName="Loaded" />
+        <dx:SplashScreenManagerService StartupLocation="CenterOwner" TrackOwnerPosition="True" />
     </dxmvvm:Interaction.Behaviors>
     <Grid>
 

@@ -8,6 +8,7 @@ using DevExpress.Mvvm;
 using EtnaSoft.WPF.Commands;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Stores;
+using EtnaSoft.WPF.Window;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -17,17 +18,27 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand NavigateContentCommand { get; }
         public ICommand UserSettingCommand { get; }
         public ICommand CreateUserCommand { get; }
+        public ICommand<WindowType> OpenRoomManagerCommand { get; }
         private readonly IContentViewStore _contentStore;
         private readonly IContentViewFactory _contentFactory;
-        
-        public HomeViewModel(IContentViewStore contentStore, IContentViewFactory contentFactory)
+        private readonly IWindowViewModelFactory _windowFactory;
+        public HomeViewModel(IContentViewStore contentStore, IContentViewFactory contentFactory, IWindowViewModelFactory windowFactory)
         {
             _contentStore = contentStore;
             _contentFactory = contentFactory;
+            _windowFactory = windowFactory;
             _contentStore.ContentViewChanged += OnContentViewChanged;
             UserSettingCommand = new DelegateCommand(OpenUsersDialogWindow);
             CreateUserCommand = new DelegateCommand(CreateUser);
+            OpenRoomManagerCommand = new DelegateCommand<WindowType>(OpenRoomManager);
+
             NavigateContentCommand = new NavigateContentCommand(_contentFactory, _contentStore);
+        }
+
+        private void OpenRoomManager(WindowType windowType)
+        {
+            var window = _windowFactory.AddViewModel(windowType);
+            window.Show();
         }
 
         private void OnContentViewChanged()

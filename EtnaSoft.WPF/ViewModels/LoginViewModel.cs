@@ -10,6 +10,7 @@ using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Stores;
 using Squirrel;
 using System.Deployment.Application;
+using System.Threading;
 using System.Windows;
 using EtnaSoft.Dal.Services.Authorization;
 using Serilog;
@@ -75,6 +76,9 @@ namespace EtnaSoft.WPF.ViewModels
         {
             get => GetService<IDialogService>();
         }
+
+      
+
         private readonly IAuthenticator _authenticator;
         private readonly IAuthorization _auth;
         private readonly IRenavigate _renavigate;
@@ -108,49 +112,59 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void OnLogin(object obj)
         {
-            bool IsDefaultAccount(string pass)
+            Thread thread = new Thread(() =>
             {
-                return Username == DefaultAccount.Admin.ToString() &&
-                       pass == DefaultAccount.admin.ToString();
-            }
-
-            void ChangePasswordDialog(string pass)
-            {
-                ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass, _auth);
-                UICommand result = DialogService.ShowDialog(changePassword.Commands, "Promeni lozinku",
-                    viewModel: changePassword);
-                if (result != null)
+                bool IsDefaultAccount(string pass)
                 {
-                    MessageBox.Show("Uspesno promenjena lozinka");
+                    return Username == DefaultAccount.Admin.ToString() &&
+                           pass == DefaultAccount.admin.ToString();
                 }
-            }
 
-            if (obj is PasswordBox passwordBox)
-            {
-                var pass = passwordBox.Password;
-                try
+                void ChangePasswordDialog(string pass)
                 {
-                    var successLogin = _authenticator.Login(Username, pass);
-                    if (successLogin)
+                    ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass, _auth);
+                    UICommand result = DialogService.ShowDialog(changePassword.Commands, "Promeni lozinku",
+                        viewModel: changePassword);
+                    if (result != null)
                     {
-                       if (IsDefaultAccount(pass))
-                       {
-                           _logger.LogInformation("This account is default one, popping modal for password change");
-                           ChangePasswordDialog(pass);
-                           _logger.LogInformation("Password change done.");
-                       }
-                       _view.CurrentViewModel = _renavigate.Navigate();
+                        MessageBox.Show("Uspesno promenjena lozinka");
                     }
                 }
-                catch (UserNotActiveExeption)
+
+                if (obj is PasswordBox passwordBox)
                 {
-                    ErrorMessage = "Ovaj korisnik je neaktivan";
+                    var pass = passwordBox.Password;
+                    try
+                    {
+                        var successLogin = _authenticator.Login(Username, pass);
+                        if (successLogin)
+                        {
+                            if (IsDefaultAccount(pass))
+                            {
+                                _logger.LogInformation(
+                                    "This account is default one, popping modal for password change");
+                                ChangePasswordDialog(pass);
+                                _logger.LogInformation("Password change done.");
+                            }
+
+                            _view.CurrentViewModel = _renavigate.Navigate();
+
+                        }
+                    }
+                    catch (UserNotActiveExeption)
+                    {
+                        ErrorMessage = "Ovaj korisnik je neaktivan";
+                    }
+                    catch (Exception)
+                    {
+                        ErrorMessage = "Pogresni parametri za logovanje";
+                    }
                 }
-                catch (Exception)
-                {
-                    ErrorMessage = "Pogresni parametri za logovanje";
-                }
-            }
+            });
+            thread.IsBackground = true;
+            thread.Start();
+
+
         }
 
 

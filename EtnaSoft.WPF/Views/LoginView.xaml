@@ -9,7 +9,9 @@
     xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:view="clr-namespace:EtnaSoft.WPF.Views">
+    xmlns:splashView="clr-namespace:EtnaSoft.WPF.SplashScreen"
+    xmlns:view="clr-namespace:EtnaSoft.WPF.Views"
+    xmlns:splashScreen="clr-namespace:EtnaSoft.WPF.SplashScreen">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -25,6 +27,8 @@
                 </DataTemplate>
             </dxwui:WinUIDialogService.ViewTemplate>
         </dxwui:WinUIDialogService>
+        <dxmvvm:DispatcherService />
+        <dx:DXSplashScreenService SplashScreenType="splashScreen:EtnaSplashScreen"/>
     </dxmvvm:Interaction.Behaviors>
 
 
@@ -34,6 +38,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
 
 
         <Border
@@ -104,6 +109,7 @@
                         </Label.Triggers>
                     </Label>
                 </Border>
+
                 <!--  Start of Login textBox form  -->
                 <StackPanel
                     Grid.Row="1"
@@ -169,5 +175,6 @@
             </Grid>
 
         </Border>
+
     </Grid>
 </UserControl>

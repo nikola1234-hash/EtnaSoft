@@ -1,0 +1,27 @@
+﻿<dx:ThemedWindow
+    x:Class="EtnaSoft.WPF.Window.RoomsManagerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+    Title="RoomsManagerWindow"
+    Width="1000"
+    Height="800"
+    Window.WindowStartupLocation="CenterScreen">
+    <DockPanel LastChildFill="True">
+        <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
+            <dxr:RibbonControl.ToolbarItems />
+            <dxr:RibbonDefaultPageCategory>
+                <dxr:RibbonPage Caption="ribbonPage1">
+                    <dxr:RibbonPageGroup Caption="ribbonPageGroup1" />
+                </dxr:RibbonPage>
+            </dxr:RibbonDefaultPageCategory>
+        </dxr:RibbonControl>
+        <DataGrid ItemsSource="{Binding RoomsCollection}" SelectedItem="{Binding SelectedItem}" />
+        <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom">
+            <dxr:RibbonStatusBarControl.RightItems />
+        </dxr:RibbonStatusBarControl>
+    </DockPanel>
+
+</dx:ThemedWindow>

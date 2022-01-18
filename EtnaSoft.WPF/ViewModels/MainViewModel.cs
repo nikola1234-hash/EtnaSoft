@@ -25,6 +25,7 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand NavigateCommand { get; }
         public ICommand OnLoadCommand { get; }
         public ICommand LogoutCommand { get; }
+     
         public MainViewModel(IViewStore viewStore, IEtnaViewModelFactory viewModelFactory, IAuthenticator authenticator)
         {
             _viewStore = viewStore;

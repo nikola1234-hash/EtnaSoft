@@ -1,0 +1,73 @@
+﻿<dx:SplashScreenWindow
+    x:Class="EtnaSoft.WPF.SplashScreen.EtnaSplashScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:dxt="http://schemas.devexpress.com/winfx/2008/xaml/core/themekeys"
+    xmlns:local="clr-namespace:EtnaSoft.WPF.SplashScreen"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    MinWidth="496"
+    MinHeight="370"
+    d:DataContext="{x:Static dxmvvm:DXSplashScreenViewModel.DesignTimeData}"
+    mc:Ignorable="d">
+    <dxmvvm:Interaction.Behaviors>
+        <dx:DXSplashScreenService SplashScreenType="{x:Type local:EtnaSplashScreen}" />
+        <dx:SplashScreenManagerService />
+    </dxmvvm:Interaction.Behaviors>
+
+
+    <!--
+        To show the splash screen on the application startup, add the following code to App.xaml.cs:
+        public App() {
+        var splashScreenViewModel = new DXSplashScreenViewModel() { Title = "MyApplication" };
+        SplashScreenManager.Create(() => new EtnaSplashScreen(), splashScreenViewModel).ShowOnStartup();
+        }
+        
+        Refer to the following articles for more information:
+        docs.devexpress.com/WPF/401685/controls-and-libraries/windows-and-utility-controls/splash-screen-manager?v=20.1#show-splash-screen
+        docs.devexpress.com/WPF/401692/mvvm-framework/services/predefined-set/splashscreenmanagerservice?v=20.1#show-splash-screen-from-view-model
+        
+        NOTE: SplashScreenWindow uses its own theme mechanism to speed up initialization.
+        For this reason, the current theme will not be applied to any DevExpress or standard controls placed inside the splash screen.
+        To apply the default theme mechanism to the splash screen content, set AllowTheming="True" for SplashScreenWindow.
+    -->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=TopRegionStyle}}">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=TitleTextBoxStyle}}" Text="{Binding Title}" />
+                <TextBlock Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=SubTitleTextBoxStyle}}" Text="{Binding Subtitle}" />
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=BottomRegionStyle}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    <TextBlock Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=StatusTextBoxStyle}}" Text="{Binding Status}" />
+                    <ProgressBar
+                        IsIndeterminate="{Binding IsIndeterminate}"
+                        Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=ProgressBarStyle}}"
+                        Value="{Binding Progress}" />
+                </StackPanel>
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=CopyrightTextBoxStyle}}"
+                    Text="{Binding Copyright}" />
+                <dx:DXImage
+                    Grid.Row="1"
+                    Source="{Binding Logo}"
+                    Style="{DynamicResource ResourceKey={dxt:SplashScreenThemeKey ResourceKey=LogoImageStyle}}" />
+            </Grid>
+        </Border>
+    </Grid>
+</dx:SplashScreenWindow>

@@ -27,12 +27,12 @@
                 ToolbarShowMode="Hide">
                 <dxr:RibbonControl.ToolbarItems>
                     <dxb:BarButtonItem Content="BarButtonItem" />
-                </dxr:RibbonControl.ToolbarItems>
-                <dxr:RibbonControl.PageHeaderItems>
                     <dxb:BarButtonItem Content="BarButtonItem" />
-                </dxr:RibbonControl.PageHeaderItems>
+                    <dxb:BarButtonItem Content="BarButtonItem" />
+                </dxr:RibbonControl.ToolbarItems>
+
                 <dxr:RibbonDefaultPageCategory Caption="Default Category">
-                    <dxr:RibbonPage Caption="Korisnici">
+                    <dxr:RibbonPage Caption="Meni">
                         <dxr:RibbonPageGroup
                             Caption="Korisnici"
                             CaptionButtonCommandParameter="Korisnici"
@@ -56,7 +56,26 @@
                                 LargeGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
                                 MediumGlyph="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}" />
                         </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup Caption="Sobe">
+                            <dxb:BarButtonItem
+                                Command="{Binding OpenRoomManagerCommand}"
+                                CommandParameter="{x:Static services:WindowType.RoomsManager}"
+                                Content="Sobe"
+                                Glyph="{dx:DXImage SvgImages/Outlook Inspired/TaskList.svg}"
+                                LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/TaskList.svg}"
+                                MediumGlyph="{dx:DXImage SvgImages/Outlook Inspired/TaskList.svg}" />
+                        </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup Caption="Smestaj">
+                            <dxb:BarButtonItem
+                                Command="{Binding NavigateContentCommand}"
+                                CommandParameter="{x:Static services:ContentViewType.CreateGuestContent}"
+                                Content="Tipovi Smestaja"
+                                Glyph="{dx:DXImage Images/Function Library/Text_32x32.png}"
+                                LargeGlyph="{dx:DXImage Images/Function Library/Text_32x32.png}"
+                                MediumGlyph="{dx:DXImage Images/Function Library/Text_32x32.png}" />
+                        </dxr:RibbonPageGroup>
                     </dxr:RibbonPage>
+
                 </dxr:RibbonDefaultPageCategory>
 
             </dxr:RibbonControl>

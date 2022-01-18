@@ -179,8 +179,13 @@
     <Compile Include="Services\ContentViewFactory.cs" />
     <Compile Include="Services\IContentViewFactory.cs" />
     <Compile Include="Services\IEtnaViewModelFactory.cs" />
+    <Compile Include="Services\IWindowViewModelFactory.cs" />
     <Compile Include="Services\Reception\DetailsManager.cs" />
     <Compile Include="Services\Reception\IDetailsManager.cs" />
+    <Compile Include="Services\WindowViewModelFactory.cs" />
+    <Compile Include="SplashScreen\ThemedSplashScreen\EtnaSplashScreen.xaml.cs">
+      <DependentUpon>EtnaSplashScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Stores\ContentViewStore.cs" />
     <Compile Include="Stores\IContentViewStore.cs" />
     <Compile Include="Stores\IRenavigate.cs" />
@@ -201,6 +206,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MessageViewModel.cs" />
     <Compile Include="ViewModels\ReceptionViewModel.cs" />
+    <Compile Include="ViewModels\RoomsManagerViewModel.cs" />
     <Compile Include="ViewModels\SearchGuestDialogViewModel.cs" />
     <Compile Include="ViewModels\UserContentViewModel.cs" />
     <Compile Include="Views\ChangePasswordDialog.xaml.cs">
@@ -242,6 +248,9 @@
     <Compile Include="Window\EditGuestWindow.xaml.cs">
       <DependentUpon>EditGuestWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Window\RoomsManagerWindow.xaml.cs">
+      <DependentUpon>RoomsManagerWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -259,6 +268,10 @@
     <Compile Include="Stores\ViewStore.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Page Include="Navigation\NavigationBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SplashScreen\ThemedSplashScreen\EtnaSplashScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -323,6 +336,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\EditGuestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\RoomsManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
