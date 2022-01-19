@@ -39,8 +39,8 @@
                             Glyph="{dx:DXImage SvgImages/Business Objects/BO_Customer.svg}"
                             SmallGlyph="{dx:DXImage SvgImages/Business Objects/BO_Customer.svg}">
                             <dxb:BarButtonItem
-                                Command="{Binding NavigateContentCommand}"
-                                CommandParameter="{x:Static services:ContentViewType.UserContent}"
+                                Command="{Binding OpenManagerWindowCommand}"
+                                CommandParameter="{x:Static services:WindowType.UserManager}"
                                 Content="Korisnici"
                                 Glyph="{dx:DXImage SvgImages/Business Objects/BO_Customer.svg}"
                                 LargeGlyph="{dx:DXImage SvgImages/Business Objects/BO_Customer.svg}"
@@ -58,7 +58,7 @@
                         </dxr:RibbonPageGroup>
                         <dxr:RibbonPageGroup Caption="Sobe">
                             <dxb:BarButtonItem
-                                Command="{Binding OpenRoomManagerCommand}"
+                                Command="{Binding OpenManagerWindowCommand}"
                                 CommandParameter="{x:Static services:WindowType.RoomsManager}"
                                 Content="Sobe"
                                 Glyph="{dx:DXImage SvgImages/Outlook Inspired/TaskList.svg}"
@@ -67,8 +67,8 @@
                         </dxr:RibbonPageGroup>
                         <dxr:RibbonPageGroup Caption="Smestaj">
                             <dxb:BarButtonItem
-                                Command="{Binding NavigateContentCommand}"
-                                CommandParameter="{x:Static services:ContentViewType.CreateGuestContent}"
+                                Command="{Binding OpenManagerWindowCommand}"
+                                CommandParameter="{x:Static services:WindowType.StayTypeManager}"
                                 Content="Tipovi Smestaja"
                                 Glyph="{dx:DXImage Images/Function Library/Text_32x32.png}"
                                 LargeGlyph="{dx:DXImage Images/Function Library/Text_32x32.png}"

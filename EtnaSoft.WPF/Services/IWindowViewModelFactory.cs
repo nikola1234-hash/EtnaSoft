@@ -6,7 +6,8 @@ namespace EtnaSoft.WPF.Services
     public enum WindowType
     {
         RoomsManager,
-        StayTypeManager
+        StayTypeManager,
+        UserManager
     }
     public interface IWindowViewModelFactory
     {

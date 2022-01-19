@@ -18,7 +18,7 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand NavigateContentCommand { get; }
         public ICommand UserSettingCommand { get; }
         public ICommand CreateUserCommand { get; }
-        public ICommand<WindowType> OpenRoomManagerCommand { get; }
+        public ICommand<WindowType> OpenManagerWindowCommand { get; }
         private readonly IContentViewStore _contentStore;
         private readonly IContentViewFactory _contentFactory;
         private readonly IWindowViewModelFactory _windowFactory;
@@ -30,12 +30,12 @@ namespace EtnaSoft.WPF.ViewModels
             _contentStore.ContentViewChanged += OnContentViewChanged;
             UserSettingCommand = new DelegateCommand(OpenUsersDialogWindow);
             CreateUserCommand = new DelegateCommand(CreateUser);
-            OpenRoomManagerCommand = new DelegateCommand<WindowType>(OpenRoomManager);
+            OpenManagerWindowCommand = new DelegateCommand<WindowType>(OpenManager);
 
             NavigateContentCommand = new NavigateContentCommand(_contentFactory, _contentStore);
         }
 
-        private void OpenRoomManager(WindowType windowType)
+        private void OpenManager(WindowType windowType)
         {
             var window = _windowFactory.AddViewModel(windowType);
             window.Show();

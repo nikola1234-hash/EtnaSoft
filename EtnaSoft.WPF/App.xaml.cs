@@ -14,11 +14,13 @@ using EtnaSoft.Dal.Services.Authorization;
 using EtnaSoft.Dal.Services.Converter;
 using EtnaSoft.Dal.Services.Database;
 using EtnaSoft.Dal.Services.UserServices;
+using EtnaSoft.WPF.Infrastructure;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Services.Reception;
 using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.ViewModels;
+using EtnaSoft.WPF.Window;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -74,6 +76,8 @@ namespace EtnaSoft.WPF
             service.AddTransient<CreateGuestContentViewModel>();
             service.AddTransient<CreateUserViewModel>();
             service.AddTransient<RoomsManagerViewModel>();
+            service.AddTransient<StayTypesManagerViewModel>();
+            service.AddTransient<UserManagerViewModel>();
 
             service.AddSingleton<IUserService, UserService>();
             service.AddSingleton<IGuestSearchService,GuestSearchService>();
@@ -100,7 +104,8 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IGuestHistoryService, GuestHistoryService>();
 
 
-
+            service.AddTransient<IUserManagerService, UserManagerService>();
+            service.AddTransient<IUserManagerSubViewModel, UserSubViewModel>();
             service.AddSingleton<IRenavigate, Renavigate>();
             service.AddSingleton<IViewStore, ViewStore>();
             service.AddSingleton<IEtnaViewModelFactory, ViewModelFactory>();
@@ -115,6 +120,12 @@ namespace EtnaSoft.WPF
             service.AddTransient<LoginViewModel>();
             service.AddTransient<HomeViewModel>();
             service.AddTransient<MainWindow>();
+
+            service.AddTransient<CreateUserWindow>();
+            service.AddTransient<RoomsManagerWindow>();
+            service.AddTransient<EditGuestWindow>();
+            service.AddTransient<StayTypesManagerWindow>();
+            service.AddTransient<UserManagerWindow>();
         }
 
         
