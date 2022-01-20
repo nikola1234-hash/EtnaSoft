@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using ErtnaSoft.Bo.Entities;
@@ -29,8 +26,22 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 _roomsCollection = value;
                 RaisePropertyChanged(nameof(RoomsCollection));
+                
             }
         }
+
+        public List<Room> Rooms
+        {
+            get
+            {
+                return RoomList();
+            }
+            set
+            {
+                Rooms = value;
+            }
+        }
+
 
         public RoomsManagerViewModel(IRoomsManagerService roomsManagerService, IEventAggregator eventAggregator)
         {
@@ -50,15 +61,18 @@ namespace EtnaSoft.WPF.ViewModels
             CloseWindow();
         }
 
+        private List<Room> RoomList()
+        {
+            return _roomsManagerService.GetAllRooms();
+        }
         void PopulateView()
         {
 
-            var rooms = _roomsManagerService.GetAllRooms();
             if (RoomsCollection != null)
             {
                 RoomsCollection?.Clear();
                 
-                foreach (var room in rooms)
+                foreach (var room in Rooms)
                 {
                     RoomsCollection.Add(new SubRoomViewModel(room));
                 }
@@ -66,7 +80,7 @@ namespace EtnaSoft.WPF.ViewModels
             else
             {
                 RoomsCollection = new ObservableCollection<SubRoomViewModel>();
-                foreach (var room in rooms)
+                foreach (var room in Rooms)
                 {
                     RoomsCollection.Add(new SubRoomViewModel(room));
                 }
@@ -81,6 +95,7 @@ namespace EtnaSoft.WPF.ViewModels
         public override void Dispose()
         {
             RoomsCollection = null;
+            Rooms = null;
             base.Dispose();
         }
     }
