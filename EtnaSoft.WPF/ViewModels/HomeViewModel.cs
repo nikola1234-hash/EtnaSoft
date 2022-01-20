@@ -48,14 +48,14 @@ namespace EtnaSoft.WPF.ViewModels
             }
             var window = _windowFactory.AddViewModel(windowType);
             window.Show();
-            _eventAggregator.GetEvent<UserManagerOpenEvent>().Subscribe(SetIsManagerWindowStateOpen);
+            _eventAggregator.GetEvent<WindowManagerOpenEvent>().Subscribe(SetIsManagerWindowStateOpen);
             IsManagerWindowOpen = window.IsActive;
         }
 
         void SetIsManagerWindowStateOpen()
         {
             IsManagerWindowOpen = false;
-            _eventAggregator.GetEvent<UserManagerOpenEvent>().Unsubscribe(SetIsManagerWindowStateOpen);
+            _eventAggregator.GetEvent<WindowManagerOpenEvent>().Unsubscribe(SetIsManagerWindowStateOpen);
         }
         private void OnContentViewChanged()
         {

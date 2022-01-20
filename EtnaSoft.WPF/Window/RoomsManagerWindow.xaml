@@ -4,24 +4,89 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
     Title="RoomsManagerWindow"
     Width="1000"
     Height="800"
-    Window.WindowStartupLocation="CenterScreen">
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
+    <dx:ThemedWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </dx:ThemedWindow.Resources>
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding OnLoadCommand}" Event="Loaded" />
+        <dxmvvm:CurrentWindowService />
+    </dxmvvm:Interaction.Behaviors>
     <DockPanel LastChildFill="True">
         <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
-            <dxr:RibbonControl.ToolbarItems />
             <dxr:RibbonDefaultPageCategory>
-                <dxr:RibbonPage Caption="ribbonPage1">
-                    <dxr:RibbonPageGroup Caption="ribbonPageGroup1" />
+                <dxr:RibbonPage Caption="Meni">
+                    <dxr:RibbonPageGroup Caption="{x:Null}">
+                        <dxb:BarButtonItem
+                            Command="{Binding CloseCommand}"
+                            Content="Izlaz"
+                            Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}"
+                            LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}"
+                            MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}" />
+                    </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
         </dxr:RibbonControl>
-        <DataGrid ItemsSource="{Binding RoomsCollection}" SelectedItem="{Binding SelectedItem}" />
-        <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom">
-            <dxr:RibbonStatusBarControl.RightItems />
-        </dxr:RibbonStatusBarControl>
+
+        <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom" />
+        <ItemsControl ItemsSource="{Binding RoomsCollection}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Height="Auto" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="10" Background="LightGray">
+                        <Button
+                            Width="200"
+                            Height="auto"
+                            Margin="5"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding UserCommand}" Header="Izmeni" />
+                                    <MenuItem
+                                        Command="{Binding DeactivateAccountCommand}"
+                                        Header="Deaktiviraj Korisnika"
+                                        Visibility="{Binding IsDeactivateMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <MenuItem
+                                        Command="{Binding ActivateAccountCommand}"
+                                        Header="Aktiviraj Korisnika"
+                                        Visibility="{Binding IsActivateMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    FontSize="24"
+                                    FontWeight="Bold"
+                                    Foreground="Black"
+                                    Text="{Binding RoomNumber}" />
+                                <Image
+                                    Width="64"
+                                    Height="64"
+                                    SnapsToDevicePixels="True"
+                                    Source="{Binding IsActive}"
+                                    Stretch="UniformToFill"
+                                    StretchDirection="Both" />
+
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </DockPanel>
 
 </dx:ThemedWindow>

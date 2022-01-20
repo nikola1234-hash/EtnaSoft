@@ -104,7 +104,7 @@ namespace EtnaSoft.WPF.ViewModels
         }
         private void OnClosing()
         {
-            _eventAggregator.GetEvent<UserManagerOpenEvent>().Publish();
+            _eventAggregator.GetEvent<WindowManagerOpenEvent>().Publish();
             CloseWindow();
         }
         void RepopulateUsers()
