@@ -166,6 +166,10 @@
     <Compile Include="Commands\NavigateContentCommand.cs" />
     <Compile Include="Controls\EtnaDataGrid.cs" />
     <Compile Include="Events\AppointmentViewEvent.cs" />
+    <Compile Include="Events\UserCreatedEvent.cs" />
+    <Compile Include="Events\UserCreationWindowCloseEvent.cs" />
+    <Compile Include="Events\UserManagerOpenEvent.cs" />
+    <Compile Include="Events\UserStatusChangedEvent.cs" />
     <Compile Include="Helpers\RequiredValidationRule.cs" />
     <Compile Include="Infrastructure\IUserManagerSubViewModel.cs" />
     <Compile Include="Models\CustomLabel.cs" />
@@ -180,7 +184,9 @@
     <Compile Include="Services\Authentication\Authenticator.cs" />
     <Compile Include="Services\Authentication\IAuthenticator.cs" />
     <Compile Include="Services\ContentViewFactory.cs" />
+    <Compile Include="Services\CreateUserViewFactory.cs" />
     <Compile Include="Services\IContentViewFactory.cs" />
+    <Compile Include="Services\ICreateUserViewFactory.cs" />
     <Compile Include="Services\IEtnaViewModelFactory.cs" />
     <Compile Include="Services\IWindowViewModelFactory.cs" />
     <Compile Include="Services\Reception\DetailsManager.cs" />
@@ -478,6 +484,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseFiles\Database.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\BO_Employee.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\BO_Invoice.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\BO_Person.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\BO_Report.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\BO_User.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

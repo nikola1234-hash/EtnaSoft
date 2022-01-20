@@ -162,7 +162,9 @@ namespace EtnaSoft.WPF.ViewModels
         }
         public void ShowNotification(string message)
         {
-            INotification notification = NotificationService.CreatePredefinedNotification(message, "Imate novu notifikaciju", "Notifikacija");
+            INotification notification = NotificationService
+                .CreatePredefinedNotification("Imate novu notifikaciju", 
+                    message , DateTime.Now.Date.ToShortDateString());
             
             notification.ShowAsync();
         }
@@ -318,16 +320,22 @@ namespace EtnaSoft.WPF.ViewModels
         private void OnLoad()
         {
             string soba = "sobu";
+            string ima = "imate";
             var number = _schedulerService.BookingsComingToday();
             if (number > 1 && number <= 4)
             {
-                soba = "sobe";
+                soba = $"{number} sobe";
             }
             else if (number > 5)
             {
-                soba = "soba";
+                soba = $"{number} soba";
             }
-            ShowNotification($"Danas imate {number} {soba} na dolasku.");
+            else if (number == 0)
+            {
+                soba = "soba";
+                ima = "nemate";
+            }
+            ShowNotification($"Danas {ima} {soba} na dolasku.");
             //Initialize
             PopulateRooms();
             //PopulateBookings();

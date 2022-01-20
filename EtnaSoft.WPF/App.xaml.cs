@@ -69,7 +69,7 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IContentViewStore, ContentViewStore>();
             service.AddSingleton<IContentViewFactory, ContentViewFactory>();
             service.AddSingleton<IWindowViewModelFactory, WindowViewModelFactory>();
-
+            service.AddSingleton<ICreateUserViewFactory, CreateUserViewFactory>();
             service.AddTransient<ContentViewModel>();
             service.AddTransient<UserContentViewModel>();
             service.AddTransient<GuestContentViewModel>();
@@ -121,11 +121,11 @@ namespace EtnaSoft.WPF
             service.AddTransient<HomeViewModel>();
             service.AddTransient<MainWindow>();
 
-            service.AddTransient<CreateUserWindow>();
-            service.AddTransient<RoomsManagerWindow>();
-            service.AddTransient<EditGuestWindow>();
-            service.AddTransient<StayTypesManagerWindow>();
-            service.AddTransient<UserManagerWindow>();
+            //service.AddTransient<CreateUserWindow>();
+            //service.AddTransient<RoomsManagerWindow>();
+            //service.AddTransient<EditGuestWindow>();
+            //service.AddTransient<StayTypesManagerWindow>();
+            //service.AddTransient<UserManagerWindow>();
         }
 
         

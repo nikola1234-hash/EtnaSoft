@@ -14,6 +14,8 @@ namespace EtnaSoft.Dal.Repositories
         private const string UpdateById = "sp_UpdateUser";
 
         private const string SetInactive = "Update dbo.Users Set IsActive = 0 WHERE Id = @Id";
+        
+        private const string SetActive = "Update dbo.Users Set IsActive = 1 WHERE Id = @Id";
 
         private const string CreateUser = "sp_CreateUser";
 
@@ -76,7 +78,14 @@ namespace EtnaSoft.Dal.Repositories
         public bool Delete(int id)
         {
             bool output = false;
-            int i = _context.SaveData(SetInactive, new {Id = id});
+            var user = GetById(id);
+            var sqlParameter = SetInactive;
+            if (!user.IsActive)
+            {
+                sqlParameter = SetActive;
+            }
+            
+            int i = _context.SaveData(sqlParameter, new {Id = id});
             if (i == 1)
             {
                 output = true;

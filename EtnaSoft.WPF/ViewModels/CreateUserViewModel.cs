@@ -6,7 +6,9 @@ using DevExpress.Mvvm;
 using EtnaSoft.Dal.Services.Authorization;
 using EtnaSoft.Dal.Services.UserServices;
 using EtnaSoft.Dal.Stores;
+using EtnaSoft.WPF.Events;
 using EtnaSoft.WPF.Helpers;
+using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -17,6 +19,7 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IUserService userService;
         public ICommand CreateCommand { get; }
         public ICommand CloseCommand { get; }
+        private readonly IEventAggregator _eventAggregator;
         public IMessageBoxService MessageService
         {
             get { return this.GetService<IMessageBoxService>(); }
@@ -24,10 +27,11 @@ namespace EtnaSoft.WPF.ViewModels
 
    
         public ICurrentWindowService WindowService => this.GetService<ICurrentWindowService>();
-        public CreateUserViewModel(IAuthorization authorization, IUserService userService)
+        public CreateUserViewModel(IAuthorization authorization, IUserService userService, IEventAggregator eventAggregator)
         {
             _authorization = authorization;
             this.userService = userService;
+            _eventAggregator = eventAggregator;
             CreateCommand = new DelegateCommand(OnUserCreate);
             CloseCommand = new DelegateCommand(OnClose);
 
@@ -50,18 +54,11 @@ namespace EtnaSoft.WPF.ViewModels
                 var result = _authorization.RegisterUser(FirstName, LastName, Username, Password, RepeatPassword);
                 if (result == RegistrationStatus.Success)
                 {
-                    var messageBoxResult =
-                        MessageService.Show(
-                            $"Uspesno kreiran korisnik: {Username}. Da li zelite da unesete novi zapis?", "Obavestenje",
-                            MessageBoxButton.YesNo);
-                    if (messageBoxResult == MessageBoxResult.Yes)
-                    {
-                        ClearFields();
-                    }
-                    else
-                    {
-                        CloseWindow();
-                    }
+                   
+                    MessageService.Show(
+                            $"Uspesno kreiran korisnik: {Username}. Da li zelite da unesete novi zapis?", "Obavestenje");
+                    
+                    CloseWindow();
                 }
                 else if (result == RegistrationStatus.UsernameAlreadyExists)
                 {
@@ -79,6 +76,7 @@ namespace EtnaSoft.WPF.ViewModels
         public bool IsFormEnabled => UserStore.CurrentUser == "Admin";
         void CloseWindow()
         {
+            _eventAggregator.GetEvent<UserCreationWindowCloseEvent>().Publish();
             this.WindowService.Close();
         }
         /// <summary>
@@ -87,14 +85,14 @@ namespace EtnaSoft.WPF.ViewModels
         /// </summary>
         void ClearFields()
         {
-            var properties = this.GetType().GetProperties();
-            foreach (var property in properties)
-            {
-                if (property.PropertyType == typeof(string))
-                {
-                    property.SetValue(this, string.Empty, null);
-                }
-            }
+            //var properties = this.GetType().GetProperties();
+            //foreach (var property in properties)
+            //{
+            //    if (property.PropertyType == typeof(string))
+            //    {
+            //        property.SetValue(this, string.Empty, null);
+            //    }
+            //}
         }
 
         bool PasswordNotEmptyAndMatch()
@@ -103,7 +101,18 @@ namespace EtnaSoft.WPF.ViewModels
                    && !string.IsNullOrWhiteSpace(RepeatPassword)
                    && Password == RepeatPassword;
         }
-        public bool PasswordsMatch => PasswordNotEmptyAndMatch();
+
+        private bool _passwordsMatch;
+
+        public bool PasswordsMatch
+        {
+            get { return _passwordsMatch; }
+            set
+            {
+                _passwordsMatch = value;
+                RaisePropertyChanged(nameof(PasswordsMatch));
+            }
+        }
 
 
         private string _firstName;
@@ -179,6 +188,16 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 _repeatPassword = value;
                 RaisePropertyChanged(nameof(RepeatPassword));
+                if (Password == RepeatPassword)
+                {
+                    PasswordsMatch = true;
+                    
+                }
+                else
+                {
+                    PasswordsMatch = false;
+                }
+                RaisePropertyChanged(nameof(PasswordsMatch));
             }
         }
 

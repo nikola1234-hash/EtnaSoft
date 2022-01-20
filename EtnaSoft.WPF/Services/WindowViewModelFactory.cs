@@ -14,13 +14,13 @@ namespace EtnaSoft.WPF.Services
         private readonly RoomsManagerViewModel _roomsManagerViewModel;
         private readonly StayTypesManagerViewModel _stayTypesManagerViewModel;
         private readonly UserManagerViewModel _userManagerViewModel;
-        
-        public WindowViewModelFactory(RoomsManagerViewModel roomsManagerViewModel, StayTypesManagerViewModel stayTypesManagerViewModel, UserManagerViewModel userManagerViewModel)
+        private readonly CreateUserViewModel _createUserViewModel;
+        public WindowViewModelFactory(RoomsManagerViewModel roomsManagerViewModel, StayTypesManagerViewModel stayTypesManagerViewModel, UserManagerViewModel userManagerViewModel, CreateUserViewModel createUserViewModel)
         {
             _roomsManagerViewModel = roomsManagerViewModel;
             _stayTypesManagerViewModel = stayTypesManagerViewModel;
             _userManagerViewModel = userManagerViewModel;
-            
+            _createUserViewModel = createUserViewModel;
         }
 
         private ThemedWindow CreateRoomsManagerWindow()
@@ -41,6 +41,14 @@ namespace EtnaSoft.WPF.Services
             return window;
         }
 
+        private ThemedWindow CreateUserCreateWindow()
+        {
+            var window = new CreateUserWindow()
+            {
+                DataContext = _createUserViewModel
+            };
+            return window;
+        }
         private ThemedWindow CreateUserManagerWindow()
         {
             var window = new UserManagerWindow()
@@ -60,6 +68,8 @@ namespace EtnaSoft.WPF.Services
                     return CreateStayTypesManagerWindow();
                 case WindowType.UserManager:
                     return CreateUserManagerWindow();
+                case WindowType.CreateUser:
+                    return CreateUserCreateWindow();
                 default:
                     throw new Exception("No ViewType");
             }

@@ -12,9 +12,10 @@
 
 		INSERT INTO dbo.[Users] ([Name], LastName, Username, PasswordHash, CreatedBy, DateCreated)
 		VALUES (@Name, @LastName, @Username,@PasswordHash, @CreatedBy, @DateCreated);
-		
+		DECLARE @id int;
+		SET @id = @@IDENTITY;
 		BEGIN
-			SELECT * From dbo.Users where Id = @@ROWCOUNT;
+			SELECT * From dbo.Users where Id = @id;
 		END
 
 	END

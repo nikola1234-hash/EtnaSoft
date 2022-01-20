@@ -40,7 +40,7 @@
         <interactivity:NotificationService
             ApplicationId="{Binding ApplicationId}"
             CustomNotificationPosition="BottomRight"
-            UseWin8NotificationsIfAvailable="True" />
+            UseWin8NotificationsIfAvailable="True" PredefinedNotificationTemplate="ShortHeaderAndTwoTextFields" />
 
 
     </interactivity:Interaction.Behaviors>

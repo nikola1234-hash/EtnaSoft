@@ -27,5 +27,11 @@ namespace EtnaSoft.Bll.Services
             var user = _unit.Users.GetAll().FirstOrDefault(s => s.Username == username);
             return user;
         }
+
+        public bool SetActiveOrInactiveUser(int id)
+        {
+            return _unit.Users.Delete(id);
+            
+        }
     }
 }

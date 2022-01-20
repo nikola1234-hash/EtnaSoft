@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DevExpress.Mvvm;
 using EtnaSoft.WPF.Commands;
+using EtnaSoft.WPF.Events;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.Window;
+using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -22,11 +24,14 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IContentViewStore _contentStore;
         private readonly IContentViewFactory _contentFactory;
         private readonly IWindowViewModelFactory _windowFactory;
-        public HomeViewModel(IContentViewStore contentStore, IContentViewFactory contentFactory, IWindowViewModelFactory windowFactory)
+        private readonly IEventAggregator _eventAggregator;
+        public bool IsManagerWindowOpen { get; set; }
+        public HomeViewModel(IContentViewStore contentStore, IContentViewFactory contentFactory, IWindowViewModelFactory windowFactory, IEventAggregator eventAggregator)
         {
             _contentStore = contentStore;
             _contentFactory = contentFactory;
             _windowFactory = windowFactory;
+            _eventAggregator = eventAggregator;
             _contentStore.ContentViewChanged += OnContentViewChanged;
             UserSettingCommand = new DelegateCommand(OpenUsersDialogWindow);
             CreateUserCommand = new DelegateCommand(CreateUser);
@@ -37,10 +42,21 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void OpenManager(WindowType windowType)
         {
+            if (IsManagerWindowOpen)
+            {
+                return;
+            }
             var window = _windowFactory.AddViewModel(windowType);
             window.Show();
+            _eventAggregator.GetEvent<UserManagerOpenEvent>().Subscribe(SetIsManagerWindowStateOpen);
+            IsManagerWindowOpen = window.IsActive;
         }
 
+        void SetIsManagerWindowStateOpen()
+        {
+            IsManagerWindowOpen = false;
+            _eventAggregator.GetEvent<UserManagerOpenEvent>().Unsubscribe(SetIsManagerWindowStateOpen);
+        }
         private void OnContentViewChanged()
         {
             RaisePropertiesChanged(nameof(ContentViewModel));
@@ -62,6 +78,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         public override void Dispose()
         {
+          
             base.Dispose();
         }
     }

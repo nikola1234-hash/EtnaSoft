@@ -7,5 +7,6 @@ namespace EtnaSoft.Bll.Services
     {
         IEnumerable<User> GetAllUsers();
         User GetUserByUsername(string username);
+        bool SetActiveOrInactiveUser(int id);
     }
 }

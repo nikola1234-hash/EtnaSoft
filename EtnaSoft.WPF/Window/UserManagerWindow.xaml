@@ -8,13 +8,25 @@
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
     xmlns:dxtm="http://schemas.devexpress.com/winfx/2008/xaml/treemap"
+    xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
+    xmlns:service="clr-namespace:EtnaSoft.WPF.Services"
     Title="Menadzer Korisnika"
     Width="1000"
     Height="800"
-    WindowStartupLocation="CenterScreen">
+    Icon="{dx:DXImage SvgImages/Business Objects/BO_Person.svg}"
+    ResizeMode="NoResize"
+    WindowKind="Normal"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
+    <dx:ThemedWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </dx:ThemedWindow.Resources>
     <dxmvvm:Interaction.Behaviors>
-        <dxmvvm:EventToCommand Command="{Binding OnLoadedCommand}" Event="Loaded" />
+        <dxmvvm:EventToCommand Command="{Binding OnLoadedCommand}" Event="FrameworkElement.Loaded" />
         <dxmvvm:CurrentWindowService />
+
+        <dxwui:WinUIDialogService />
+        <dxmvvm:NotificationService ApplicationId="UserManager" PredefinedNotificationTemplate="ShortHeaderAndTwoTextFields" />
 
     </dxmvvm:Interaction.Behaviors>
     <DockPanel LastChildFill="True">
@@ -33,10 +45,13 @@
                             LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}"
                             MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}" />
                         <dxb:BarButtonItem
+                            Command="{Binding NewUserCommand}"
+                            CommandParameter="{x:Static service:WindowType.CreateUser}"
                             Content="Novi Korisnik"
                             Glyph="{dx:DXImage SvgImages/Outlook Inspired/NewCustomer.svg}"
                             LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/NewCustomer.svg}"
                             MediumGlyph="{dx:DXImage SvgImages/Outlook Inspired/NewCustomer.svg}" />
+                        <dxb:BarButtonItem Content="BarButtonItem" Glyph="{dx:DXImage SvgImages/Business Objects/BO_Employee.svg}" />
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
@@ -47,7 +62,7 @@
         <ItemsControl ItemsSource="{Binding UserCollection}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid x:Name="uniGrid" />
+                    <UniformGrid Height="Auto" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
@@ -55,19 +70,33 @@
                     <Grid Margin="10" Background="LightGray">
                         <Button
                             Width="200"
-                            Height="200"
+                            Height="auto"
                             Margin="5"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Command="{Binding UserCommand}"
-                            CommandParameter="{Binding ElementName=username}">
+                            VerticalAlignment="Center">
                             <StackPanel Orientation="Vertical">
-                                <Image Source="{dx:DXImage SvgImages/Outlook Inspired/Customers.svg}" />
                                 <TextBlock
-                                    x:Name="username"
+                                    Width="auto"
+                                    Height="auto"
                                     HorizontalAlignment="Center"
+                                    FontSize="18"
                                     Text="{Binding Username}" />
+                                <Image Source="{Binding IsActive}" />
+
                             </StackPanel>
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding UserCommand}" Header="Izmeni" />
+                                    <MenuItem
+                                        Command="{Binding DeactivateAccountCommand}"
+                                        Header="Deaktiviraj Korisnika"
+                                        Visibility="{Binding IsDeactivateMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <MenuItem
+                                        Command="{Binding ActivateAccountCommand}"
+                                        Header="Aktiviraj Korisnika"
+                                        Visibility="{Binding IsActivateMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </ContextMenu>
+                            </Button.ContextMenu>
                         </Button>
                     </Grid>
                 </DataTemplate>

@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using DevExpress.Mvvm;
-using DevExpress.Xpf.Core.Native;
-using DevExpress.Xpf.LayoutControl;
-using System.Windows.Controls;
 using EtnaSoft.Bll.Services;
-using EtnaSoft.WPF.Infrastructure;
+using EtnaSoft.WPF.Events;
+using EtnaSoft.WPF.Services;
+using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
@@ -33,23 +27,76 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IUserManagerService _userManager;
         
         private ICurrentWindowService CurrentWindowService => this.GetService<ICurrentWindowService>();
+        private INotificationService NotificationService => GetService<INotificationService>();
+        private readonly ICreateUserViewFactory createUserViewFactory;
+        private readonly IEventAggregator _eventAggregator;
         public ICommand OnLoadedCommand { get; }
         public ICommand CloseCommand { get; }
-        public ICommand<object> RightMouseCommand { get; }
-        public UserManagerViewModel(IUserManagerService userManager)
+        public ICommand<WindowType> NewUserCommand { get; }
+
+        public static string ApplicationId
+        {
+            get
+            {
+                return "UserManager";
+            }
+        }
+
+        
+        public string ActiveUser
+        {
+            get
+            {
+                return "dx:DXImage SvgImages/Outlook Inspired/Customers.svg";
+            }
+        }
+        public bool IsCreateUserWindowOpen { get; set; }
+        public UserManagerViewModel(IUserManagerService userManager, ICreateUserViewFactory createUserViewFactory, IEventAggregator eventAggregator)
         {
             _userManager = userManager;
-            
+            this.createUserViewFactory = createUserViewFactory;
+            _eventAggregator = eventAggregator;
+            _eventAggregator.GetEvent<UserCreatedEvent>().Subscribe(OnUserCreation);
+            _eventAggregator.GetEvent<UserStatusChangedEvent>().Subscribe(RepopulateUsers);
+
             OnLoadedCommand = new DelegateCommand(OnLoad);
             CloseCommand = new DelegateCommand(OnClosing);
-            RightMouseCommand = new DelegateCommand(OnRightMouseDown);
+            NewUserCommand = new DelegateCommand<WindowType>(OpenNewUserWindow);
+
         }
 
-        private void OnRightMouseDown()
+        private void OnUserCreation()
+        {
+            RepopulateUsers();
+            ShowNotification("Uspesno dodat novi korisnik");
+        }
+
+        private void ShowNotification(string message)
         {
             
+            INotification notification =
+                NotificationService.CreatePredefinedNotification("Obavestenje", message,
+                    DateTime.Now.ToShortDateString());
+            notification.ShowAsync();
+        }
+        private void OpenNewUserWindow(WindowType windowType)
+        {
+            if (IsCreateUserWindowOpen)
+            {
+                return;
+            }
+       
+            var window = createUserViewFactory.CreateView(windowType);
+            window.Show();
+            IsCreateUserWindowOpen = window.IsActive;
+            _eventAggregator.GetEvent<UserCreationWindowCloseEvent>().Subscribe(SetCreateUserWindowClose);
         }
 
+        void SetCreateUserWindowClose()
+        {
+            IsCreateUserWindowOpen = false;
+            _eventAggregator.GetEvent<UserCreationWindowCloseEvent>().Unsubscribe(SetCreateUserWindowClose);
+        }
 
         private void CloseWindow()
         {
@@ -57,16 +104,28 @@ namespace EtnaSoft.WPF.ViewModels
         }
         private void OnClosing()
         {
+            _eventAggregator.GetEvent<UserManagerOpenEvent>().Publish();
             CloseWindow();
         }
-
+        void RepopulateUsers()
+        {
+            UserCollection?.Clear();
+            UserCollection = null;
+            UserCollection = new ObservableCollection<UserSubViewModel>();
+            var users = _userManager.GetAllUsers().ToList();
+            foreach (var user in users)
+            {
+                UserCollection.Add(new UserSubViewModel(_userManager, user, _eventAggregator));
+            }
+            
+        }
         private void OnLoad()
         {
             UserCollection = new ObservableCollection<UserSubViewModel>();
             var users = _userManager.GetAllUsers().ToList();
             foreach (var user in users)
             {
-                UserCollection.Add(new UserSubViewModel(_userManager, user));
+                UserCollection.Add(new UserSubViewModel(_userManager, user, _eventAggregator));
             }
 
             
@@ -77,6 +136,7 @@ namespace EtnaSoft.WPF.ViewModels
         {
             UserCollection.Clear();
             UserCollection = null;
+            _eventAggregator.GetEvent<UserCreatedEvent>().Unsubscribe(OnUserCreation);
             base.Dispose();
           
         }

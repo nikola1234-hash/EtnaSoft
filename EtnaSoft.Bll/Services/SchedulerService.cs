@@ -20,7 +20,7 @@ namespace EtnaSoft.Bll.Services
 
         public int BookingsComingToday()
         {
-            var reservation = _unit.Reservations.GetAll().Where(s => s.StartDate == DateTime.Now.Date);
+            var reservation = _unit.Reservations.GetAll().Where(s => s.StartDate == DateTime.Now.Date && s.IsCheckedIn == false);
             return reservation.Count();
         }
 
