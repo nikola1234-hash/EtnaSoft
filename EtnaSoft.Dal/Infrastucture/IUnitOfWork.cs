@@ -12,5 +12,6 @@ namespace EtnaSoft.Dal.Infrastucture
         IRepository<StayType> StayTypes { get; }
         IRepository<CustomLabel> Labels { get; }
         IRepository<DataGridGuest> DataGridGuests { get; }
+        IRepository<Promotion> Promotions { get; }
     }
 }

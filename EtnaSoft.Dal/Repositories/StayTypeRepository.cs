@@ -12,6 +12,15 @@ namespace EtnaSoft.Dal.Repositories
         private const string GetTypes = "SELECT * from dbo.StayTypes";
         private const string GetTypesById = "SELECT * from dbo.StayTypes WHERE Id = @Id";
 
+        private const string UpdateTypes =
+            "UPDATE dbo.StayTypes SET Title = @title, Price = @price, IsActive = @isActive, IsSpecialType = @isSpecialType Where Id = @id";
+
+        private const string CreateType =
+            @"INSERT INTO dbo.StayTypes (Title, Price, IsActive) Values (@Title, @Price, 1);
+               SELECT * FROM dbo.StayTypes where Id = @@IDENTITY";
+
+        private const string SetInactive = @"UPDATE dbo.StayTypes SET IsActive = @isActive";
+
         private readonly IGenericDbContext _context;
         //TODO: FINISH THIS REPOSITORY
         public StayTypeRepository(IGenericDbContext context)
@@ -34,17 +43,33 @@ namespace EtnaSoft.Dal.Repositories
 
         public bool Update(int id, StayType entity)
         {
-            throw new NotImplementedException();
+            var success = false;
+            var output = _context.SaveData(UpdateTypes,
+                new { title = entity.Title, price = entity.Price, isActive = entity.IsActive, id });
+            success = output > 0;
+            return success;
         }
 
         public StayType Create(StayType entity)
         {
-            throw new NotImplementedException();
+            var e = new
+            {
+                Title = entity.Title,
+                Price = entity.Price
+            };
+
+            var output = _context.LoadData<StayType, dynamic>(CreateType, e).FirstOrDefault();
+            return output;
         }
 
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            var stayType = GetById(id);
+            bool isActive = !stayType.IsActive;
+            var output = _context.SaveData(SetInactive, new { isActive });
+            success = output > 0;
+            return success;
         }
     }
 }

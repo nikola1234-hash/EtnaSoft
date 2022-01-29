@@ -6,5 +6,6 @@
         public string Title { get; set; }
         public decimal Price { get; set; }
         public bool IsActive { get; set; }
+        public bool IsSpecialType { get; set; }
     }
 }

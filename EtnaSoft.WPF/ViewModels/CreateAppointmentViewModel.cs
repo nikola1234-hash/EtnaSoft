@@ -14,6 +14,10 @@ using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
 {
+    public enum TipPromocije
+    {
+        Vaucer
+    }
     public class CreateAppointmentViewModel : AppointmentWindowBase
     {
         
@@ -21,6 +25,7 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IComboboxFacade _comboboxFacade;
         private readonly ICreateReservationService _createReservation;
         private readonly IAvailableRoomsService _availableRooms;
+        private readonly ISpecialTypeService _specialTypeService;
         public ICommand CreateReservationCommand { get; }
         public ICommand AbortReservationCreationCommand { get; }
         public ICommand SearchExistingGuestCommand { get; }
@@ -83,8 +88,18 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
-        
 
+        private string _numberOfPeopleLabel = "Broj osoba:";
+
+        public string NumberOfPeopleLabel
+        {
+            get { return _numberOfPeopleLabel; }
+            set
+            {
+                _numberOfPeopleLabel = value;
+                RaisePropertyChanged(nameof(NumberOfPeopleLabel));
+            }
+        }
         public decimal PricePerUnit
         {
             get { return  SelectedStayType?.Price ?? 0;  }
@@ -128,7 +143,13 @@ namespace EtnaSoft.WPF.ViewModels
             get { return _selectedStayType; }
             set
             {
+                
                 _selectedStayType = value;
+                if (SelectedStayType.IsSpecialType)
+                {
+                    _numberOfPeopleLabel = "Broj promocija:";
+                    RaisePropertiesChanged(nameof(NumberOfPeopleLabel));
+                }
                 TotalPriceChanged();
                 RaisePropertyChanged(nameof(SelectedStayType));
                 RaisePropertiesChanged(nameof(PricePerUnit));
@@ -262,7 +283,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation, IAvailableRoomsService availableRooms) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation, IAvailableRoomsService availableRooms, ISpecialTypeService specialTypeService) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
 
@@ -271,6 +292,7 @@ namespace EtnaSoft.WPF.ViewModels
             _comboboxFacade = comboboxFacade;
             _createReservation = createReservation;
             _availableRooms = availableRooms;
+            _specialTypeService = specialTypeService;
             AddGuestDialogViewModel = dialogServiceViewModel;
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
             SearchExistingGuestCommand = new DelegateCommand(SearchGuestDialogOpen);
@@ -298,6 +320,12 @@ namespace EtnaSoft.WPF.ViewModels
         }
         private void TotalPriceChanged()
         {
+            if (SelectedStayType.IsSpecialType)
+            {
+                PricePerKid = _specialTypeService.GetPricePerChild(SelectedStayType.Id);
+                TotalPrice = SelectedStayType.Price + PricePerKid;
+                return;
+            }
             if (NumberOfKids > 0)
             {
                 if (SelectedStayType != null)
@@ -478,10 +506,9 @@ namespace EtnaSoft.WPF.ViewModels
 
         public override void Dispose()
         {
-            base.Dispose();
             AddGuestDialogViewModel?.Dispose();
             SearchGuestDialogViewModel?.Dispose();
-
+            base.Dispose();
         }
     }
 }

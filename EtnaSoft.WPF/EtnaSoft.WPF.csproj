@@ -206,6 +206,7 @@
     <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
     <Compile Include="ViewModels\CreateGuestContentViewModel.cs" />
+    <Compile Include="ViewModels\CreateStayTypeDialogViewModel.cs" />
     <Compile Include="ViewModels\CreateUserViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
     <Compile Include="ViewModels\EditGuestViewModel.cs" />
@@ -231,6 +232,9 @@
     </Compile>
     <Compile Include="Views\CreateGuestContentView.xaml.cs">
       <DependentUpon>CreateGuestContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateStayTypeDialogView.xaml.cs">
+      <DependentUpon>CreateStayTypeDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomAppointmentWindow.xaml.cs">
       <DependentUpon>CustomAppointmentWindow.xaml</DependentUpon>
@@ -319,6 +323,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CreateGuestContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateStayTypeDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

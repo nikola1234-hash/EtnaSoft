@@ -18,8 +18,6 @@ namespace EtnaSoft.WPF.ViewModels
     {
         public ContentViewModel ContentViewModel => _contentStore.CurrentContentView;
         public ICommand NavigateContentCommand { get; }
-        public ICommand UserSettingCommand { get; }
-        public ICommand CreateUserCommand { get; }
         public ICommand<WindowType> OpenManagerWindowCommand { get; }
         private readonly IContentViewStore _contentStore;
         private readonly IContentViewFactory _contentFactory;
@@ -33,8 +31,7 @@ namespace EtnaSoft.WPF.ViewModels
             _windowFactory = windowFactory;
             _eventAggregator = eventAggregator;
             _contentStore.ContentViewChanged += OnContentViewChanged;
-            UserSettingCommand = new DelegateCommand(OpenUsersDialogWindow);
-            CreateUserCommand = new DelegateCommand(CreateUser);
+            
             OpenManagerWindowCommand = new DelegateCommand<WindowType>(OpenManager);
 
             NavigateContentCommand = new NavigateContentCommand(_contentFactory, _contentStore);
@@ -62,23 +59,10 @@ namespace EtnaSoft.WPF.ViewModels
             RaisePropertiesChanged(nameof(ContentViewModel));
         }
 
-        private void CreateUser()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OpenUsersDialogWindow()
-        {
-            //Open dialog window
-            //for Creating, deleting and editing users
-
-            throw new NotImplementedException();
-        }
-
 
         public override void Dispose()
         {
-          
+            _contentStore.ContentViewChanged -= OnContentViewChanged;
             base.Dispose();
         }
     }

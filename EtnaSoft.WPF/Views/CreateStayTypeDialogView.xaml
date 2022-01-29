@@ -1,0 +1,50 @@
+﻿<UserControl
+    x:Class="EtnaSoft.WPF.Views.CreateStayTypeDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
+    </UserControl.Resources>
+
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding OnLoadCommand}" Event="FrameworkElement.Loaded" />
+    </dxmvvm:Interaction.Behaviors>
+    <dxlc:LayoutControl>
+        <dxlc:LayoutGroup Orientation="Vertical">
+
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Naziv:">
+                    <dxe:TextEdit Text="{Binding Title}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="{Binding CenaLabel}">
+                    <dxe:TextEdit Text="{Binding Price}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Promocija:">
+                    <CheckBox IsChecked="{Binding IsSpecialType}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <dxlc:LayoutGroup>
+                <dxlc:LayoutItem Label="Cena za dete:">
+                    <dxe:TextEdit IsEnabled="{Binding IsSpecialType}" Text="{Binding ChildPrice}" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Label="Broj nocenja:">
+                    <dxe:TextEdit IsEnabled="{Binding IsSpecialType}" Text="{Binding StayDays}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+        </dxlc:LayoutGroup>
+
+    </dxlc:LayoutControl>
+</UserControl>

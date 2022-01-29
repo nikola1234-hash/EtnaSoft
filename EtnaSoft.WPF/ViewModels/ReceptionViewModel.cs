@@ -25,6 +25,7 @@ namespace EtnaSoft.WPF.ViewModels
         
         private readonly IEventAggregator _eventAggregator;
         private readonly IDetailsManager _detailsManager;
+        private readonly ISpecialTypeService _specialTypeService;
         private ObservableCollection<Room> _rooms;
 
         public ObservableCollection<Room> Rooms
@@ -94,7 +95,7 @@ namespace EtnaSoft.WPF.ViewModels
             IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager,
             SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel,
             IComboboxFacade comboboxFacade, ICreateReservationService createReservation,
-            IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate, IAuthenticator authenticator)
+            IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate, IAuthenticator authenticator, ISpecialTypeService specialTypeService)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -118,6 +119,7 @@ namespace EtnaSoft.WPF.ViewModels
             _availableRooms = availableRooms;
             _dragUpdate = dragUpdate;
             _authenticator = authenticator;
+            _specialTypeService = specialTypeService;
 
             _schedulerService = schedulerService;
         }
@@ -370,7 +372,7 @@ namespace EtnaSoft.WPF.ViewModels
                 args.Window = new CreateAppointmentWindow
                 {
                     DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator,
-                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade, _createReservation, _availableRooms)
+                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade, _createReservation, _availableRooms, _specialTypeService)
                 };
             }
             else
