@@ -29,6 +29,10 @@ namespace EtnaSoft.WPF.ViewModels
         {
             UICommand result = DialogService.ShowDialog(createStayTypeDialogViewModel.UICommands,
                 "Kreiraj tip smestaja", viewModel: createStayTypeDialogViewModel);
+            if ((MessageResult)result.Id == MessageResult.OK)
+            {
+                return;
+            }
 
         }
 

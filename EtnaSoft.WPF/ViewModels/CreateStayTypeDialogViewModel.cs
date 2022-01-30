@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DevExpress.Mvvm;
+using DevExpress.Mvvm.POCO;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Dto;
 using EtnaSoft.Bll.Services;
@@ -34,6 +35,8 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 _title = value;
                 RaisePropertyChanged(nameof(Title));
+                CanExecute();
+
             }
         }
 
@@ -45,6 +48,8 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 _price = value;
                 RaisePropertyChanged(nameof(Price));
+                CanExecute();
+
             }
         }
 
@@ -198,7 +203,7 @@ namespace EtnaSoft.WPF.ViewModels
         private bool CanExecute()
         {
             //Logic for can Execute for now is true
-            return true;
+            return !string.IsNullOrEmpty(Title) && Price > 0;
         }
     }
 }

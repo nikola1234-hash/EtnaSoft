@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Dal;
@@ -34,16 +35,36 @@ namespace EtnaSoft.Bll.Services
             return reservation.IsCheckedIn;
         }
 
-        public bool CheckIn(int id)
+        public string CheckIn(int id)
         {
-            bool success = false;
+            string success = "";
             Reservation resevation = _unit.Reservations.GetById(id);
+            RoomReservation roomReservation = _unit.RoomReservations.GetById(resevation.RoomReservationId);
+            var roomStatuses = _unit.RoomStatus.GetAll().FirstOrDefault(s => s.RoomReservationId == resevation.RoomReservationId);
+            RoomStatus roomStatus = new RoomStatus();
+            RoomStatus newStatus = new RoomStatus();
+            if (roomStatuses != null)
+            {
+                roomStatus.DateUsed = resevation.StartDate;
+                roomStatus.RoomId = roomReservation.RoomId;
+                newStatus = _unit.RoomStatus.Create(roomStatus);
+
+            }
+
+            if (roomStatus.IsDirty)
+            {
+                return "Soba jos nije sredjena";
+            }
             if (resevation != null)
             {
                 resevation.IsCheckedIn = true;
                 _unit.Reservations.Update(id, resevation);
                 var updated = _unit.Reservations.GetById(id);
-                success = updated.IsCheckedIn;
+                var update = updated.IsCheckedIn;
+                if (update)
+                {
+                    success = "Uspesno prijavljena soba!";
+                }
             }
 
             return success;

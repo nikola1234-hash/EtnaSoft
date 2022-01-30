@@ -13,5 +13,6 @@ namespace EtnaSoft.Dal.Infrastucture
         IRepository<CustomLabel> Labels { get; }
         IRepository<DataGridGuest> DataGridGuests { get; }
         IRepository<Promotion> Promotions { get; }
+        IRepository<RoomStatus> RoomStatus { get; }
     }
 }

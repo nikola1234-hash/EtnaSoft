@@ -8,7 +8,7 @@ namespace EtnaSoft.Bll.Services
     {
         bool UndoCheckIn(int id);
         bool CheckInStatus(int id);
-        bool CheckIn(int id);
+        string CheckIn(int id);
         bool Cancel(int id);
     }
 }

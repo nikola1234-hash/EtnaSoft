@@ -197,15 +197,18 @@ namespace EtnaSoft.WPF.ViewModels
                 
                 int id = (int)booking.Id;
                 var isCheckedIn = _bookingService.CheckInStatus(id);
+                string message = "";
                 if (!isCheckedIn)
                 {
-                    _bookingService.CheckIn(id);
+                    message = _bookingService.CheckIn(id);
                     PopulateBookings((DateTime)booking.Start, (DateTime)booking.Start.AddDays(7));
                 }
                 else
                 {
-                    MessageBox.Show("Rezervacija je vec prijavljena");
+                    message = "Rezervacija je vec prijavljena";
                 }
+
+                MessageBox.Show(message);
             }
         }
 

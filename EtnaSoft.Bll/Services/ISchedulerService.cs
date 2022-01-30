@@ -9,7 +9,8 @@ namespace EtnaSoft.Bll.Services
     public enum ReservationStatusType : int
     {
         CheckedIn = 1,
-        Coming = 2
+        Coming = 2,
+        IsReady = 3
     }
     public interface ISchedulerService
     {

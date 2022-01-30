@@ -421,10 +421,11 @@ namespace EtnaSoft.WPF.ViewModels
         {
             int id;
             bool success = int.TryParse(_appointmentItem.Id.ToString(), out id);
+            string message = string.Empty;
             if (success)
             {
-                IsCheckedIn = _bookingService.CheckIn(id);
-                MessageBox.Show("Uspesno prijavljen gost");
+                message = _bookingService.CheckIn(id);
+                MessageBox.Show(message);
                 OnChangeReloadAppointments();
                 CloseWindow();
             }

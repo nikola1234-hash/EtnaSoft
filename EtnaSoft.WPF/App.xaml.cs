@@ -99,6 +99,8 @@ namespace EtnaSoft.WPF
             service.AddSingleton<IRepository<CustomLabel>, LabelRepository>();
             service.AddSingleton<IRepository<DataGridGuest>, GuestDataGridRepository>();
             service.AddSingleton<IRepository<Promotion>, PromotionRepository>();
+            service.AddSingleton<IRepository<RoomStatus>, RoomStatusRepository>();
+
             service.AddSingleton<IUpdateReservationDateDragService, UpdateReservationDateDragService>();
             service.AddSingleton<IUnitOfWork, UnitOfWork>();
             service.AddSingleton<IGenericDbContext, GenericDbContext>();
