@@ -14,6 +14,7 @@ namespace EtnaSoft.Bll.Services
 
         void CreateStayType(object entity);
         bool UpdateStayType(int id, object entity);
+        StayType GetStayTypeById(int id);
         List<StayType> GetAllStayTypes();
     }
 }

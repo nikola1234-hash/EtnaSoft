@@ -42,6 +42,22 @@ namespace EtnaSoft.Bll.Services
             var output = _unit.Promotions.GetAll().FirstOrDefault(s => s.StayTypeId == stayTypeId);
             return output.ChildPrice;
         }
+
+        public Promotion GetPromotionById(int id)
+        {
+            return _unit.Promotions.GetById(id);
+        }
+
+        public bool UpdatePromotion(Promotion promotion)
+        {
+            return _unit.Promotions.Update(promotion.Id, promotion);
+        }
+
+        public Promotion GetPromotionByStayTypeId(int stayTypeId)
+        {
+            var promotion = _unit.Promotions.GetAll().FirstOrDefault(s => s.StayTypeId == stayTypeId);
+            return promotion;
+        }
     }
 
    

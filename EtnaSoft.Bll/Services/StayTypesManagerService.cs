@@ -63,6 +63,11 @@ namespace EtnaSoft.Bll.Services
             return output;
         }
 
+        public StayType GetStayTypeById(int id)
+        {
+            return _unitOfWork.StayTypes.GetById(id);
+        }
+
         public List<StayType> GetAllStayTypes()
         {
             return _unitOfWork.StayTypes.GetAll().ToList();

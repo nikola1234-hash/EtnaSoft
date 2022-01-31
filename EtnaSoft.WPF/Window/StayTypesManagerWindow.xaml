@@ -90,7 +90,10 @@
                             </StackPanel>
                             <Button.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Command="{Binding EditCommand}" Header="Izmeni" />
+                                    <MenuItem
+                                        Command="{Binding EditCommand}"
+                                        CommandParameter="{Binding StayType.Id}"
+                                        Header="Izmeni" />
                                     <MenuItem
                                         Command="{Binding DeactivateCommand}"
                                         Header="Deaktiviraj"

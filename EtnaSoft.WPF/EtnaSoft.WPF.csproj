@@ -202,6 +202,7 @@
     <Compile Include="Stores\Renavigate.cs" />
     <Compile Include="ViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\AppointmentWindowBase.cs" />
+    <Compile Include="ViewModels\BaseStayTypeDialogViewModel.cs" />
     <Compile Include="ViewModels\Base\EditGuestViewModelBase.cs" />
     <Compile Include="ViewModels\ChangePasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\ContentViewModel.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="ViewModels\CreateUserViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
     <Compile Include="ViewModels\EditGuestViewModel.cs" />
+    <Compile Include="ViewModels\EditStayTypeDialogViewModel.cs" />
     <Compile Include="ViewModels\EtnaBaseViewModel.cs" />
     <Compile Include="ViewModels\GuestContentViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />

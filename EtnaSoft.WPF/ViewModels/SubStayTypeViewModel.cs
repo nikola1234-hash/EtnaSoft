@@ -62,17 +62,18 @@ namespace EtnaSoft.WPF.ViewModels
             get
             {
                 SolidColorBrush color;
-                if (StayType.IsSpecialType)
+                if (StayType.IsSpecialType && !StayType.IsActive)
                 {
-                    color = new SolidColorBrush(Colors.Coral);
+                    color = new SolidColorBrush(Colors.Gray);
                 }
+               
                 else if (!StayType.IsActive)
                 {
                     color =  new SolidColorBrush(Colors.Gray);
                 }
-                else if (StayType.IsSpecialType && !StayType.IsActive)
+                else if (StayType.IsSpecialType)
                 {
-                    color = new SolidColorBrush(Colors.Gray);
+                    color = new SolidColorBrush(Colors.Coral);
                 }
                 else
                 {
@@ -86,6 +87,9 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand DeactivateCommand { get; }
         private readonly IStayTypesManagerService _stayTypesManager;
         private readonly IEventAggregator _eventAggregator;
+
+        //TODO: COntext menu edit command 
+        public ICommand EditCommand { get; }
         public SubStayTypeViewModel(StayType stayType, IStayTypesManagerService stayTypesManager, IEventAggregator eventAggregator)
         {
             StayType = stayType;
@@ -94,7 +98,6 @@ namespace EtnaSoft.WPF.ViewModels
 
             ActivateCommand = new DelegateCommand(ActivateOrDeactivateType);
             DeactivateCommand = new DelegateCommand(ActivateOrDeactivateType);
-
         }
 
         private void ActivateOrDeactivateType()

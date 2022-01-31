@@ -125,6 +125,7 @@ namespace EtnaSoft.WPF
             service.AddTransient<HomeViewModel>();
             service.AddTransient<MainWindow>();
             service.AddTransient<CreateStayTypeDialogViewModel>();
+            service.AddTransient<EditStayTypeDialogViewModel>();
 
             //service.AddTransient<CreateUserWindow>();
             //service.AddTransient<RoomsManagerWindow>();

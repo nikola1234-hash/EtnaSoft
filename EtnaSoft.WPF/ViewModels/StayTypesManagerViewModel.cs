@@ -23,7 +23,9 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand LoadCommand { get; }
         public ICommand CloseWindowCommand { get; }
         public ICommand NewStayTypeCommand { get; }
-        private readonly CreateStayTypeDialogViewModel createStayTypeDialogViewModel;
+        public ICommand<int> EditCommand { get; }
+        private readonly CreateStayTypeDialogViewModel _createStayTypeDialogViewModel;
+        private readonly EditStayTypeDialogViewModel _editStayTypeDialogViewModel;
 
         private ObservableCollection<SubStayTypeViewModel> _stayTypesCollection;
 
@@ -54,15 +56,17 @@ namespace EtnaSoft.WPF.ViewModels
                 StayTypesCollection.Add(new SubStayTypeViewModel(type, _stayTypesManager, _eventAggregator));
             }
         }
-        public StayTypesManagerViewModel(IEventAggregator eventAggregator, IStayTypesManagerService stayTypesManager, CreateStayTypeDialogViewModel createStayTypeDialogViewModel)
+        public StayTypesManagerViewModel(IEventAggregator eventAggregator, IStayTypesManagerService stayTypesManager, CreateStayTypeDialogViewModel createStayTypeDialogViewModel, EditStayTypeDialogViewModel editStayTypeDialogViewModel)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<StayTypeStatusChangedEvent>().Subscribe(LoadStayTypes);
             _stayTypesManager = stayTypesManager;
-            this.createStayTypeDialogViewModel = createStayTypeDialogViewModel;
+            _createStayTypeDialogViewModel = createStayTypeDialogViewModel;
+            _editStayTypeDialogViewModel = editStayTypeDialogViewModel;
             CloseWindowCommand = new DelegateCommand(OnWindowClosing);
             NewStayTypeCommand = new DelegateCommand(OpenNewDialog);
             LoadCommand = new DelegateCommand(OnLoad);
+            EditCommand = new DelegateCommand<int>(OpenEditDialog);
         }
 
         private void OnLoad()
@@ -70,15 +74,29 @@ namespace EtnaSoft.WPF.ViewModels
             LoadStayTypes();
         }
 
-        //TODO: Finish the metod
-        private void OpenNewDialog()
+
+
+
+        private void OpenEditDialog(int id)
         {
-            UICommand result = DialogService.ShowDialog(createStayTypeDialogViewModel.UICommands,
-                "Kreiraj tip smestaja", viewModel: createStayTypeDialogViewModel);
+            _editStayTypeDialogViewModel.Id = id;
+            UICommand result = DialogService.ShowDialog(_editStayTypeDialogViewModel.Commands, "Izmeni zapis",
+                _editStayTypeDialogViewModel);
             if ((MessageResult)result.Id == MessageResult.OK)
             {
                 LoadStayTypes();
             }
+            _editStayTypeDialogViewModel.Dispose();
+        }
+        private void OpenNewDialog()
+        {
+            UICommand result = DialogService.ShowDialog(_createStayTypeDialogViewModel.UICommands,
+                "Kreiraj tip smestaja", viewModel: _createStayTypeDialogViewModel);
+            if ((MessageResult)result.Id == MessageResult.OK)
+            {
+                LoadStayTypes();
+            }
+            _createStayTypeDialogViewModel.Dispose();
 
         }
 

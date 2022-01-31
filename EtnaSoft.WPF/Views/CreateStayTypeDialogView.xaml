@@ -19,7 +19,7 @@
     </UserControl.Resources>
 
     <dxmvvm:Interaction.Behaviors>
-        <dxmvvm:EventToCommand Command="{Binding OnLoadCommand}" Event="FrameworkElement.Loaded" />
+        <dxmvvm:EventToCommand Command="{Binding OnLoadCommand}" Event="Loaded" />
     </dxmvvm:Interaction.Behaviors>
     <dxlc:LayoutControl>
         <dxlc:LayoutGroup Orientation="Vertical">
