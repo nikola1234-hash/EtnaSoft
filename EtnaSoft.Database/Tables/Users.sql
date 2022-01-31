@@ -12,3 +12,7 @@
 	[ModifiedBy] NVARCHAR(25) NULL
 
 )
+GO
+CREATE INDEX IX_UsersId ON dbo.Users (Id)
+GO
+CREATE INDEX IX_UsersName ON dbo.Users(Username)

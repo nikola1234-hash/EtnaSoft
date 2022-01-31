@@ -13,4 +13,15 @@
 	[ModifiedBy] nvarchar(25) NULL,
 	[DateModified] date NULL
     CONSTRAINT [FK_Reservations_ToRoomReservation] FOREIGN KEY (RoomReservationId) REFERENCES RoomReservations(Id)
+
 )
+GO
+CREATE INDEX [IX_ReservationId] ON [dbo].[Reservations] (Id)
+GO
+CREATE INDEX [IX_RoomReservationId] ON [dbo].[Reservations] (RoomReservationId)
+GO 
+CREATE INDEX [IX_StartDate] ON dbo.Reservations (StartDate)
+GO 
+CREATE INDEX [IX_EndDate] ON dbo.Reservations (EndDate)
+GO
+Create INDEX [IX_IsCheckedId] ON dbo.Reservations (IsCheckedIn)

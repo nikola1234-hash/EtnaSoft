@@ -12,3 +12,5 @@
     CONSTRAINT [FK_RoomReservations_ToStayTypes] FOREIGN KEY (StayTypeId) REFERENCES StayTypes(Id), 
     CONSTRAINT [FK_RoomReservations_ToGuests] FOREIGN KEY (GuestId) REFERENCES Guests(Id)
 )
+GO
+CREATE INDEX IX_RoomReservationId ON [dbo].[RoomReservations](Id)

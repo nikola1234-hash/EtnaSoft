@@ -166,6 +166,7 @@
     <Compile Include="Commands\NavigateContentCommand.cs" />
     <Compile Include="Controls\EtnaDataGrid.cs" />
     <Compile Include="Events\AppointmentViewEvent.cs" />
+    <Compile Include="Events\StayTypeStatusChangedEvent.cs" />
     <Compile Include="Events\UserCreatedEvent.cs" />
     <Compile Include="Events\UserCreationWindowCloseEvent.cs" />
     <Compile Include="Events\WindowManagerOpenEvent.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="ViewModels\SearchGuestDialogViewModel.cs" />
     <Compile Include="ViewModels\StayTypesManagerViewModel.cs" />
     <Compile Include="ViewModels\SubRoomViewModel.cs" />
+    <Compile Include="ViewModels\SubStayTypeViewModel.cs" />
     <Compile Include="ViewModels\UserContentViewModel.cs" />
     <Compile Include="ViewModels\UserDetailsViewModel.cs" />
     <Compile Include="ViewModels\UserManagerViewModel.cs" />
@@ -495,6 +497,9 @@
     <Content Include="DatabaseFiles\Database.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Icons\staytype.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Icons\hotelbed.png" />
     <Resource Include="Icons\bed.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

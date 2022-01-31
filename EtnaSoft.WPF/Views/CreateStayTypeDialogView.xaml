@@ -26,10 +26,10 @@
 
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem Label="Naziv:">
-                    <dxe:TextEdit Text="{Binding Title}" />
+                    <dxe:TextEdit MinWidth="250" Text="{Binding Title}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="{Binding CenaLabel}">
-                    <dxe:TextEdit Text="{Binding Price}" />
+                    <dxe:TextEdit MinWidth="250" Text="{Binding Price}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Promocija:">
                     <CheckBox IsChecked="{Binding IsSpecialType}" />
@@ -37,10 +37,16 @@
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup>
                 <dxlc:LayoutItem Label="Cena za dete:">
-                    <dxe:TextEdit IsEnabled="{Binding IsSpecialType}" Text="{Binding ChildPrice}" />
+                    <dxe:TextEdit
+                        MinWidth="250"
+                        IsEnabled="{Binding IsSpecialType}"
+                        Text="{Binding ChildPrice}" />
                 </dxlc:LayoutItem>
                 <dxlc:LayoutItem Label="Broj nocenja:">
-                    <dxe:TextEdit IsEnabled="{Binding IsSpecialType}" Text="{Binding StayDays}" />
+                    <dxe:TextEdit
+                        MinWidth="250"
+                        IsEnabled="{Binding IsSpecialType}"
+                        Text="{Binding StayDays}" />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 

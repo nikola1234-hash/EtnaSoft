@@ -31,7 +31,8 @@ namespace EtnaSoft.Bll.Services.Facade
 
         public ObservableCollection<StayType> FillStayTypeCombobox()
         {
-            var stayTypesEnum = _scheduler.LoadStayTypes();
+            var stayTypesEnum = _scheduler.LoadStayTypes().Where(s=>s.IsActive);
+            
             var stayTypes = new ObservableCollection<StayType>(stayTypesEnum);
             return stayTypes;
         }

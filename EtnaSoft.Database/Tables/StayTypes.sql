@@ -6,3 +6,5 @@
     [IsActive] BIT NOT NULL DEFAULT 1,
     [IsSpecialType] BIT NOT NULL DEFAULT 0
 )
+GO
+CREATE INDEX IX_StayTypesId ON dbo.StayTypes (Id)

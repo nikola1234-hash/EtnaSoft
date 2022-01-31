@@ -15,3 +15,15 @@
     [Address] NVARCHAR(250) NULL
 
 )
+
+GO
+
+CREATE INDEX [IX_Guests_ID] ON [dbo].[Guests] (Id)
+
+GO
+
+CREATE INDEX [IX_Guests_FName] ON [dbo].[Guests] (FirstName)
+
+GO
+
+CREATE INDEX [IX_Guests_LName] ON [dbo].[Guests] (LastName)

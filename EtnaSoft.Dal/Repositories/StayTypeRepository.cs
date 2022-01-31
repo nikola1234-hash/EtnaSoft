@@ -16,10 +16,10 @@ namespace EtnaSoft.Dal.Repositories
             "UPDATE dbo.StayTypes SET Title = @title, Price = @price, IsActive = @isActive, IsSpecialType = @isSpecialType Where Id = @id";
 
         private const string CreateType =
-            @"INSERT INTO dbo.StayTypes (Title, Price, IsActive) Values (@Title, @Price, 1);
+            @"INSERT INTO dbo.StayTypes (Title, Price, IsActive, IsSpecialType) Values (@Title, @Price, 1, @isSpecialType);
                SELECT * FROM dbo.StayTypes where Id = @@IDENTITY";
 
-        private const string SetInactive = @"UPDATE dbo.StayTypes SET IsActive = @isActive";
+        private const string SetInactive = @"UPDATE dbo.StayTypes SET IsActive = @isActive WHERE Id = @Id";
 
         private readonly IGenericDbContext _context;
         //TODO: FINISH THIS REPOSITORY
@@ -45,7 +45,7 @@ namespace EtnaSoft.Dal.Repositories
         {
             var success = false;
             var output = _context.SaveData(UpdateTypes,
-                new { title = entity.Title, price = entity.Price, isActive = entity.IsActive, id });
+                new { title = entity.Title, price = entity.Price, isActive = entity.IsActive, isSpecialType = entity.IsSpecialType, id });
             success = output > 0;
             return success;
         }
@@ -55,7 +55,8 @@ namespace EtnaSoft.Dal.Repositories
             var e = new
             {
                 Title = entity.Title,
-                Price = entity.Price
+                Price = entity.Price,
+                IsSpecialType = entity.IsSpecialType
             };
 
             var output = _context.LoadData<StayType, dynamic>(CreateType, e).FirstOrDefault();
@@ -67,7 +68,7 @@ namespace EtnaSoft.Dal.Repositories
             bool success = false;
             var stayType = GetById(id);
             bool isActive = !stayType.IsActive;
-            var output = _context.SaveData(SetInactive, new { isActive });
+            var output = _context.SaveData(SetInactive, new { isActive, id });
             success = output > 0;
             return success;
         }
