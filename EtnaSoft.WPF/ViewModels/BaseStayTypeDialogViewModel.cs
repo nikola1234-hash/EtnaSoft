@@ -115,5 +115,14 @@ namespace EtnaSoft.WPF.ViewModels
         public abstract bool CanExecute();
         public abstract void Execute();
         public abstract void Abort(CancelEventArgs obj);
+
+        public void ClearFields()
+        {
+            Title = string.Empty;
+            Price = 0M;
+            ChildPrice = 0M;
+            StayDays = 0;
+            IsSpecialType = false;
+        }
     }
 }

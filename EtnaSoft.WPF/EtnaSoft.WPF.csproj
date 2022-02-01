@@ -166,6 +166,8 @@
     <Compile Include="Commands\NavigateContentCommand.cs" />
     <Compile Include="Controls\EtnaDataGrid.cs" />
     <Compile Include="Events\AppointmentViewEvent.cs" />
+    <Compile Include="Events\RoomDataChangeEvent.cs" />
+    <Compile Include="Events\RoomEditOpenDialogEvent.cs" />
     <Compile Include="Events\StayTypeStatusChangedEvent.cs" />
     <Compile Include="Events\UserCreatedEvent.cs" />
     <Compile Include="Events\UserCreationWindowCloseEvent.cs" />
@@ -202,17 +204,21 @@
     <Compile Include="Stores\Renavigate.cs" />
     <Compile Include="ViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\AppointmentWindowBase.cs" />
+    <Compile Include="ViewModels\BaseRoomEditViewModel.cs" />
     <Compile Include="ViewModels\BaseStayTypeDialogViewModel.cs" />
     <Compile Include="ViewModels\Base\EditGuestViewModelBase.cs" />
     <Compile Include="ViewModels\ChangePasswordDialogViewModel.cs" />
     <Compile Include="ViewModels\ContentViewModel.cs" />
     <Compile Include="ViewModels\CreateAppointmentViewModel.cs" />
     <Compile Include="ViewModels\CreateGuestContentViewModel.cs" />
+    <Compile Include="ViewModels\CreateRoomViewModel.cs" />
     <Compile Include="ViewModels\CreateStayTypeDialogViewModel.cs" />
     <Compile Include="ViewModels\CreateUserViewModel.cs" />
     <Compile Include="ViewModels\DialogServiceViewModel.cs" />
     <Compile Include="ViewModels\EditGuestViewModel.cs" />
+    <Compile Include="ViewModels\EditRoomDialogViewModel.cs" />
     <Compile Include="ViewModels\EditStayTypeDialogViewModel.cs" />
+    <Compile Include="ViewModels\EditStayTypeViewModel.cs" />
     <Compile Include="ViewModels\EtnaBaseViewModel.cs" />
     <Compile Include="ViewModels\GuestContentViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
@@ -236,6 +242,9 @@
     </Compile>
     <Compile Include="Views\CreateGuestContentView.xaml.cs">
       <DependentUpon>CreateGuestContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateRoomView.xaml.cs">
+      <DependentUpon>CreateRoomView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CreateStayTypeDialogView.xaml.cs">
       <DependentUpon>CreateStayTypeDialogView.xaml</DependentUpon>
@@ -269,6 +278,9 @@
     </Compile>
     <Compile Include="Window\EditGuestWindow.xaml.cs">
       <DependentUpon>EditGuestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\EditStayTypeWindow.xaml.cs">
+      <DependentUpon>EditStayTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Window\RoomsManagerWindow.xaml.cs">
       <DependentUpon>RoomsManagerWindow.xaml</DependentUpon>
@@ -330,6 +342,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CreateRoomView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CreateStayTypeDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -371,6 +387,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\EditGuestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\EditStayTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

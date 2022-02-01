@@ -7,6 +7,7 @@ using DevExpress.Mvvm;
 using ErtnaSoft.Bo.Entities;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.WPF.Events;
+using EtnaSoft.WPF.Window;
 using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
@@ -87,23 +88,43 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand DeactivateCommand { get; }
         private readonly IStayTypesManagerService _stayTypesManager;
         private readonly IEventAggregator _eventAggregator;
+        private readonly ISpecialTypeService _specialTypeService;
 
         //TODO: COntext menu edit command 
         public ICommand EditCommand { get; }
-        public SubStayTypeViewModel(StayType stayType, IStayTypesManagerService stayTypesManager, IEventAggregator eventAggregator)
+        public SubStayTypeViewModel(StayType stayType, IStayTypesManagerService stayTypesManager, IEventAggregator eventAggregator, ISpecialTypeService specialTypeService)
         {
             StayType = stayType;
             _stayTypesManager = stayTypesManager;
             _eventAggregator = eventAggregator;
-
+            _specialTypeService = specialTypeService;
+            EditCommand = new DelegateCommand(OpenEditWindow);
             ActivateCommand = new DelegateCommand(ActivateOrDeactivateType);
             DeactivateCommand = new DelegateCommand(ActivateOrDeactivateType);
         }
 
+        private void OpenEditWindow()
+        {
+            var viewModel = new EditStayTypeViewModel(StayType, _specialTypeService, _stayTypesManager);
+            var window = new EditStayTypeWindow
+            {
+                DataContext = viewModel
+            };
+            window.ShowDialog();
+            OnDataChange();
+            viewModel.Dispose();
+            
+            
+        }
+
+        void OnDataChange()
+        {
+            _eventAggregator.GetEvent<StayTypeStatusChangedEvent>().Publish();
+        }
         private void ActivateOrDeactivateType()
         {
             _stayTypesManager.DeactiveTypeOrActivate(StayType.Id);
-            _eventAggregator.GetEvent<StayTypeStatusChangedEvent>().Publish();
+            OnDataChange();
         }
     }
 }

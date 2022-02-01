@@ -23,10 +23,10 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand LoadCommand { get; }
         public ICommand CloseWindowCommand { get; }
         public ICommand NewStayTypeCommand { get; }
-        public ICommand<int> EditCommand { get; }
+        
         private readonly CreateStayTypeDialogViewModel _createStayTypeDialogViewModel;
-        private readonly EditStayTypeDialogViewModel _editStayTypeDialogViewModel;
-
+        
+        private readonly ISpecialTypeService _specialTypeService;
         private ObservableCollection<SubStayTypeViewModel> _stayTypesCollection;
 
         public ObservableCollection<SubStayTypeViewModel> StayTypesCollection
@@ -53,20 +53,21 @@ namespace EtnaSoft.WPF.ViewModels
             var types = _stayTypesManager.GetAllStayTypes();
             foreach (var type in types)
             {
-                StayTypesCollection.Add(new SubStayTypeViewModel(type, _stayTypesManager, _eventAggregator));
+                StayTypesCollection.Add(new SubStayTypeViewModel(type, _stayTypesManager, _eventAggregator, _specialTypeService));
             }
         }
-        public StayTypesManagerViewModel(IEventAggregator eventAggregator, IStayTypesManagerService stayTypesManager, CreateStayTypeDialogViewModel createStayTypeDialogViewModel, EditStayTypeDialogViewModel editStayTypeDialogViewModel)
+        public StayTypesManagerViewModel(IEventAggregator eventAggregator, IStayTypesManagerService stayTypesManager, CreateStayTypeDialogViewModel createStayTypeDialogViewModel, ISpecialTypeService specialTypeService)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.GetEvent<StayTypeStatusChangedEvent>().Subscribe(LoadStayTypes);
             _stayTypesManager = stayTypesManager;
             _createStayTypeDialogViewModel = createStayTypeDialogViewModel;
-            _editStayTypeDialogViewModel = editStayTypeDialogViewModel;
+            
+            _specialTypeService = specialTypeService;
             CloseWindowCommand = new DelegateCommand(OnWindowClosing);
             NewStayTypeCommand = new DelegateCommand(OpenNewDialog);
             LoadCommand = new DelegateCommand(OnLoad);
-            EditCommand = new DelegateCommand<int>(OpenEditDialog);
+            
         }
 
         private void OnLoad()
@@ -74,20 +75,6 @@ namespace EtnaSoft.WPF.ViewModels
             LoadStayTypes();
         }
 
-
-
-
-        private void OpenEditDialog(int id)
-        {
-            _editStayTypeDialogViewModel.Id = id;
-            UICommand result = DialogService.ShowDialog(_editStayTypeDialogViewModel.Commands, "Izmeni zapis",
-                _editStayTypeDialogViewModel);
-            if ((MessageResult)result.Id == MessageResult.OK)
-            {
-                LoadStayTypes();
-            }
-            _editStayTypeDialogViewModel.Dispose();
-        }
         private void OpenNewDialog()
         {
             UICommand result = DialogService.ShowDialog(_createStayTypeDialogViewModel.UICommands,

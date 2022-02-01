@@ -6,6 +6,7 @@
     xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+    xmlns:views="clr-namespace:EtnaSoft.WPF.Views"
     Title="RoomsManagerWindow"
     Width="1000"
     Height="800"
@@ -18,6 +19,18 @@
     <dxmvvm:Interaction.Behaviors>
         <dxmvvm:EventToCommand Command="{Binding OnLoadCommand}" Event="Loaded" />
         <dxmvvm:CurrentWindowService />
+        <dx:DialogService x:Name="createNewRoom" DialogWindowStartupLocation="CenterOwner">
+            <dx:DialogService.ViewTemplate>
+                <DataTemplate>
+                    <views:CreateRoomView />
+                </DataTemplate>
+            </dx:DialogService.ViewTemplate>
+            <dx:DialogService.DialogStyle>
+                <Style TargetType="{x:Type dx:DXDialogWindow}">
+                    <Setter Property="SizeToContent" Value="WidthAndHeight" />
+                </Style>
+            </dx:DialogService.DialogStyle>
+        </dx:DialogService>
     </dxmvvm:Interaction.Behaviors>
     <DockPanel LastChildFill="True">
         <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
@@ -30,6 +43,14 @@
                             Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}"
                             LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}"
                             MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}" />
+                    </dxr:RibbonPageGroup>
+                    <dxr:RibbonPageGroup Caption="{x:Null}">
+                        <dxb:BarButtonItem
+                            Command="{Binding CreateRoomCommand}"
+                            Content="Nova soba"
+                            Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+                            LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+                            MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}" />
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
@@ -53,15 +74,8 @@
                             VerticalAlignment="Center">
                             <Button.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Command="{Binding UserCommand}" Header="Izmeni" />
-                                    <MenuItem
-                                        Command="{Binding DeactivateAccountCommand}"
-                                        Header="Deaktiviraj Korisnika"
-                                        Visibility="{Binding IsDeactivateMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                    <MenuItem
-                                        Command="{Binding ActivateAccountCommand}"
-                                        Header="Aktiviraj Korisnika"
-                                        Visibility="{Binding IsActivateMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <MenuItem Command="{Binding EditCommand}" Header="Izmeni" />
+                                    <MenuItem Command="{Binding DeleteCommand}" Header="Izbrisi sobu" />
                                 </ContextMenu>
                             </Button.ContextMenu>
                             <StackPanel Orientation="Vertical">

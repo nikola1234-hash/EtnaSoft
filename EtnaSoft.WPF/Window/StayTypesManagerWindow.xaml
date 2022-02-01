@@ -6,6 +6,8 @@
     xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+    xmlns:local="clr-namespace:EtnaSoft.WPF.Window"
+    xmlns:viewModel="clr-namespace:EtnaSoft.WPF.ViewModels"
     xmlns:views="clr-namespace:EtnaSoft.WPF.Views"
     Title="{Binding WindowTitle}"
     Width="1000"
@@ -90,10 +92,7 @@
                             </StackPanel>
                             <Button.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem
-                                        Command="{Binding EditCommand}"
-                                        CommandParameter="{Binding StayType.Id}"
-                                        Header="Izmeni" />
+                                    <MenuItem Command="{Binding EditCommand}" Header="Izmeni" />
                                     <MenuItem
                                         Command="{Binding DeactivateCommand}"
                                         Header="Deaktiviraj"

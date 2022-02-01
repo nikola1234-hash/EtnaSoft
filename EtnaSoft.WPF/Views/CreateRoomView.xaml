@@ -1,0 +1,21 @@
+﻿<UserControl
+    x:Class="EtnaSoft.WPF.Views.CreateRoomView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="200"
+    d:DesignWidth="200"
+    mc:Ignorable="d">
+    <dxlc:LayoutControl>
+        <dxlc:LayoutGroup>
+            <dxlc:LayoutItem Label="Broj sobe:">
+                <dxe:TextEdit MinWidth="250" Text="{Binding Room.RoomNumber}" />
+            </dxlc:LayoutItem>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+
+</UserControl>

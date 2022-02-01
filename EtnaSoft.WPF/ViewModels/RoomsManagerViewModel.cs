@@ -14,9 +14,12 @@ namespace EtnaSoft.WPF.ViewModels
     {
         private readonly IRoomsManagerService _roomsManagerService;
         private ICurrentWindowService CurrentWindowService => GetService<ICurrentWindowService>();
+        private IDialogService DialogService => GetService<IDialogService>();
+        private CreateRoomViewModel createRoomViewModel;
         private readonly IEventAggregator _eventAggregator;
         public ICommand OnLoadCommand { get; }
         public ICommand CloseCommand { get; }
+        public ICommand CreateRoomCommand { get; }
         private ObservableCollection<SubRoomViewModel> _roomsCollection = new ObservableCollection<SubRoomViewModel>();
 
         public ObservableCollection<SubRoomViewModel> RoomsCollection
@@ -36,10 +39,7 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 return RoomList();
             }
-            set
-            {
-                Rooms = value;
-            }
+        
         }
 
 
@@ -49,6 +49,30 @@ namespace EtnaSoft.WPF.ViewModels
             _eventAggregator = eventAggregator;
             OnLoadCommand = new DelegateCommand(OnLoaded);
             CloseCommand = new DelegateCommand(OnCloseCommand);
+            CreateRoomCommand = new DelegateCommand(OpenDialog);
+            _eventAggregator.GetEvent<RoomDataChangeEvent>().Subscribe(PopulateView);
+            _eventAggregator.GetEvent<RoomEditOpenDialogEvent>().Subscribe(OpenEditDialog);
+        }
+
+        private void OpenEditDialog(object obj)
+        {
+            if (obj is EditRoomDialogViewModel viewModel)
+            {
+                DialogService.ShowDialog(viewModel.Commands, "Izmeni", viewModel);
+            }
+            PopulateView();
+        }
+
+        private void OpenDialog()
+        {
+            
+            createRoomViewModel = new CreateRoomViewModel(new Room(), _roomsManagerService);
+            var result = DialogService.ShowDialog(createRoomViewModel.Commands, "Kreiraj zapis", createRoomViewModel);
+            if ((MessageResult)result.Id == MessageResult.OK)
+            {
+                PopulateView();
+            }
+
         }
 
         private void CloseWindow()
@@ -74,7 +98,7 @@ namespace EtnaSoft.WPF.ViewModels
                 
                 foreach (var room in Rooms)
                 {
-                    RoomsCollection.Add(new SubRoomViewModel(room));
+                    PopulateRoomsCollection(room);
                 }
             }
             else
@@ -82,9 +106,15 @@ namespace EtnaSoft.WPF.ViewModels
                 RoomsCollection = new ObservableCollection<SubRoomViewModel>();
                 foreach (var room in Rooms)
                 {
-                    RoomsCollection.Add(new SubRoomViewModel(room));
+                    PopulateRoomsCollection(room);
                 }
             }
+        }
+
+        void PopulateRoomsCollection(Room room)
+        {
+            var srvm = new SubRoomViewModel(room, _roomsManagerService, _eventAggregator);
+            RoomsCollection.Add(srvm);
         }
 
         private void OnLoaded()
@@ -95,7 +125,8 @@ namespace EtnaSoft.WPF.ViewModels
         public override void Dispose()
         {
             RoomsCollection = null;
-            Rooms = null;
+            _eventAggregator.GetEvent<RoomDataChangeEvent>().Unsubscribe(PopulateView);
+            _eventAggregator.GetEvent<RoomEditOpenDialogEvent>().Unsubscribe(OpenEditDialog);
             base.Dispose();
         }
     }
