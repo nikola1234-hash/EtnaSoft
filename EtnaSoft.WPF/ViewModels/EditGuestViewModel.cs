@@ -20,11 +20,11 @@ namespace EtnaSoft.WPF.ViewModels
         public delegate void UserDataChanged(object sender);
         public event UserDataChanged OnUserDataChange;
 
-        public IWindowService WindowService
+        public ICurrentWindowService WindowService
         {
             get
             {
-                return this.GetService<IWindowService>();
+                return this.GetService<ICurrentWindowService>();
             }
         }
 
@@ -35,12 +35,9 @@ namespace EtnaSoft.WPF.ViewModels
                 return this.GetService<IMessageBoxService>();
             }
         }
-
-        
-        
         public ICommand SaveCommand { get; }
         public ICommand LoadCommand { get; }
-
+        public ICommand CloseCommand { get; set; }
 
         private bool _isEditable = false;
 
@@ -55,7 +52,6 @@ namespace EtnaSoft.WPF.ViewModels
         }
 
         private ObservableCollection<GuestBookingHistory> _guestBookingHistories;
-
         public ObservableCollection<GuestBookingHistory> GuestBookingHistories
         {
             get { return _guestBookingHistories; }
@@ -73,7 +69,18 @@ namespace EtnaSoft.WPF.ViewModels
             _logger = logger;
             SaveCommand = new DelegateCommand(SaveData);
             LoadCommand = new DelegateCommand(OnLoad);
-           
+            CloseCommand = new DelegateCommand(CloseWindow);
+
+        }
+
+        private void WindowClose()
+        {
+            WindowService?.Close();
+        }
+
+        private void CloseWindow()
+        {
+            WindowClose();
         }
 
         public void OnLoad()

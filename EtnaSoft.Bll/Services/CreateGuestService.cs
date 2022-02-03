@@ -20,5 +20,17 @@ namespace EtnaSoft.Bll.Services
             var result = _unit.Guests.Create(guest);
             return result;
         }
+        [Obsolete]
+        public void DeactivateGuest(int id)
+        {
+            try
+            {
+                _unit.Guests.Delete(id);
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -17,88 +17,11 @@ using Microsoft.Extensions.Logging;
 
 namespace EtnaSoft.WPF.ViewModels
 {
-    public sealed class CreateGuestContentViewModel : ContentViewModel, IDataErrorInfo, IDisposable
+    public sealed class CreateGuestContentViewModel : ContentViewModel
     {
         #region Fields
 
-        private bool _isDirty;
-        private bool _isButtonEnabled;
-        private bool allowValidation = false;
-        public bool IsButtonEnabled
-        {
-            get { return _isButtonEnabled; }
-            set
-            {
-                _isButtonEnabled = value;
-                RaisePropertyChanged(nameof(IsButtonEnabled));
-            }
-        }
-        public bool IsDirty
-        {
-            get => _isDirty;
-            set
-            {
-                _isDirty = value;
-                RaisePropertyChanged(nameof(IsDirty));
-            }
-        }
-
-        private string _firstName;
-        [Required]
-        public string FirstName
-        {
-            get => _firstName;
-            set => IsDirty = SetValue(ref _firstName, value);
-        }
-
-        private string _lastName;
-        [Required]
-        public string LastName
-        {
-            get => _lastName;
-            set => IsDirty = SetValue(ref _lastName, value);
-        }
-
-        private string _telephone;
-        [Required]
-        public string Telephone
-        {
-            get => _telephone;
-            set => IsDirty = SetValue(ref _telephone, value);
-        }
-
-        private string _emailAddress;
-
-        public string EmailAddress
-        {
-            get => _emailAddress;
-            set => IsDirty = SetValue(ref _emailAddress, value);
-        }
-
-        private string _address;
-
-        public string Address
-        {
-            get => _address;
-            set => IsDirty = SetValue(ref _address, value);
-        }
-
-        private string _uniqueNumber;
-
-        public string UniqueNumber
-        {
-            get => _uniqueNumber;
-            set => IsDirty = SetValue(ref _uniqueNumber, value);
-        }
-
-        private DateTime? _birthDate;
-
-        public DateTime? BirthDate
-        {
-            get => _birthDate;
-            set => SetValue(ref _birthDate, value);
-        }
-
+        
         private Guest _selectedGuest;
 
         public Guest SelectedGuest
@@ -122,6 +45,7 @@ namespace EtnaSoft.WPF.ViewModels
                 {
                     return;
                 }
+
                 _dataGrid = value;
                 RaisePropertyChanged(nameof(DataGrid));
             }
@@ -135,22 +59,49 @@ namespace EtnaSoft.WPF.ViewModels
         private readonly IUpdateGuestService _updateGuestService;
         private readonly IGuestHistoryService _guestHistoryService;
         private readonly ILogger<EditGuestViewModel> _editGuestLogger;
-        public ICommand CreateGuestCommand { get; }
+        public ICommand NewGuestCommand { get; }
         public ICommand LoadCommand { get; }
         public ICommand<object> CellDoubleClickCommand { get; }
-        
-        public CreateGuestContentViewModel(ICreateGuestService createGuestService, IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService, IGuestHistoryService guestHistoryService, ILogger<EditGuestViewModel> editGuestLogger)
+        public ICommand<object> EditGuestCommand { get; }
+        public ICommand<object> DeactivateGuestCommand { get; }
+        public CreateGuestContentViewModel(ICreateGuestService createGuestService,
+            IGuestSearchService guestSearchService, IUpdateGuestService updateGuestService,
+            IGuestHistoryService guestHistoryService, ILogger<EditGuestViewModel> editGuestLogger)
         {
             _createGuestService = createGuestService;
             _guestSearchService = guestSearchService;
             _updateGuestService = updateGuestService;
             _guestHistoryService = guestHistoryService;
             _editGuestLogger = editGuestLogger;
-
-            CreateGuestCommand = new DelegateCommand(CreateGuest);
+            NewGuestCommand = new DelegateCommand(OpenNewGuestWindow);
+            EditGuestCommand = new DelegateCommand<object>(OnCellDoubleClick);
+            DeactivateGuestCommand = new DelegateCommand<object>(DeactivateGuest);
             LoadCommand = new DelegateCommand(OnLoad);
             CellDoubleClickCommand = new DelegateCommand<object>(OnCellDoubleClick);
 
+        }
+
+        private void DeactivateGuest(object obj)
+        {
+            if (obj is Guest guest)
+            {
+                _createGuestService.DeactivateGuest(guest.Id);
+                PopulateDataGrid();
+            }
+        }
+
+        private void OpenNewGuestWindow()
+        {
+            var viewModel = new CreateGuestViewModel(_createGuestService);
+            viewModel.OnDataChange += DataGridDataChanged;
+            var window = new CreateGuestWindow
+            {
+                DataContext = viewModel
+            };
+            window.ShowDialog();
+            PopulateDataGrid();
+            viewModel.OnDataChange -= DataGridDataChanged;
+            viewModel.Dispose();
         }
 
         private void OnCellDoubleClick(object obj)
@@ -161,7 +112,7 @@ namespace EtnaSoft.WPF.ViewModels
             {
                 DataContext = viewModel
             };
-            viewModel.OnUserDataChange += ViewModel_OnUserDataChange1; 
+            viewModel.OnUserDataChange += ViewModel_OnUserDataChange1;
             window.ShowDialog();
 
             viewModel.OnUserDataChange -= ViewModel_OnUserDataChange1;
@@ -171,128 +122,41 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void ViewModel_OnUserDataChange1(object sender)
         {
+            PopulateDataGrid();
+        }
+
+        private void PopulateDataGrid()
+        {
+            if (DataGrid == null)
+            {
+                DataGrid = new ObservableCollection<Guest>();
+            }
             if (DataGrid.Any())
             {
                 DataGrid.Clear();
             }
 
             DataGrid = ReturnGuests();
-            
-            
         }
 
-    
 
         private void OnLoad()
         {
-            
-            
+
+
         }
 
         private ObservableCollection<Guest> ReturnGuests()
         {
             var guests = _guestSearchService.GetGuests();
-          
-          
-            
             return new ObservableCollection<Guest>(guests);
         }
-        private void ClearFields()
+
+        void DataGridDataChanged()
         {
-            FirstName = string.Empty;
-            LastName = string.Empty;
-            Address = string.Empty;
-            Telephone = string.Empty;
-            EmailAddress = string.Empty;
-            BirthDate = DateTime.Now.Date.AddYears(-20);
-            UniqueNumber = string.Empty;
-
-        }
-        private string EnableValidationAndGetError()
-        {
-            string error = ((IDataErrorInfo)this).Error;
-            if (!string.IsNullOrEmpty(error))
-            {
-                this.RaisePropertyChanged();
-                return error;
-            }
-
-            return null;
-        }
-      
-
-        private void CreateGuest()
-        {
-            string error = EnableValidationAndGetError();
-            if (error != null) return;
-            try
-            {
-                Guest newGuest = new Guest()
-                {
-                    FirstName = FirstName,
-                    LastName = LastName,
-                    Address = Address,
-                    EmailAddress = EmailAddress,
-                    BirthDate = BirthDate,
-                    UniqueNumber = UniqueNumber,
-                    Telephone = Telephone
-                };
-                var guest = _createGuestService.CreateGuest(newGuest);
-                ClearFields();
-                RaisePropertyChanged(nameof(DataGrid));
-                MessageBox.Show("Uspesno upisan gost.", "Obavestenje", MessageBoxButton.OK);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-           
-
+            RaisePropertyChanged(nameof(DataGrid));
         }
 
-        public string this[string columnName]
-        {
-            get
-            {
-                string firstName = BindableBase.GetPropertyName(() => FirstName);
-                string lastName = BindableBase.GetPropertyName(() => LastName);
-                string telephone = BindableBase.GetPropertyName(() => Telephone);
-                if (columnName == firstName)
-                {
-                    return RequiredValidationRule.GetErrorMessage(firstName, FirstName);
-                }
-                else if (columnName == lastName)
-                {
-                    return RequiredValidationRule.GetErrorMessage(lastName, LastName);
-                }
-                else if (columnName == telephone)
-                {
-                    return RequiredValidationRule.GetErrorMessage(telephone, Telephone);
-                }
-
-                return null;
-            }
-        }
-
-        public string Error
-        {
-            get
-            {
-                IDataErrorInfo me = (IDataErrorInfo)this;
-                string error = me[BindableBase.GetPropertyName(() => FirstName)] +
-                               me[BindableBase.GetPropertyName(() => LastName)] +
-                               me[BindableBase.GetPropertyName(() => Telephone)];
-
-                if (!String.IsNullOrEmpty(error))
-                {
-                    return "Molimo vas proverite unete podatke";
-                }
-
-                return null;
-
-            }
-        }
-        
     }
-    
+
 }

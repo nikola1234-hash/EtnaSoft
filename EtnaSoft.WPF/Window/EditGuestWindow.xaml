@@ -4,19 +4,55 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Serialization="clr-namespace:DevExpress.Xpf.LayoutControl.Serialization;assembly=DevExpress.Xpf.LayoutControl.v20.1"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
-    Title="EditGuestWindow"
+    xmlns:dxp="http://schemas.devexpress.com/winfx/2008/xaml/printing"
+    xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+    xmlns:service="clr-namespace:EtnaSoft.WPF.Services"
+    Title="Podaci gosta"
     Width="1000"
-    Height="800">
+    Height="800"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
 
-    <Grid>
-        <dxmvvm:Interaction.Behaviors>
-            <dxmvvm:EventToCommand Command="{Binding LoadCommand}" Event="Loaded" />
-            <dxmvvm:WindowService />
-            <dx:DXMessageBoxService />
-        </dxmvvm:Interaction.Behaviors>
+
+
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding LoadCommand}" Event="Loaded" />
+        <dx:DXMessageBoxService />
+        <dxmvvm:CurrentWindowService />
+    </dxmvvm:Interaction.Behaviors>
+    <DockPanel>
+        <dxr:RibbonControl
+            DockPanel.Dock="Top"
+            PageCategoryAlignment="Right"
+            RibbonStyle="Office2019">
+
+            <dxr:RibbonDefaultPageCategory>
+                <dxr:RibbonPage Caption="Meni">
+                    <dxr:RibbonPageGroup Caption="{x:Null}">
+                        <dxb:BarButtonItem
+                            Command="{Binding CloseCommand}"
+                            Content="Izlaz"
+                            Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}"
+                            LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}"
+                            MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_DeleteCircled.svg}" />
+                        <dxb:BarButtonItem
+                            Command="{Binding ReportCommand}"
+                            Content="Izvestaj gosta"
+                            Glyph="{dx:DXImage SvgImages/Outlook Inspired/TaskList.svg}"
+                            LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/TaskList.svg}"
+                            MediumGlyph="{dx:DXImage SvgImages/Outlook Inspired/TaskList.svg}" />
+                        <dxb:BarButtonItem Content="BarButtonItem" Glyph="{dx:DXImage SvgImages/Business Objects/BO_Employee.svg}" />
+                    </dxr:RibbonPageGroup>
+                </dxr:RibbonPage>
+            </dxr:RibbonDefaultPageCategory>
+
+        </dxr:RibbonControl>
         <dxlc:LayoutControl Orientation="Vertical">
             <dxlc:LayoutGroup
                 Header="Izmena Gosta"
@@ -72,6 +108,7 @@
             </dxlc:LayoutGroup>
             <dxlc:LayoutItem>
                 <Button
+                    Width="200"
                     Command="{Binding SaveCommand}"
                     Content="Sacuvaj"
                     IsEnabled="{Binding IsEditable}" />
@@ -79,12 +116,20 @@
             <dxlc:LayoutGroup>
                 <dxlc:LayoutGroup Header="LayoutGroup" View="Tabs">
                     <dxlc:LayoutGroup Header="Istorijat">
-                        <DataGrid IsReadOnly="True" ItemsSource="{Binding GuestBookingHistories}" />
+                        <dxg:GridControl
+                            AutoGenerateColumns="AddNew"
+                            EnableSmartColumnsGeneration="True"
+                            ItemsSource="{Binding GuestBookingHistories}"
+                            SelectionMode="Row">
+                            <dxg:GridControl.View>
+                                <dxg:TableView AllowEditing="False" AutoWidth="True" />
+                            </dxg:GridControl.View>
+                        </dxg:GridControl>
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
 
         </dxlc:LayoutControl>
+    </DockPanel>
 
-    </Grid>
 </dx:ThemedWindow>

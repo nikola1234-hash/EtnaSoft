@@ -4,128 +4,53 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:helpers="clr-namespace:EtnaSoft.WPF.Helpers"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="clr-namespace:EtnaSoft.WPF.Views"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <dxlc:LayoutControl x:Name="container" dxe:ValidationService.IsValidationContainer="True">
-            <dxmvvm:Interaction.Behaviors />
-            <dxlc:LayoutGroup Orientation="Vertical">
-                <dxlc:LayoutGroup Orientation="Horizontal">
-                    <dxlc:LayoutItem Label="Ime">
-                        <dxe:TextEdit
-                            Text="{Binding FirstName}"
-                            ValidateOnEnterKeyPressed="True"
-                            ValidateOnTextInput="False">
-                            <Binding
-                                Mode="TwoWay"
-                                Path="FirstName"
-                                UpdateSourceTrigger="PropertyChanged"
-                                ValidatesOnDataErrors="True">
-                                <Binding.ValidationRules>
-                                    <helpers:RequiredValidationRule FieldName="FirstName" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </dxe:TextEdit>
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Prezime">
-                        <dxe:TextEdit Text="{Binding LastName}">
-                            <Binding
-                                Mode="TwoWay"
-                                Path="LastName"
-                                UpdateSourceTrigger="PropertyChanged"
-                                ValidatesOnDataErrors="True">
-                                <Binding.ValidationRules>
-                                    <helpers:RequiredValidationRule FieldName="LastName" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </dxe:TextEdit>
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Telefon">
-                        <dxe:TextEdit Text="{Binding Telephone}">
-                            <Binding
-                                Mode="TwoWay"
-                                Path="Telephone"
-                                UpdateSourceTrigger="PropertyChanged"
-                                ValidatesOnDataErrors="True">
-                                <Binding.ValidationRules>
-                                    <helpers:RequiredValidationRule FieldName="Telephone" />
-                                </Binding.ValidationRules>
-                            </Binding>
-                        </dxe:TextEdit>
-                    </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-                <dxlc:GroupSeparator Height="10px" />
-                <dxlc:LayoutGroup Orientation="Horizontal">
-                    <dxlc:LayoutItem Label="Adresa">
-                        <dxe:TextEdit Text="{Binding Address}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="Email">
-                        <dxe:TextEdit Text="{Binding EmailAddress}" />
-                    </dxlc:LayoutItem>
-                    <dxlc:LayoutItem Label="JMBG">
-                        <dxe:TextEdit Text="{Binding UniqueNumber}" />
-                    </dxlc:LayoutItem>
-                </dxlc:LayoutGroup>
-                <dxlc:GroupSeparator Height="10px" />
-                <dxlc:LayoutGroup>
-                    <dxlc:LayoutItem Width="250px" Label="Datum rodjenja">
-                        <dxe:DateEdit
-                            AllowSpinOnMouseWheel="True"
-                            IsTextEditable="True"
-                            Text="{Binding BirthDate}" />
-                    </dxlc:LayoutItem>
-
-
-                </dxlc:LayoutGroup>
-                <dxlc:LayoutItem Width="200px">
-                    <Button
-                        Command="{Binding CreateGuestCommand}"
-                        Content="Sacuvaj"
-                        IsEnabled="True" />
-                </dxlc:LayoutItem>
-
-                <dxlc:GroupSeparator Height="10px" />
-
-            </dxlc:LayoutGroup>
-
-
-        </dxlc:LayoutControl>
-        <dxlc:LayoutControl Grid.Row="1">
+        <dxlc:LayoutControl>
 
             <dxlc:LayoutGroup Orientation="Vertical">
-                <dxlc:DataLayoutItem>
-                    <DataGrid
+                <Grid Height="Auto">
+
+                    <dxg:GridControl
                         x:Name="dataGrid"
-                        CanUserAddRows="False"
-                        CanUserDeleteRows="False"
-                        CanUserReorderColumns="False"
-                        CanUserResizeColumns="True"
-                        CanUserResizeRows="True"
-                        CanUserSortColumns="False"
-                        IsReadOnly="True"
+                        AutoGenerateColumns="AddNew"
+                        EnableSmartColumnsGeneration="True"
                         ItemsSource="{Binding DataGrid, Mode=OneWay}"
                         SelectedItem="{Binding SelectedGuest}"
-                        SelectionMode="Single"
-                        VerticalScrollBarVisibility="Auto">
-                        <DataGrid.InputBindings>
+                        SelectionMode="Row">
+                        <dxg:GridControl.View>
+                            <dxg:TableView AllowEditing="False" AutoWidth="True">
+                                <dxg:TableView.RowCellMenuCustomizations>
+                                    <dxb:BarButtonItem Command="{Binding Path=DataContext.NewGuestCommand, RelativeSource={RelativeSource AncestorType={x:Type view:CreateGuestContentView}}}" Content="Novi zapis" />
+                                    <dxb:BarButtonItem
+                                        Command="{Binding Path=DataContext.EditGuestCommand, RelativeSource={RelativeSource AncestorType={x:Type view:CreateGuestContentView}}}"
+                                        CommandParameter="{Binding Path=DataContext.SelectedGuest, RelativeSource={RelativeSource AncestorType={x:Type view:CreateGuestContentView}}}"
+                                        Content="Izmeni" />
+                                </dxg:TableView.RowCellMenuCustomizations>
+                            </dxg:TableView>
+                        </dxg:GridControl.View>
+
+                        <dxg:GridControl.InputBindings>
                             <MouseBinding
                                 Command="{Binding CellDoubleClickCommand}"
                                 CommandParameter="{Binding SelectedGuest}"
                                 Gesture="LeftDoubleClick" />
-                        </DataGrid.InputBindings>
-                    </DataGrid>
-                </dxlc:DataLayoutItem>
+                        </dxg:GridControl.InputBindings>
+                    </dxg:GridControl>
+
+                </Grid>
+
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
     </Grid>

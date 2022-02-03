@@ -8,5 +8,7 @@ namespace EtnaSoft.Bll.Services
     public interface ICreateGuestService
     {
         Guest CreateGuest(Guest guest);
+        [Obsolete]
+        void DeactivateGuest(int id);
     }
 }

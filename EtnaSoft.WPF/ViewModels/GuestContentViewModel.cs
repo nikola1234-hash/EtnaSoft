@@ -26,7 +26,24 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(GuestInfos));
             }
         }
+        private string _searchGuest;
+        /// <summary>
+        /// Guest Search textbox
+        /// </summary>
+        public string SearchGuest
+        {
+            get { return _searchGuest; }
+            set
+            {
+                _searchGuest = value;
+                RaisePropertyChanged(nameof(SearchGuest));
+            }
+        }
 
+        void GuestSearch()
+        {
+            
+        }
         private GuestInfo _selectedItem;
 
         public GuestInfo SelectedItem
@@ -48,6 +65,15 @@ namespace EtnaSoft.WPF.ViewModels
         }
 
         private void OnLoad()
+        {
+            InitialGuestInfo();
+        }
+
+        void SearchGuestByKeyword(string keyword)
+        {
+            GuestInfos = _guestService.LoadByKeyword(keyword);
+        }
+        void InitialGuestInfo()
         {
             var guests = _guestService.GetAllGuestData();
             GuestInfos = new ObservableCollection<GuestInfo>(guests);

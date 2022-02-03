@@ -1,0 +1,108 @@
+﻿<Window
+    x:Class="EtnaSoft.WPF.Window.CreateGuestWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:helpers="clr-namespace:EtnaSoft.WPF.Helpers"
+    xmlns:local="clr-namespace:EtnaSoft.WPF.Window"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Novi gost"
+    Width="318"
+    Height="450"
+    Background="LightGray"
+    BorderThickness="2"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:CurrentWindowService />
+    </dxmvvm:Interaction.Behaviors>
+    <Grid>
+        <dxlc:LayoutControl
+            x:Name="container"
+            dxe:ValidationService.IsValidationContainer="True"
+            Orientation="Vertical">
+            <dxmvvm:Interaction.Behaviors />
+            <StackPanel Width="200">
+                <Label HorizontalAlignment="Center" Content="Ime" />
+                <dxe:TextEdit
+                    Text="{Binding FirstName}"
+                    ValidateOnEnterKeyPressed="True"
+                    ValidateOnTextInput="False">
+                    <Binding
+                        Mode="TwoWay"
+                        Path="FirstName"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
+                        <Binding.ValidationRules>
+                            <helpers:RequiredValidationRule FieldName="FirstName" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </dxe:TextEdit>
+
+                <Label HorizontalAlignment="Center" Content="Prezime" />
+                <dxe:TextEdit Text="{Binding LastName}">
+                    <Binding
+                        Mode="TwoWay"
+                        Path="LastName"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
+                        <Binding.ValidationRules>
+                            <helpers:RequiredValidationRule FieldName="LastName" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </dxe:TextEdit>
+                <Label Content="Telefon" />
+                <dxe:TextEdit Text="{Binding Telephone}">
+                    <Binding
+                        Mode="TwoWay"
+                        Path="Telephone"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True">
+                        <Binding.ValidationRules>
+                            <helpers:RequiredValidationRule FieldName="Telephone" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </dxe:TextEdit>
+
+                <dxlc:GroupSeparator Height="10px" />
+                <Label HorizontalAlignment="Center" Content="Adresa" />
+                <dxe:TextEdit Text="{Binding Address}" />
+
+                <Label HorizontalAlignment="Center" Content="E-mail" />
+                <dxe:TextEdit Text="{Binding EmailAddress}" />
+                <Label HorizontalAlignment="Center" Content="JMBG" />
+                <dxe:TextEdit Text="{Binding UniqueNumber}" />
+                <dxlc:GroupSeparator Height="10px" />
+                <Label HorizontalAlignment="Center" Content="Datum rodjenja" />
+                <dxe:DateEdit
+                    AllowSpinOnMouseWheel="True"
+                    IsTextEditable="True"
+                    Text="{Binding BirthDate}" />
+                <dxlc:GroupSeparator Height="10px" />
+
+                <Button
+                    Width="100"
+                    Margin="0,20,0,0"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding CreateGuestCommand}"
+                    Content="Sacuvaj"
+                    IsEnabled="True" />
+                <Button
+                    Width="100"
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding AbortCommand}"
+                    Content="Izlaz"
+                    IsEnabled="True" />
+
+
+            </StackPanel>
+
+        </dxlc:LayoutControl>
+    </Grid>
+</Window>

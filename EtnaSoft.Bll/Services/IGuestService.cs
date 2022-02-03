@@ -11,6 +11,8 @@ namespace EtnaSoft.Bll.Services
         /// </summary>
         /// <param name="keyword">Search keyword default is null</param>
         /// <returns>IEnumrable of object => Cast it as GuestInfo</returns>
-        ObservableCollection<GuestInfo> GetAllGuestData(string keyword = null);
+        ObservableCollection<GuestInfo> GetAllGuestData();
+
+        ObservableCollection<GuestInfo> LoadByKeyword(string keyword);
     }
 }
