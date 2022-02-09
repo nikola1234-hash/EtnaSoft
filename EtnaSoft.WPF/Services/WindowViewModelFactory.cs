@@ -15,12 +15,14 @@ namespace EtnaSoft.WPF.Services
         private readonly StayTypesManagerViewModel _stayTypesManagerViewModel;
         private readonly UserManagerViewModel _userManagerViewModel;
         private readonly CreateUserViewModel _createUserViewModel;
-        public WindowViewModelFactory(RoomsManagerViewModel roomsManagerViewModel, StayTypesManagerViewModel stayTypesManagerViewModel, UserManagerViewModel userManagerViewModel, CreateUserViewModel createUserViewModel)
+        private readonly SmsManagerViewModel _smsManagerViewModel;
+        public WindowViewModelFactory(RoomsManagerViewModel roomsManagerViewModel, StayTypesManagerViewModel stayTypesManagerViewModel, UserManagerViewModel userManagerViewModel, CreateUserViewModel createUserViewModel, SmsManagerViewModel smsManagerViewModel)
         {
             _roomsManagerViewModel = roomsManagerViewModel;
             _stayTypesManagerViewModel = stayTypesManagerViewModel;
             _userManagerViewModel = userManagerViewModel;
             _createUserViewModel = createUserViewModel;
+            _smsManagerViewModel = smsManagerViewModel;
         }
 
         private ThemedWindow CreateRoomsManagerWindow()
@@ -32,6 +34,14 @@ namespace EtnaSoft.WPF.Services
             return window;
         }
 
+        private ThemedWindow CreateSmsManagerWindow()
+        {
+            var window = new SmsManagerWindow
+            {
+                DataContext = _smsManagerViewModel
+            };
+            return window;
+        }
         private ThemedWindow CreateStayTypesManagerWindow()
         {
             var window = new StayTypesManagerWindow
@@ -70,6 +80,8 @@ namespace EtnaSoft.WPF.Services
                     return CreateUserManagerWindow();
                 case WindowType.CreateUser:
                     return CreateUserCreateWindow();
+                case WindowType.SmsManager:
+                    return CreateSmsManagerWindow();
                 default:
                     throw new Exception("No ViewType");
             }

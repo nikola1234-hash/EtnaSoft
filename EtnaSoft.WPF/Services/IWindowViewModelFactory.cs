@@ -8,7 +8,8 @@ namespace EtnaSoft.WPF.Services
         RoomsManager,
         StayTypeManager,
         UserManager,
-        CreateUser
+        CreateUser,
+        SmsManager
     }
     public interface IWindowViewModelFactory
     {

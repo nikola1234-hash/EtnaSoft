@@ -20,8 +20,29 @@ namespace EtnaSoft.WPF.ViewModels
                 RaisePropertyChanged(nameof(IsBusy));
             }
         }
+
+        private void ReleaseUnmanagedResources()
+        {
+            // TODO release unmanaged resources here
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            ReleaseUnmanagedResources();
+            if (disposing)
+            {
+            }
+        }
+
         public virtual void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~EtnaBaseViewModel()
+        {
+            Dispose(false);
         }
     }
 }

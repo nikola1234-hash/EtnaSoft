@@ -187,6 +187,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\Authentication\Authenticator.cs" />
     <Compile Include="Services\Authentication\IAuthenticator.cs" />
+    <Compile Include="Services\Configuration\ConfigurationFileManager.cs" />
     <Compile Include="Services\ContentViewFactory.cs" />
     <Compile Include="Services\CreateUserViewFactory.cs" />
     <Compile Include="Services\IContentViewFactory.cs" />
@@ -195,6 +196,8 @@
     <Compile Include="Services\IWindowViewModelFactory.cs" />
     <Compile Include="Services\Reception\DetailsManager.cs" />
     <Compile Include="Services\Reception\IDetailsManager.cs" />
+    <Compile Include="Services\SmsService\ISmsFacade.cs" />
+    <Compile Include="Services\SmsService\SmsFacade.cs" />
     <Compile Include="Services\WindowViewModelFactory.cs" />
     <Compile Include="SplashScreen\ThemedSplashScreen\EtnaSplashScreen.xaml.cs">
       <DependentUpon>EtnaSplashScreen.xaml</DependentUpon>
@@ -229,6 +232,8 @@
     <Compile Include="ViewModels\ReceptionViewModel.cs" />
     <Compile Include="ViewModels\RoomsManagerViewModel.cs" />
     <Compile Include="ViewModels\SearchGuestDialogViewModel.cs" />
+    <Compile Include="ViewModels\SmsDialogViewModel.cs" />
+    <Compile Include="ViewModels\SmsManagerViewModel.cs" />
     <Compile Include="ViewModels\StayTypesManagerViewModel.cs" />
     <Compile Include="ViewModels\SubRoomViewModel.cs" />
     <Compile Include="ViewModels\SubStayTypeViewModel.cs" />
@@ -272,6 +277,9 @@
     <Compile Include="Views\ReceptionView.xaml.cs">
       <DependentUpon>ReceptionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SmsServiceDialogView.xaml.cs">
+      <DependentUpon>SmsServiceDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserContentView.xaml.cs">
       <DependentUpon>UserContentView.xaml</DependentUpon>
     </Compile>
@@ -289,6 +297,9 @@
     </Compile>
     <Compile Include="Window\RoomsManagerWindow.xaml.cs">
       <DependentUpon>RoomsManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\SmsManagerWindow.xaml.cs">
+      <DependentUpon>SmsManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Window\StayTypesManagerWindow.xaml.cs">
       <DependentUpon>StayTypesManagerWindow.xaml</DependentUpon>
@@ -383,6 +394,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SmsServiceDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -404,6 +419,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\RoomsManagerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\SmsManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

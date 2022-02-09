@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using DevExpress.Mvvm.POCO;
 using ErtnaSoft.Bo.Entities;
+using EtnaSoft.Bll.BulkSms.Services;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Dal;
@@ -20,6 +21,7 @@ using EtnaSoft.WPF.Services.Authentication;
 using EtnaSoft.WPF.Services.Reception;
 using EtnaSoft.WPF.Stores;
 using EtnaSoft.WPF.ViewModels;
+using EtnaSoft.WPF.Views;
 using EtnaSoft.WPF.Window;
 using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -126,7 +128,8 @@ namespace EtnaSoft.WPF
             service.AddTransient<MainWindow>();
             service.AddTransient<CreateStayTypeDialogViewModel>();
             service.AddTransient<EditStayTypeDialogViewModel>();
-
+            service.AddTransient<SmsManagerViewModel>();
+            service.AddTransient<SmsDialogViewModel>();
             //service.AddTransient<CreateUserWindow>();
             //service.AddTransient<RoomsManagerWindow>();
             //service.AddTransient<EditGuestWindow>();
@@ -137,6 +140,9 @@ namespace EtnaSoft.WPF
         
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
+            SmsService sms = new SmsService();
+            //sms.GetProfile();
+
             var logger = ServiceProvider.GetRequiredService<ILogger<App>>();
             logger.LogInformation("[Logging App_OnStartup]");
             string dirName = ConfigurationManager.AppSettings["DirectoryName"];

@@ -74,6 +74,15 @@
                                 LargeGlyph="{dx:DXImage Images/Function Library/Text_32x32.png}"
                                 MediumGlyph="{dx:DXImage Images/Function Library/Text_32x32.png}" />
                         </dxr:RibbonPageGroup>
+                        <dxr:RibbonPageGroup Caption="SMSservis">
+                            <dxb:BarButtonItem
+                                Command="{Binding OpenManagerWindowCommand}"
+                                CommandParameter="{x:Static services:WindowType.SmsManager}"
+                                Content="SMS menadzer"
+                                Glyph="{dx:DXImage SvgImages/Scheduling/Forward.svg}"
+                                LargeGlyph="{dx:DXImage SvgImages/Scheduling/Forward.svg}"
+                                MediumGlyph="{dx:DXImage SvgImages/Scheduling/Forward.svg}" />
+                        </dxr:RibbonPageGroup>
                     </dxr:RibbonPage>
 
                 </dxr:RibbonDefaultPageCategory>
