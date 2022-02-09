@@ -10,13 +10,32 @@ using Newtonsoft.Json;
 
 namespace EtnaSoft.Bll.BulkSms.Services
 {
-    public sealed class SmsService
+    public class GetMessageListService
     {
-
-        public async Task<Profile> GetProfileAsync(string username, string password, string uri)
+        private string Username { get; set; }
+        private string Secret { get; set; }
+        private bool RetrieveSentMessages { get; set; }
+        public GetMessageListService(string username, string secret, bool retrieveSentMessages)
         {
-            string url = uri +"profile";
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(secret))
+            {
+                throw new Exception("Polja ne mogu biti prazna");
+            }
+            Username = username;
+            Secret = secret;
+            RetrieveSentMessages = retrieveSentMessages;
+        }
+        public async Task<List<ResponseSchema>> GetMessages()
+        {
+            string sent = "SENT";
+            if (RetrieveSentMessages == false)
+            {
+                sent = "RECEIVED";
+            }
+            string url = "https://api.bulksms.com/v1/messages?filter=type%3D"+sent;
 
+            var username = Protector.Unprotect(Username);
+            var password = Protector.Unprotect(Secret);
             var request = WebRequest.Create(url);
             string encoded = System.Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
                 .GetBytes(username + ":" + password));
@@ -38,10 +57,12 @@ namespace EtnaSoft.Bll.BulkSms.Services
                 
             }
 
-            Profile profile = JsonConvert.DeserializeObject<Profile>(responseFromServer);
+            List<ResponseSchema> messagesList = await Task.Factory.StartNew(() =>
+                JsonConvert.DeserializeObject<List<ResponseSchema>>(responseFromServer));
+            
             // Close the response.
             response.Close();
-            return profile;
+            return messagesList;
         }
     }
 }

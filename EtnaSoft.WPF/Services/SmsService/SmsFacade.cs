@@ -17,20 +17,29 @@ namespace EtnaSoft.WPF.Services.SmsService
     }
     public sealed class SmsFacade : ISmsFacade
     {
+        
         private string username { get; }
         private string url { get; }
         private string secret { get; }
         public SmsFacade(string username, string url, string secret)
         {
+            CheckArguments(username, url, secret);
             this.username = username;
             this.url = url;
             this.secret = secret;
             SaveValues();
         }
-
         public SmsFacade()
         {
             
+        }
+        private static void CheckArguments(string username, string url, string secret)
+        {
+            if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(url) &&
+                string.IsNullOrWhiteSpace(secret))
+            {
+                throw new Exception("Fields cannot be empty");
+            }
         }
         private List<string> ProtectData()
         {
@@ -51,9 +60,15 @@ namespace EtnaSoft.WPF.Services.SmsService
 
         public string GetValue(ConfigKeys key)
         {
+            if (key == ConfigKeys.SmsUrl)
+            {
+                var uri = ConfigurationFileManager.GetSetting(key.ToString());
+                return uri;
+            }
             var data = ConfigurationFileManager.GetSetting(key.ToString());
             var unprotected = Protector.Unprotect(data);
             return unprotected;
         }
+
     }
 }

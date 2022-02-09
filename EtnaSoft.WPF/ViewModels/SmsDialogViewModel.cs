@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using DevExpress.DataAccess.Native.ExpressionEditor;
 using DevExpress.Mvvm;
 using EtnaSoft.WPF.Services.Configuration;
@@ -23,8 +24,8 @@ namespace EtnaSoft.WPF.ViewModels
             set
             {
                 _url = value;
-                CanExecute();
                 RaisePropertyChanged(nameof(Url));
+                CanExecute();
             }
         }
         private string _username;
@@ -34,8 +35,8 @@ namespace EtnaSoft.WPF.ViewModels
             set
             {
                 _username = value;
-                CanExecute();
                 RaisePropertyChanged(nameof(Username));
+                CanExecute();
             }
         }
         private string _secret;
@@ -45,11 +46,11 @@ namespace EtnaSoft.WPF.ViewModels
             set
             {
                 _secret = value;
-                CanExecute();
                 RaisePropertyChanged(nameof(Secret));
+                CanExecute();
             }
         }
-        private ISmsFacade _facade { get; set; }
+        private ISmsFacade Facade { get; set; }
 
         private UICommand RegisterCommand { get; set; }
         
@@ -65,14 +66,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         public SmsDialogViewModel()
         {
-            RegisterCommand = new UICommand(id: MessageResult.Yes,
-                command: new DelegateCommand(ExecuteRegister, CanExecute), isDefault: true, caption: "Registruj", isCancel:false);
-            AbortCommand = new UICommand(id: MessageResult.Cancel, caption: "Odustani",
-                new DelegateCommand<CancelEventArgs>(ExecuteAbort), isCancel: true, isDefault:false);
-            Commands = new List<UICommand>(2);
-            Commands.Add(RegisterCommand);
-            Commands.Add(AbortCommand);
-            
+            InitializeDialogCommands();
         }
 
         private void ExecuteAbort(CancelEventArgs args)
@@ -80,6 +74,16 @@ namespace EtnaSoft.WPF.ViewModels
             args.Cancel = false;
         }
 
+        private void InitializeDialogCommands()
+        {
+            RegisterCommand = new UICommand(id: MessageResult.Yes,
+                command: new DelegateCommand(ExecuteRegister, CanExecute), isDefault: true, caption: "Registruj", isCancel:false);
+            AbortCommand = new UICommand(id: MessageResult.Cancel, caption: "Odustani",
+                new DelegateCommand<CancelEventArgs>(ExecuteAbort), isCancel: true, isDefault:false);
+            Commands = new List<UICommand>(2);
+            Commands.Add(RegisterCommand);
+            Commands.Add(AbortCommand);
+        }
         private bool FieldsNotEmpty()
         {
             bool output = !string.IsNullOrEmpty(_url) && !string.IsNullOrEmpty(_username) &&
@@ -93,12 +97,20 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void ExecuteRegister()
         {
-            _facade = new SmsFacade(Username, Url, Secret);
-        }
+            try
+            {
+                Facade = new SmsFacade(Username, Url, Secret);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Obavestenje");
+            }
 
+        }
         public override void Dispose()
         {
             base.Dispose();
         }
+        
     }
 }

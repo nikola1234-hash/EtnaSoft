@@ -234,6 +234,7 @@
     <Compile Include="ViewModels\SearchGuestDialogViewModel.cs" />
     <Compile Include="ViewModels\SmsDialogViewModel.cs" />
     <Compile Include="ViewModels\SmsManagerViewModel.cs" />
+    <Compile Include="ViewModels\SmsServiceViewModels\SmsProfileViewModel.cs" />
     <Compile Include="ViewModels\StayTypesManagerViewModel.cs" />
     <Compile Include="ViewModels\SubRoomViewModel.cs" />
     <Compile Include="ViewModels\SubStayTypeViewModel.cs" />
@@ -300,6 +301,9 @@
     </Compile>
     <Compile Include="Window\SmsManagerWindow.xaml.cs">
       <DependentUpon>SmsManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Window\SmsProfileWindow.xaml.cs">
+      <DependentUpon>SmsProfileWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Window\StayTypesManagerWindow.xaml.cs">
       <DependentUpon>StayTypesManagerWindow.xaml</DependentUpon>
@@ -423,6 +427,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Window\SmsManagerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Window\SmsProfileWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -550,6 +558,9 @@
     <Content Include="DatabaseFiles\Database.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\hotelbed.svg" />
+    <Resource Include="Icons\previouscomment.png" />
+    <Resource Include="Icons\nextcomment.png" />
     <Resource Include="Icons\staytype.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

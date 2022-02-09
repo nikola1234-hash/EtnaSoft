@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
     xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
     xmlns:local="clr-namespace:EtnaSoft.WPF.Window"
@@ -49,13 +51,55 @@
                     </dxr:RibbonPageGroup>
                     <dxr:RibbonPageGroup Caption="{x:Null}">
                         <dxb:BarButtonItem
-                            Command="{Binding NewStayTypeCommand}"
-                            Content="Profil"
+                            Command="{Binding OpenProfileCommand}"
+                            Content="Pregled profila"
                             Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_AddCircled.svg}"
                             MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_AddCircled.svg}" />
+                        <dxb:BarButtonItem Content="Izmena Servisa" Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Settings.svg}" />
+                        <dxb:BarButtonItem
+                            Command="{Binding TypeOfMessagesCommand}"
+                            Content="{Binding MessageTypeContent}"
+                            Glyph="{Binding MessageTypeImagePath}" />
                     </dxr:RibbonPageGroup>
                 </dxr:RibbonPage>
             </dxr:RibbonDefaultPageCategory>
         </dxr:RibbonControl>
+        <dxlc:LayoutControl>
+
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <Grid Height="Auto">
+
+                    <dxg:GridControl
+                        x:Name="dataGrid"
+                        AutoGenerateColumns="AddNew"
+                        EnableSmartColumnsGeneration="True"
+                        ItemsSource="{Binding MessageDetailsCollection, Mode=OneWay}"
+                        SelectedItem="{Binding SelectedItem}"
+                        SelectionMode="Row">
+                        <dxg:GridControl.View>
+                            <dxg:TableView AllowEditing="False" AutoWidth="True">
+                                <dxg:TableView.RowCellMenuCustomizations>
+                                    <dxb:BarButtonItem Command="{Binding Path=DataContext.NewGuestCommand, RelativeSource={RelativeSource AncestorType={x:Type views:CreateGuestContentView}}}" Content="Novi zapis" />
+                                    <dxb:BarButtonItem
+                                        Command="{Binding Path=DataContext.EditGuestCommand, RelativeSource={RelativeSource AncestorType={x:Type views:CreateGuestContentView}}}"
+                                        CommandParameter="{Binding Path=DataContext.SelectedGuest, RelativeSource={RelativeSource AncestorType={x:Type views:CreateGuestContentView}}}"
+                                        Content="Izmeni" />
+                                </dxg:TableView.RowCellMenuCustomizations>
+                            </dxg:TableView>
+                        </dxg:GridControl.View>
+
+                        <dxg:GridControl.InputBindings>
+                            <MouseBinding
+                                Command="{Binding CellDoubleClickCommand}"
+                                CommandParameter="{Binding SelectedGuest}"
+                                Gesture="LeftDoubleClick" />
+                        </dxg:GridControl.InputBindings>
+                    </dxg:GridControl>
+
+                </Grid>
+
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+
     </DockPanel>
 </dx:ThemedWindow>
