@@ -36,7 +36,7 @@ namespace EtnaSoft.Bll.Services
                 startDate = null;
                 endDate = null;
                 reservations = _unit.Reservations.GetAll()
-                    .Where(s=> s.StartDate >= sDate || s.StartDate <= eDate && s.EndDate >= sDate || s.EndDate >= eDate && s.IsCanceled == false);
+                    .Where(s=> (s.StartDate >= sDate || s.StartDate <= eDate && s.EndDate >= sDate || s.EndDate >= eDate) && s.IsCanceled == false);
             }
             else
             {
@@ -89,7 +89,7 @@ namespace EtnaSoft.Bll.Services
                     ModifiedBy = reservation.ModifiedBy,
                     DateCreated = reservation.DateCreated,
                     DateModified = reservation.DateModified,
-                    TotalPrice = reservation.TotalPrice,
+                    InvoiceId = reservation.InvoiceId,
                     LabelId = AssignLabelId(reservation.IsCheckedIn)
                 });
             }

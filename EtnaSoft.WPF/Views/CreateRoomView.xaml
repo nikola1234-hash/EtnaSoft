@@ -13,7 +13,7 @@
     <dxlc:LayoutControl>
         <dxlc:LayoutGroup>
             <dxlc:LayoutItem Label="Broj sobe:">
-                <dxe:TextEdit MinWidth="250" Text="{Binding Room.RoomNumber}" />
+                <dxe:TextEdit MinWidth="250" Text="{Binding Room.RoomNumber, UpdateSourceTrigger=PropertyChanged}" />
             </dxlc:LayoutItem>
         </dxlc:LayoutGroup>
     </dxlc:LayoutControl>

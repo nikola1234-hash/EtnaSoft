@@ -4,7 +4,7 @@ namespace EtnaSoft.Bll.Services
 {
     public interface ICreateReservationService
     {
-        void CreateReservationInTransaction(RoomReservation roomReservation, Reservation reservation);
+        bool CreateReservationInTransaction(RoomReservation roomReservation, Reservation reservation, Invoice invoice);
         
     }
 }

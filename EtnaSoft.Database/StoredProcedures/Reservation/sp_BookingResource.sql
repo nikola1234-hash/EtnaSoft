@@ -5,7 +5,7 @@
 
 	BEGIN
 		SELECT [r].[Id], [r].[RoomReservationId], [r].[NumberOfPeople], [r].[StartDate], [r].[EndDate],
-		[r].[TotalPrice], [r].[IsCheckedIn], [r].[IsCanceled], [rs].[Id], [rs].[RoomId], [rs].[StayTypeId],
+		[r].InvoiceId, [r].[IsCheckedIn], [r].[IsCanceled], [rs].[Id], [rs].[RoomId], [rs].[StayTypeId],
 		[rs].[GuestId], [rs].[DateCreated], [rs].[DateModified], [rs].[CreatedBy], [rs].[ModifiedBy],
 		[ro].[Id] as RoomId, [ro].[RoomNumber], [g].[Id] as GuestId, [g].[FirstName], [g].[LastName], [g].[Telephone],
 		[g].[EmailAddress], [g].[UniqueNumber], [g].[BirthDate], [g].[IsActive], [g].[Address] 

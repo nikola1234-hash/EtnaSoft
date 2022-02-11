@@ -99,6 +99,8 @@ namespace EtnaSoft.WPF.ViewModels
             
         }
 
+       
+
         private async void OnViewLoad()
         {
             await CheckForUpdates();
@@ -110,11 +112,10 @@ namespace EtnaSoft.WPF.ViewModels
             
         }
 
-        private void OnLogin(object obj)
+        private void OnLogin(object secret)
         {
-            Thread thread = new Thread(() =>
-            {
-                bool IsDefaultAccount(string pass)
+
+            bool IsDefaultAccount(string pass)
                 {
                     return Username == DefaultAccount.Admin.ToString() &&
                            pass == DefaultAccount.admin.ToString();
@@ -122,7 +123,7 @@ namespace EtnaSoft.WPF.ViewModels
 
                 void ChangePasswordDialog(string pass)
                 {
-                    ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(Username, pass, _auth);
+                    ChangePasswordDialogViewModel changePassword = new ChangePasswordDialogViewModel(_username, pass, _auth);
                     UICommand result = DialogService.ShowDialog(changePassword.Commands, "Promeni lozinku",
                         viewModel: changePassword);
                     if (result != null)
@@ -131,12 +132,13 @@ namespace EtnaSoft.WPF.ViewModels
                     }
                 }
 
-                if (obj is PasswordBox passwordBox)
+                if (secret is PasswordBox passwordBox)
                 {
                     var pass = passwordBox.Password;
+                    
                     try
                     {
-                        var successLogin = _authenticator.Login(Username, pass);
+                        var successLogin = _authenticator.Login(_username, pass);
                         if (successLogin)
                         {
                             if (IsDefaultAccount(pass))
@@ -160,9 +162,8 @@ namespace EtnaSoft.WPF.ViewModels
                         ErrorMessage = "Pogresni parametri za logovanje";
                     }
                 }
-            });
-            thread.IsBackground = true;
-            thread.Start();
+    
+            
 
 
         }

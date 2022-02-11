@@ -96,6 +96,14 @@
                         LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/NewEmployee.svg}"
                         MediumGlyph="{dx:DXImage SvgImages/Outlook Inspired/NewEmployee.svg}" />
                 </dxr:RibbonPageGroup>
+                <dxr:RibbonPageGroup Caption="Avans">
+                    <dxb:BarButtonItem
+                        Command="{Binding AvansCommand}"
+                        Content="Avans Rezervacija"
+                        Glyph="{dx:DXImage SvgImages/Outlook Inspired/CostAnalysis.svg}"
+                        LargeGlyph="{dx:DXImage SvgImages/Outlook Inspired/CostAnalysis.svg}"
+                        MediumGlyph="{dx:DXImage SvgImages/Outlook Inspired/CostAnalysis.svg}" />
+                </dxr:RibbonPageGroup>
             </dxr:RibbonPage>
         </dxr:RibbonControl>
         <dxlc:LayoutControl dxe:ValidationService.IsValidationContainer="True" Orientation="Vertical">
@@ -156,7 +164,7 @@
             </dxlc:LayoutGroup>
             <dxlc:LayoutGroup Serialization:SerializableItem.TypeName="LayoutGroup" dx:ScrollViewerTouchBehavior.IsEnabled="True">
                 <dxlc:LayoutGroup
-                    Width="375"
+                    Width="340"
                     Header="Podaci o gostu"
                     Orientation="Vertical"
                     View="GroupBox">
@@ -185,6 +193,32 @@
                     </dxlc:LayoutItem>
                     <dxlc:LayoutItem Label="Ukupno cena:">
                         <dxe:TextEdit IsReadOnly="True" Text="{Binding TotalPrice}" />
+                    </dxlc:LayoutItem>
+
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup
+                    MinWidth="200"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    Header="Avans"
+                    IsEnabled="{Binding IsAvans, Mode=OneWay}"
+                    Orientation="Vertical"
+                    View="GroupBox">
+                    <dxlc:LayoutItem Label="Procenat:">
+                        <dxe:ComboBoxEdit
+                            DisplayMember="Naziv"
+                            ItemsSource="{Binding ProcenatList}"
+                            SelectedItem="{Binding SelectedAvans}"
+                            ValueMember="Procenat" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Ukupno:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding SubTotal, Mode=OneWay}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Avans:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding Avans, Mode=OneWay}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="Preostalo:">
+                        <dxe:TextEdit IsReadOnly="True" Text="{Binding RemainingPrice, Mode=OneWay}" />
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>

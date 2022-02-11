@@ -40,7 +40,6 @@ namespace EtnaSoft.WPF.ViewModels
 
             }
         }
-
         public string MessageTypeContent
         {
             get
@@ -55,7 +54,6 @@ namespace EtnaSoft.WPF.ViewModels
                 }
             }
         }
-
         private ICurrentWindowService CurrentWindow => GetService<ICurrentWindowService>();
         private IDialogService DialogService => GetService<IDialogService>();
         public ICommand LoadCommand { get; }
@@ -162,7 +160,7 @@ namespace EtnaSoft.WPF.ViewModels
         }
         private void OnLoad()
         {
-            var isValueEmpty = ConfigurationFileManager.CheckIfThereIsValue(ConfigKeys.SmsUrl.ToString());
+            bool isValueEmpty = ConfigurationFileManager.CheckIfThereIsValue(ConfigKeys.SmsUrl.ToString());
             if (isValueEmpty)
             {
                 ShowDialog();

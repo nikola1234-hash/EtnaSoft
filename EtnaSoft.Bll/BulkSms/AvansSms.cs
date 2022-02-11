@@ -4,12 +4,13 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using ErtnaSoft.Bo.Entities;
 
 namespace EtnaSoft.Bll.BulkSms
 {
     public sealed class AvansSms
     {
-        public async Task<object> SendSms()
+        public async Task<object> SendSms(Guest guest, Reservation reservation, Invoice invoice)
         {
             string myURI = @"https://api.bulksms.com/v1/messages";
             string myUsername = "username";

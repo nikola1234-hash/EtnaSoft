@@ -27,7 +27,8 @@ namespace EtnaSoft.Dal.Services.Authorization
             {
                 throw new Exception("Must have username and password!");
             }
-            User user = _unitOfWork.Users.GetAll().FirstOrDefault(s => s.Username == username);
+            var users = _unitOfWork.Users.GetAll();
+            var user = users.FirstOrDefault((s) => s.Username == username );
             if (user is null)
             {
                 throw new Exception("Username does not exist");

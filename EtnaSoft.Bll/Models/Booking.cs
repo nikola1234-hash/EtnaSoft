@@ -21,7 +21,7 @@ namespace EtnaSoft.Bll.Models
         public int NumberOfPeople { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public decimal TotalPrice { get; set; }
+        public int InvoiceId { get; set; }
         public bool IsCheckedIn { get; set; }
         public bool IsCanceled { get; set; }
         public bool AllDay { get; set; }
@@ -30,5 +30,6 @@ namespace EtnaSoft.Bll.Models
         public DateTime DateCreated { get; set; }
         public DateTime? DateModified { get; set; }
         public int LabelId { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }

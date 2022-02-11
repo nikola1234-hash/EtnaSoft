@@ -4,7 +4,7 @@
 
 AS 
 BEGIN
-	SELECT r.StartDate, r.EndDate, r.IsCheckedIn, r.IsCanceled, r.TotalPrice,
+	SELECT r.StartDate, r.EndDate, r.IsCheckedIn, r.IsCanceled, r.InvoiceId,
 	ro.RoomNumber, st.Title
 	from dbo.RoomReservations as rr
 	INNER JOIN dbo.Reservations AS r ON r.Id = rr.Id

@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
+using DevExpress.CodeParser;
 using DevExpress.Mvvm;
 using DevExpress.Xpf.Scheduling;
 using ErtnaSoft.Bo.Entities;
+using EtnaSoft.Bll.BulkSms.Services;
+using EtnaSoft.Bll.Models;
 using EtnaSoft.Bll.Services;
 using EtnaSoft.Bll.Services.Facade;
 using EtnaSoft.Dal.Services;
 using EtnaSoft.Dal.Stores;
 using EtnaSoft.WPF.Events;
+using EtnaSoft.WPF.Services.SmsService;
 using Prism.Events;
 
 namespace EtnaSoft.WPF.ViewModels
@@ -31,11 +36,13 @@ namespace EtnaSoft.WPF.ViewModels
         public ICommand SearchExistingGuestCommand { get; }
         public ICommand AddNewGuestCommand { get; }
         public ICommand LoadedCommand { get; }
+        public ICommand AvansCommand { get; }
 
         protected DialogServiceViewModel AddGuestDialogViewModel { get; private set; }
         protected SearchGuestDialogViewModel SearchGuestDialogViewModel { get; private set; }
         protected IDialogService NewGuestDialogService => GetService<IDialogService>("newGuestService");
         protected IDialogService ChoseGuestDialogService => GetService<IDialogService>("choseGuestService");
+        private readonly IGuestSearchService _guestSearchService;
         protected IMessageBoxService MessageService
         {
             get => GetService<IMessageBoxService>();
@@ -52,13 +59,158 @@ namespace EtnaSoft.WPF.ViewModels
         private int _guestId;
         private decimal _totalPrice;
 
+        private ObservableCollection<ProcenatModel> _procenatList = new ObservableCollection<ProcenatModel>()
+        {
+            new ProcenatModel()
+            {
+                Naziv = "10%",
+                Procenat = 10
+            },
+            new ProcenatModel()
+            {
+                Naziv = "20%",
+                Procenat = 20
+            },
+            new ProcenatModel()
+            {
+                Naziv = "30%",
+                Procenat = 30
+            }
+
+        };
+
+        public ObservableCollection<ProcenatModel> ProcenatList
+        {
+            get { return _procenatList; }
+            set
+            {
+                _procenatList = value;
+                RaisePropertyChanged(nameof(ProcenatList));
+            }
+        }
+
+        private ProcenatModel _selectedAvans;
+
+        public ProcenatModel SelectedAvans
+        {
+            get { return _selectedAvans; }
+            set
+            {
+                _selectedAvans = value;
+                CalculateAvans();
+                
+            }
+        }
+
+        private void RaiseAvansGroupChange()
+        {
+            RaisePropertyChanged(nameof(SelectedAvans));
+            RaisePropertyChanged(nameof(Avans));
+            RaisePropertyChanged(nameof(RemainingPrice));
+            RaisePropertyChanged(nameof(SubTotal));
+        }
+
+        private bool _isAvans;
+
+        public bool IsAvans
+        {
+            get { return _isAvans; }
+            set
+            {
+                if (IsAvans)
+                {
+                    _subTotal = TotalPrice;
+                    RaisePropertyChanged(nameof(SubTotal));
+                    CalculateAvans();
+                }
+                _isAvans = value;
+                RaisePropertyChanged(nameof(IsAvans));
+            }
+        }
+
+        private void CalculateAvans()
+        {
+            if (!IsAvans)
+                return;
+            decimal percent = 0M;
+            if (SelectedAvans != null)
+            {
+                switch(SelectedAvans.Procenat)
+                {
+                    case 20:
+                        percent = 0.2M;
+                        break;
+                    case 10:
+                        percent = 0.1M;
+                        break;
+                    case 30:
+                        percent = 0.3M;
+                        break;
+                    default:
+                        percent = 0M;
+                        break;
+                }
+            }
+
+            SubTotal = _totalPrice;
+            Avans = _totalPrice * percent;
+            RemainingPrice = _totalPrice - _avans;
+            RaiseAvansGroupChange();
+        }
+
+
+        private decimal _remainingPrice;
+
+        public decimal RemainingPrice
+        {
+            get { return _remainingPrice; }
+            set
+            {
+                _remainingPrice = value;
+                RaisePropertyChanged(nameof(RemainingPrice));
+            }
+        }
+
+        private decimal _avans;
+
+        public decimal Avans
+        {
+            get { return _avans; }
+            set
+            {
+                
+                _avans = value;
+                RaisePropertyChanged(nameof(Avans));
+            }
+        }
+
+
+        private decimal _subTotal;
+
+        public decimal SubTotal
+        {
+            get { return _subTotal; }
+            set
+            {
+                _subTotal = value;
+                RaisePropertyChanged(nameof(SubTotal));
+            }
+        }
+
         public decimal TotalPrice
         {
             get { return _totalPrice; }
             set
             {
+                if (IsAvans)
+                {
+                    _subTotal = value;
+                    CalculateAvans();
+                }
                 _totalPrice = value;
                 RaisePropertyChanged(nameof(TotalPrice));
+                RaisePropertyChanged(nameof(SubTotal));
+
             }
         }
 
@@ -283,7 +435,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         #endregion
 
-        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation, IAvailableRoomsService availableRooms, ISpecialTypeService specialTypeService) : base(appointmentItem, scheduler)
+        public CreateAppointmentViewModel(AppointmentItem appointmentItem, SchedulerControl scheduler, IEventAggregator eventAggregator, DialogServiceViewModel dialogServiceViewModel, SearchGuestDialogViewModel searchGuestDialogViewModel, IComboboxFacade comboboxFacade, ICreateReservationService createReservation, IAvailableRoomsService availableRooms, ISpecialTypeService specialTypeService, IGuestSearchService guestSearchService) : base(appointmentItem, scheduler)
         {
             _eventAggregator = eventAggregator;
 
@@ -293,15 +445,23 @@ namespace EtnaSoft.WPF.ViewModels
             _createReservation = createReservation;
             _availableRooms = availableRooms;
             _specialTypeService = specialTypeService;
+            _guestSearchService = guestSearchService;
             AddGuestDialogViewModel = dialogServiceViewModel;
             CreateReservationCommand = new DelegateCommand(CreateReservationExecute);
             SearchExistingGuestCommand = new DelegateCommand(SearchGuestDialogOpen);
             AbortReservationCreationCommand = new DelegateCommand(AbortExecute);
             LoadedCommand = new DelegateCommand(OnLoaded);
             AddNewGuestCommand = new DelegateCommand(AddNewGuestExecute);
-            
-           
+            AvansCommand = new DelegateCommand(EnableOrDisableAvans);
+
         }
+
+        private void EnableOrDisableAvans()
+        {
+            _isAvans = !_isAvans;
+            RaisePropertyChanged(nameof(IsAvans));
+        }
+
         /// <summary>
         /// Loads Available Rooms for dates
         /// </summary>
@@ -320,12 +480,16 @@ namespace EtnaSoft.WPF.ViewModels
         }
         private void TotalPriceChanged()
         {
-            if (SelectedStayType.IsSpecialType)
+            
+           
+            if (SelectedStayType != null && SelectedStayType.IsSpecialType)
             {
-                PricePerKid = _specialTypeService.GetPricePerChild(SelectedStayType.Id);
-                TotalPrice = SelectedStayType.Price + PricePerKid;
-                return;
+                    PricePerKid = _specialTypeService.GetPricePerChild(SelectedStayType.Id);
+                    TotalPrice = SelectedStayType.Price + PricePerKid;
+                    return;
             }
+            
+            
             if (NumberOfKids > 0)
             {
                 if (SelectedStayType != null)
@@ -343,7 +507,7 @@ namespace EtnaSoft.WPF.ViewModels
                 }
                 
             }
-            
+            CalculateAvans();
         }
         /// <summary>
         /// Clear the fields
@@ -466,7 +630,7 @@ namespace EtnaSoft.WPF.ViewModels
                     StartDate = StartDate,
                     EndDate = EndDate,
                     NumberOfPeople = NumberOfPeople,
-                    TotalPrice = TotalPrice,
+                    InvoiceId = 0,
                     CreatedBy = UserStore.CurrentUser
 
                 };
@@ -477,9 +641,24 @@ namespace EtnaSoft.WPF.ViewModels
             // OnAppointmentCreation();
             if (_guestId > 0)
             {
+                var invoice = new Invoice()
+                {
+                    Avans = Avans,
+                    SubTotal = TotalPrice,
+                    TotalPrice = TotalPrice - Avans
+                };
                 var roomRes = CreateRoomReservation();
                 var reservation = CreateReservationObject();
-                _createReservation.CreateReservationInTransaction(roomRes, reservation);
+                var reservationCreated = _createReservation.CreateReservationInTransaction(roomRes, reservation, invoice);
+                if (IsAvans && reservationCreated)
+                {
+                    SendSmsAsync(reservation, invoice);
+                }
+                else if (IsAvans && !reservationCreated)
+                {
+                    MessageService.Show("Neuspesno kreiranje rezervacije");
+                }
+                
                 OnAppointmentCreation();
                 CloseWindow();
             }
@@ -489,7 +668,19 @@ namespace EtnaSoft.WPF.ViewModels
             }
         }
 
+        private async void SendSmsAsync(Reservation reservation, Invoice invoice)
+        {
+            ISmsFacade smsFacade = new SmsFacade();
+            
+            var url = smsFacade.GetValue(ConfigKeys.SmsUrl);
+            var user = smsFacade.GetValue(ConfigKeys.SmsUser);
+            var secret = smsFacade.GetValue(ConfigKeys.SmsSecret);
 
+            AvansSmsService avansService = new AvansSmsService(url, user, secret);
+            var guest = _guestSearchService.GetGuestById(_guestId);
+            var message = await avansService.SendSmsTask(guest, reservation, invoice);
+            MessageService.Show(message);
+        }
         /// <summary>
         /// The Scheduler Timeline gets bookings refreshed by this event
         /// It should get called when CreateReservationCommand is called

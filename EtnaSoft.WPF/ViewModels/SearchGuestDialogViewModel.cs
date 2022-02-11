@@ -130,7 +130,7 @@ namespace EtnaSoft.WPF.ViewModels
 
         private void CancelExecute(CancelEventArgs args)
         {
-            
+            args.Cancel = false;
         }
 
         private void InitializeCollection()

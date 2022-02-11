@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using DevExpress.DocumentServices.ServiceModel.ServiceOperations;
@@ -66,6 +67,7 @@ namespace EtnaSoft.WPF.ViewModels
         
         
         private SubscriptionToken _subToken;
+        private readonly IGuestSearchService _guestSearchService;
         private readonly IResourceService _roomResource;
         private readonly ISchedulerService _schedulerService;
         private readonly IBookingService _bookingService;
@@ -95,7 +97,7 @@ namespace EtnaSoft.WPF.ViewModels
             IBookingService bookingService, IEventAggregator eventAggregator, IDetailsManager detailsManager,
             SearchGuestDialogViewModel searchGuestDialogViewModel, DialogServiceViewModel dialogServiceViewModel,
             IComboboxFacade comboboxFacade, ICreateReservationService createReservation,
-            IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate, IAuthenticator authenticator, ISpecialTypeService specialTypeService)
+            IAvailableRoomsService availableRooms, IUpdateReservationDateDragService dragUpdate, IAuthenticator authenticator, ISpecialTypeService specialTypeService, IGuestSearchService guestSearchService)
         {
             EditBookingCommand = new DelegateCommand<object>(OnBookingWindowOpen);
             LoadedCommand = new DelegateCommand(OnLoad);
@@ -120,6 +122,7 @@ namespace EtnaSoft.WPF.ViewModels
             _dragUpdate = dragUpdate;
             _authenticator = authenticator;
             _specialTypeService = specialTypeService;
+            _guestSearchService = guestSearchService;
 
             _schedulerService = schedulerService;
         }
@@ -241,7 +244,10 @@ namespace EtnaSoft.WPF.ViewModels
                if (answeResult == MessageBoxResult.Yes)
                {
                    //TODO: Raskaciti event naci resenje!
+                   
                    eventArgs.SourceAppointments[0].ResourceIdsChanged += ReceptionViewModel_ResourceIdsChanged;
+                  
+                   
                    var startDate = eventArgs.DragAppointments[0].Start;
                    var endDate = eventArgs.DragAppointments[0].End;
                    var sourceStartDate = eventArgs.SourceAppointments[0].Start;
@@ -257,7 +263,6 @@ namespace EtnaSoft.WPF.ViewModels
                        }
                    }
                }
-               //eventArgs.SourceAppointments[0].ResourceIdsChanged -= ReceptionViewModel_ResourceIdsChanged;
             }
         }
 
@@ -275,7 +280,9 @@ namespace EtnaSoft.WPF.ViewModels
                     MessageBox.Show("Uspesno promenjena soba");
                 }
                 PopulateBookings();
+                bookingItem.ResourceIdsChanged -= ReceptionViewModel_ResourceIdsChanged;
             }
+            
         }
 
         private void AppointmentOnStateChanged()
@@ -372,7 +379,7 @@ namespace EtnaSoft.WPF.ViewModels
                 args.Window = new CreateAppointmentWindow
                 {
                     DataContext = new CreateAppointmentViewModel(args.Appointment, sender, _eventAggregator,
-                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade, _createReservation, _availableRooms, _specialTypeService)
+                                                                _dialogServiceViewModel, _searchGuestDialogViewModel, _comboboxFacade, _createReservation, _availableRooms, _specialTypeService, _guestSearchService)
                 };
             }
             else

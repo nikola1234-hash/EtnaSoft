@@ -2,9 +2,9 @@
 	@Id int,
 	@RoomReservationId int, 
 	@NumberOfPeople int,
+	@InvoiceId int,
 	@StartDate date,
 	@EndDate date,
-	@TotalPrice decimal(19,4),
 	@IsCheckedIn bit,
 	@ModifiedBy nvarchar(25),
 	@IsCanceled bit
@@ -14,9 +14,9 @@
 		BEGIN 
 			DECLARE @DateModified date;
 			SET @DateModified = GETDATE();
-			UPDATE dbo.Reservations SET RoomReservationId = @RoomReservationId,
+			UPDATE dbo.Reservations SET RoomReservationId = @RoomReservationId, InvoiceId = @InvoiceId,
 			NumberOfPeople = @NumberOfPeople, StartDate = @StartDate, EndDate = @EndDate,
-			TotalPrice = @TotalPrice, IsCheckedIn = @IsCheckedIn, ModifiedBy = @ModifiedBy,
+			IsCheckedIn = @IsCheckedIn, ModifiedBy = @ModifiedBy,
 			DateModified = @DateModified, IsCanceled = @IsCanceled WHERE Id = @Id;
 			END
 			SELECT * FROM dbo.Reservations WHERE Id = @@IDENTITY;

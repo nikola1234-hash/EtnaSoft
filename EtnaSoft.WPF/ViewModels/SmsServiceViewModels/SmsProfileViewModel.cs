@@ -12,7 +12,7 @@ using EtnaSoft.WPF.Services.SmsService;
 
 namespace EtnaSoft.WPF.ViewModels.SmsServiceViewModels
 {
-    public sealed class SmsProfileViewModel :EtnaBaseViewModel
+    public sealed class SmsProfileViewModel : EtnaBaseViewModel
     {
         public Profile Profile
         {
@@ -42,6 +42,7 @@ namespace EtnaSoft.WPF.ViewModels.SmsServiceViewModels
         private async void OnLoadAsync()
         {
             Profile = await GetProfileAsync();
+            RaisePropertyChanged(nameof(Profile));
         }
         public async Task<Profile> GetProfileAsync()
         {

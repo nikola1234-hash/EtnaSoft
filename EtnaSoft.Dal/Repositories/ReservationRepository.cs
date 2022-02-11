@@ -54,7 +54,7 @@ namespace EtnaSoft.Dal.Repositories
                     NumberOfPeople = reservation.NumberOfPeople,
                     StartDate = reservation.StartDate,
                     EndDate = reservation.EndDate,
-                    TotalPrice = reservation.TotalPrice,
+                    InvoiceId = reservation.InvoiceId,
                     IsCheckedIn = reservation.IsCheckedIn,
                     IsCanceled = reservation.IsCanceled,
                     ModifiedBy = reservation.ModifiedBy

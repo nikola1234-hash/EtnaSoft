@@ -42,7 +42,6 @@ namespace EtnaSoft.WPF.Services.Reception
                     Id = (int) appointmentViewModel.Appointment.Id,
                     StartDate = appointmentViewModel.StartDate.Date,
                     EndDate = appointmentViewModel.EndDate.Date,
-                    TotalPrice = appointmentViewModel.TotalPrice,
                     NumberOfPeople = appointmentViewModel.NumberOfPeople
                 };
                 return mappedReservation;

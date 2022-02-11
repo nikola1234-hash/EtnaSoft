@@ -76,5 +76,10 @@ namespace EtnaSoft.Bll.Services
             result = guests.Where(s => s.FirstName == keyword && s.IsActive);
             return result;
         }
+
+        public Guest GetGuestById(int id)
+        {
+            return _unit.Guests.GetById(id);
+        }
     }
 }

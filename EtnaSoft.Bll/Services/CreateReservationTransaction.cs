@@ -15,9 +15,19 @@ namespace EtnaSoft.Bll.Services
             
         }
 
-        public void CreateReservationInTransaction(RoomReservation roomReservation, Reservation reservation)
+        private object MapInvoice(Invoice invoice)
         {
-            
+            var p = new
+            {
+                Avans = invoice.Avans,
+                SubTotal = invoice.SubTotal,
+                TotalPrice = invoice.TotalPrice
+            };
+            return p;
+        }
+        public bool CreateReservationInTransaction(RoomReservation roomReservation, Reservation reservation, Invoice invoice)
+        {
+            bool success = false;
             object CreateRoomReservation(RoomReservation rr)
             {
                 var output = new
@@ -29,7 +39,7 @@ namespace EtnaSoft.Bll.Services
                 };
                 return output;
             }
-            object CreateReservationObject(Reservation res, RoomReservation newRoomRes)
+            object CreateReservationObject(Reservation res, RoomReservation newRoomRes, Invoice newInvoice)
             {
                 var output = new
                 {
@@ -37,7 +47,7 @@ namespace EtnaSoft.Bll.Services
                     NumberOfPeople = res.NumberOfPeople,
                     StartDate = res.StartDate,
                     EndDate = res.EndDate,
-                    TotalPrice = res.TotalPrice,
+                    InvoiceId = newInvoice.Id,
                     CreatedBy = res.CreatedBy
 
                 };
@@ -56,8 +66,15 @@ namespace EtnaSoft.Bll.Services
                     if (newRoomReservation is null)
                         throw new Exception("Room reservation objekat je null");
 
-                    var reservationObject = CreateReservationObject(reservation, newRoomReservation);
-                    _context.SaveDataTransaction("sp_CreateReservation", reservationObject);
+                    //TODO: Generate Invoice
+                    var invoiceObject = MapInvoice(invoice);
+                    var invoices = _context.LoadDataTransaction<Invoice, dynamic>("sp_CreateInvoice", invoiceObject).FirstOrDefault();
+                    var reservationObject = CreateReservationObject(reservation, newRoomReservation, invoices);
+                    var i = _context.SaveDataTransaction("sp_CreateReservation", reservationObject);
+                    if (i > 0)
+                    {
+                        success = true;
+                    }
                     _context.CommitTransaction();
                 }
                 catch
@@ -65,6 +82,8 @@ namespace EtnaSoft.Bll.Services
                     _context.RollBackTransaction();
                     throw;
                 }
+
+                return success;
             }
        
 

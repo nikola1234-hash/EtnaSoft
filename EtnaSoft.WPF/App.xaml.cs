@@ -209,7 +209,14 @@ namespace EtnaSoft.WPF
                 {
                     
                     logger.LogInformation("Database does exist starting main window");
-                    
+
+                    var adminService = ServiceProvider.GetRequiredService<AdminService>();
+                    bool accountExists = adminService.CheckIfAccountExists();
+                    if (!accountExists)
+                    {
+                        logger.LogInformation("User does not exists, attempting to create a master user.");
+                        adminService.FirstUserCreation();
+                    }
                     CreateMainWindow();
                 }
                 else

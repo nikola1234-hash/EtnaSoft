@@ -1,10 +1,11 @@
-﻿using EtnaSoft.WPF.Navigation;
+﻿using System.Threading;
+using EtnaSoft.WPF.Navigation;
 using EtnaSoft.WPF.Services;
 using EtnaSoft.WPF.Stores;
 
 namespace EtnaSoft.WPF.Commands
 {
-    public class NavigateCommand : BaseCommand
+    public sealed class NavigateCommand : BaseCommand
     {
         private readonly IEtnaViewModelFactory _viewModelFactory;
         private readonly IViewStore _viewStore;

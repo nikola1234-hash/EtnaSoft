@@ -8,5 +8,6 @@ namespace EtnaSoft.Bll.Services
     public interface IGuestSearchService
     {
         IEnumerable<Guest> GetGuests(string keyword="");
+        Guest GetGuestById(int id);
     }
 }

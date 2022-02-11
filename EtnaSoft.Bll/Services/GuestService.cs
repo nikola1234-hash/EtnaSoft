@@ -35,6 +35,8 @@ namespace EtnaSoft.Bll.Services
 
             return guestInfos;
         }
+
+        
         [Obsolete]
         public ObservableCollection<GuestInfo> LoadByKeyword(string keyword)
         {
